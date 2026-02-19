@@ -50,7 +50,12 @@
   <input type="password" id="password" placeholder="Password"><br>
   <input type="text" id="username" placeholder="Choose username"><br>
   <button onclick="signUp()">Create Account</button>
-  <p id="message"></p>
+
+<br><br>
+
+<button onclick="login()">Login</button>
+
+<p id="message"></p>
 </div>
 
 <script>
@@ -77,19 +82,39 @@
 
     const user = data.user;
 
-    const { error: profileError } = await supabaseClient
-      .from("profiles")
-      .insert([
-        { id: user.id, username: username }
-      ]);
+    await supabaseClient.from("profiles").insert([
+      { id: user.id, username: username }
+    ]);
 
-    if (profileError) {
-      document.getElementById("message").innerText = profileError.message;
+    document.getElementById("message").innerText =
+      "Account created! Now login below 👇";
+  }
+
+  async function login() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    const { error } = await supabaseClient.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
+
+    if (error) {
+      document.getElementById("message").innerText = error.message;
       return;
     }
 
-    document.getElementById("message").innerText = "Account created successfully!";
+    window.location.href = "/dashboard.html";
   }
+
+  async function checkUser(){
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if(user){
+      window.location.href = "/dashboard.html";
+    }
+  }
+
+  checkUser();
 </script>
 
 </body>
