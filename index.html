@@ -6,37 +6,37 @@
 
   <style>
     body{
-      font-family:Arial;
+      font-family: Arial;
       text-align:center;
-      background:linear-gradient(135deg,#6a11cb,#2575fc,#00c6ff);
+      background: linear-gradient(135deg,#6a11cb,#2575fc,#00c6ff);
       color:white;
       padding:40px;
     }
 
-    input{
-      padding:10px;
-      margin:10px;
-      width:250px;
-      border-radius:8px;
-      border:none;
-    }
-
-    button{
-      padding:10px 20px;
-      border:none;
-      border-radius:20px;
-      cursor:pointer;
-      background:white;
-      color:#2575fc;
-      font-weight:bold;
-      margin-top:10px;
-    }
-
     .box{
-      background:rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.15);
       padding:30px;
       border-radius:20px;
       display:inline-block;
+    }
+
+    input{
+      padding:10px;
+      margin:8px;
+      width:260px;
+      border:none;
+      border-radius:10px;
+    }
+
+    button{
+      padding:12px 25px;
+      border:none;
+      border-radius:20px;
+      background:white;
+      color:#2575fc;
+      font-weight:bold;
+      cursor:pointer;
+      margin-top:10px;
     }
   </style>
 </head>
@@ -47,20 +47,16 @@
 <p>Create your premium creator link page</p>
 
 <div class="box">
-  <h2>Signup</h2>
+  <h2>Signup / Login</h2>
 
-  <input type="email" id="email" placeholder="Email"><br>
-  <input type="password" id="password" placeholder="Password"><br>
-  <input type="text" id="username" placeholder="Choose username"><br>
+  <input id="email" type="email" placeholder="Email"><br>
+  <input id="password" type="password" placeholder="Password"><br>
+  <input id="username" type="text" placeholder="Username (only for signup)"><br>
 
-  <button onclick="signUp()">Create Account</button>
-
-  <p id="message"></p>
-
-  <hr style="margin:20px 0">
-
-  <h3>Already have account?</h3>
+  <button onclick="signUp()">Create Account</button><br>
   <button onclick="login()">Login</button>
+
+  <p id="msg"></p>
 </div>
 
 <script>
@@ -68,66 +64,42 @@ const { createClient } = supabase;
 
 const supabaseClient = createClient(
   "https://pibrvhziqkaitaacbegy.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw"
+  "PASTE_ANON_KEY"
 );
 
 async function signUp(){
-  const email=document.getElementById("email").value.trim();
-  const password=document.getElementById("password").value.trim();
-  const username=document.getElementById("username").value.trim().toLowerCase();
+  const email=document.getElementById("email").value;
+  const password=document.getElementById("password").value;
+  const username=document.getElementById("username").value.toLowerCase();
 
-  if(!email || !password || !username){
-    document.getElementById("message").innerText="Fill all fields";
+  if(!email||!password||!username){
+    msg.innerText="Fill all fields";
     return;
   }
 
-  document.getElementById("message").innerText="Creating account...";
-
   // create auth
-  const { error } = await supabaseClient.auth.signUp({
+  const { data, error } = await supabaseClient.auth.signUp({
     email:email,
     password:password
   });
 
   if(error){
-    document.getElementById("message").innerText=error.message;
+    msg.innerText=error.message;
     return;
   }
 
-  // auto login immediately
-  const { error:loginError } = await supabaseClient.auth.signInWithPassword({
-    email:email,
-    password:password
-  });
+  const user=data.user;
 
-  if(loginError){
-    document.getElementById("message").innerText="Account created. Now login.";
-    return;
-  }
+  // create profile
+  await supabaseClient.from("profiles").insert([
+    {
+      id:user.id,
+      username:username,
+      bio:""
+    }
+  ]);
 
-  // get user after login
-  const { data:{user} } = await supabaseClient.auth.getUser();
-
-  if(!user){
-    document.getElementById("message").innerText="Login again";
-    return;
-  }
-
-  // create profile correctly linked
-  const { error:profileError } = await supabaseClient
-    .from("profiles")
-    .insert([
-      {
-        id:user.id,
-        username:username
-      }
-    ]);
-
-  if(profileError){
-    console.log(profileError);
-  }
-
-  window.location.href="/dashboard.html";
+  msg.innerText="Account created. Now login.";
 }
 
 async function login(){
@@ -140,21 +112,21 @@ async function login(){
   });
 
   if(error){
-    document.getElementById("message").innerText=error.message;
+    msg.innerText=error.message;
     return;
   }
 
   window.location.href="/dashboard.html";
 }
 
-// auto redirect
-async function checkUser(){
-  const { data:{user} } = await supabaseClient.auth.getUser();
-  if(user){
-    window.location.href="/dashboard.html";
-  }
+// auto login redirect
+async function check(){
+ const { data:{user} } = await supabaseClient.auth.getUser();
+ if(user){
+   window.location.href="/dashboard.html";
+ }
 }
-checkUser();
+check();
 </script>
 
 </body>
