@@ -40,6 +40,7 @@
 <h1 id="username">Loading...</h1>
 
 <div class="box">
+  <div id="bio"></div>
   <div id="links"></div>
 </div>
 
@@ -47,25 +48,25 @@
 const { createClient } = supabase;
 const supabaseClient = createClient(
   "https://pibrvhziqkaitaacbegy.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw"
+  ""eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw""
 );
 
 async function loadProfile(){
 
-  // get username from URL
+  // 🔥 correct username detection
   const path = window.location.pathname;
-  const username = path.substring(1);
+  const username = path.split("/").pop();
 
   if(!username){
     document.getElementById("username").innerText = "User not found";
     return;
   }
 
-  // get profile
+  // 🔥 get profile (case insensitive)
   const { data: profile, error } = await supabaseClient
     .from("profiles")
     .select("*")
-    .eq("username", username)
+    .ilike("username", username)
     .single();
 
   if(error || !profile){
@@ -73,9 +74,15 @@ async function loadProfile(){
     return;
   }
 
-  document.getElementById("username").innerText = username;
+  document.getElementById("username").innerText = profile.username;
 
-  // get links
+  // 🔥 show bio
+  if(profile.bio){
+    document.getElementById("bio").innerHTML =
+      "<p style='margin-bottom:20px'>" + profile.bio + "</p>";
+  }
+
+  // 🔥 get links
   const { data: links } = await supabaseClient
     .from("links")
     .select("*")
@@ -83,9 +90,13 @@ async function loadProfile(){
 
   let html="";
 
-  links.forEach(link=>{
-    html += `<a href="${link.url}" target="_blank">${link.title}</a>`;
-  });
+  if(links && links.length>0){
+    links.forEach(link=>{
+      html += `<a href="${link.url}" target="_blank">${link.title}</a>`;
+    });
+  }else{
+    html = "<p>No links added yet</p>";
+  }
 
   document.getElementById("links").innerHTML = html;
 }
