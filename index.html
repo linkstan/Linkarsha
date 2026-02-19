@@ -51,7 +51,7 @@
 
   <input id="email" type="email" placeholder="Email"><br>
   <input id="password" type="password" placeholder="Password"><br>
-  <input id="username" type="text" placeholder="Username (only for signup)"><br>
+  <input id="username" type="text" placeholder="Username (for signup only)"><br>
 
   <button onclick="signUp()">Create Account</button><br>
   <button onclick="login()">Login</button>
@@ -68,16 +68,15 @@ const supabaseClient = createClient(
 );
 
 async function signUp(){
-  const email=document.getElementById("email").value;
-  const password=document.getElementById("password").value;
-  const username=document.getElementById("username").value.toLowerCase();
+  const email=document.getElementById("email").value.trim();
+  const password=document.getElementById("password").value.trim();
+  const username=document.getElementById("username").value.trim().toLowerCase();
 
   if(!email||!password||!username){
     msg.innerText="Fill all fields";
     return;
   }
 
-  // create auth
   const { data, error } = await supabaseClient.auth.signUp({
     email:email,
     password:password
@@ -88,12 +87,9 @@ async function signUp(){
     return;
   }
 
-  const user=data.user;
-
-  // create profile
   await supabaseClient.from("profiles").insert([
     {
-      id:user.id,
+      id:data.user.id,
       username:username,
       bio:""
     }
@@ -119,7 +115,6 @@ async function login(){
   window.location.href="/dashboard.html";
 }
 
-// auto login redirect
 async function check(){
  const { data:{user} } = await supabaseClient.auth.getUser();
  if(user){
