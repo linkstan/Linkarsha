@@ -68,13 +68,13 @@ const { createClient } = supabase;
 
 const supabaseClient = createClient(
   "https://pibrvhziqkaitaacbegy.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw"
+  "PASTE_YOUR_ANON_KEY"
 );
 
 async function signUp(){
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const username = document.getElementById("username").value.trim().toLowerCase();
+  const email=document.getElementById("email").value.trim();
+  const password=document.getElementById("password").value.trim();
+  const username=document.getElementById("username").value.trim().toLowerCase();
 
   if(!email || !password || !username){
     document.getElementById("message").innerText="Fill all fields";
@@ -83,7 +83,7 @@ async function signUp(){
 
   document.getElementById("message").innerText="Creating account...";
 
-  // create auth account
+  // create auth
   const { error } = await supabaseClient.auth.signUp({
     email:email,
     password:password
@@ -94,42 +94,45 @@ async function signUp(){
     return;
   }
 
-  // wait for session to be ready
-  setTimeout(async ()=>{
+  // auto login immediately
+  const { error:loginError } = await supabaseClient.auth.signInWithPassword({
+    email:email,
+    password:password
+  });
 
-    const { data:{user} } = await supabaseClient.auth.getUser();
+  if(loginError){
+    document.getElementById("message").innerText="Account created. Now login.";
+    return;
+  }
 
-    if(!user){
-      document.getElementById("message").innerText=
-      "Signup success. Now login once.";
-      return;
-    }
+  // get user after login
+  const { data:{user} } = await supabaseClient.auth.getUser();
 
-    // create profile linked to correct auth id
-    const { error:profileError } = await supabaseClient
-      .from("profiles")
-      .insert([
-        {
-          id:user.id,
-          username:username
-        }
-      ]);
+  if(!user){
+    document.getElementById("message").innerText="Login again";
+    return;
+  }
 
-    if(profileError){
-      document.getElementById("message").innerText=
-      profileError.message;
-      return;
-    }
+  // create profile correctly linked
+  const { error:profileError } = await supabaseClient
+    .from("profiles")
+    .insert([
+      {
+        id:user.id,
+        username:username
+      }
+    ]);
 
-    document.getElementById("message").innerText=
-    "Account created 😈 Now login";
+  if(profileError){
+    console.log(profileError);
+  }
 
-  },2000);
+  window.location.href="/dashboard.html";
 }
 
 async function login(){
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  const email=document.getElementById("email").value;
+  const password=document.getElementById("password").value;
 
   const { error } = await supabaseClient.auth.signInWithPassword({
     email:email,
@@ -144,7 +147,7 @@ async function login(){
   window.location.href="/dashboard.html";
 }
 
-// auto redirect if already logged
+// auto redirect
 async function checkUser(){
   const { data:{user} } = await supabaseClient.auth.getUser();
   if(user){
