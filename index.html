@@ -5,38 +5,38 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    body {
-      font-family: Arial;
-      text-align: center;
-      background: linear-gradient(135deg,#6a11cb,#2575fc,#00c6ff);
-      color: white;
-      padding: 40px;
+    body{
+      font-family:Arial;
+      text-align:center;
+      background:linear-gradient(135deg,#6a11cb,#2575fc,#00c6ff);
+      color:white;
+      padding:40px;
     }
 
-    input {
-      padding: 10px;
-      margin: 10px;
-      width: 250px;
-      border-radius: 8px;
-      border: none;
+    input{
+      padding:10px;
+      margin:10px;
+      width:250px;
+      border-radius:8px;
+      border:none;
     }
 
-    button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      background: white;
-      color: #2575fc;
-      font-weight: bold;
+    button{
+      padding:10px 20px;
+      border:none;
+      border-radius:20px;
+      cursor:pointer;
+      background:white;
+      color:#2575fc;
+      font-weight:bold;
       margin-top:10px;
     }
 
-    .box {
-      background: rgba(255,255,255,0.15);
-      padding: 30px;
-      border-radius: 20px;
-      display: inline-block;
+    .box{
+      background:rgba(255,255,255,0.15);
+      padding:30px;
+      border-radius:20px;
+      display:inline-block;
     }
   </style>
 </head>
@@ -65,82 +65,90 @@
 
 <script>
 const { createClient } = supabase;
+
 const supabaseClient = createClient(
   "https://pibrvhziqkaitaacbegy.supabase.co",
   "PASTE_YOUR_ANON_KEY"
 );
 
-async function signUp() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  const username = document.getElementById("username").value;
+async function signUp(){
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const username = document.getElementById("username").value.trim().toLowerCase();
 
   if(!email || !password || !username){
-    document.getElementById("message").innerText = "Fill all fields";
+    document.getElementById("message").innerText="Fill all fields";
     return;
   }
 
-  // 🔥 signup
-  const { data, error } = await supabaseClient.auth.signUp({
-    email: email,
-    password: password
+  document.getElementById("message").innerText="Creating account...";
+
+  // create auth account
+  const { error } = await supabaseClient.auth.signUp({
+    email:email,
+    password:password
   });
 
   if(error){
-    document.getElementById("message").innerText = error.message;
+    document.getElementById("message").innerText=error.message;
     return;
   }
 
-  const user = data.user;
+  // wait for session to be ready
+  setTimeout(async ()=>{
 
-  if(!user){
-    document.getElementById("message").innerText =
-    "Signup success. Now login.";
-    return;
-  }
+    const { data:{user} } = await supabaseClient.auth.getUser();
 
-  // 🔥 create profile safely
-  const { error: profileError } = await supabaseClient
-    .from("profiles")
-    .insert([
-      {
-        id: user.id,
-        username: username.toLowerCase()
-      }
-    ]);
+    if(!user){
+      document.getElementById("message").innerText=
+      "Signup success. Now login once.";
+      return;
+    }
 
-  if(profileError){
-    document.getElementById("message").innerText =
-    profileError.message;
-    return;
-  }
+    // create profile linked to correct auth id
+    const { error:profileError } = await supabaseClient
+      .from("profiles")
+      .insert([
+        {
+          id:user.id,
+          username:username
+        }
+      ]);
 
-  document.getElementById("message").innerText =
-  "Account created successfully 😈 Now login";
+    if(profileError){
+      document.getElementById("message").innerText=
+      profileError.message;
+      return;
+    }
+
+    document.getElementById("message").innerText=
+    "Account created 😈 Now login";
+
+  },2000);
 }
 
-async function login() {
+async function login(){
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
   const { error } = await supabaseClient.auth.signInWithPassword({
-    email: email,
-    password: password
+    email:email,
+    password:password
   });
 
-  if (error) {
-    document.getElementById("message").innerText = error.message;
+  if(error){
+    document.getElementById("message").innerText=error.message;
     return;
   }
 
-  window.location.href = "/dashboard";
+  window.location.href="/dashboard.html";
 }
 
 // auto redirect if already logged
 async function checkUser(){
-  const { data: { user } } = await supabaseClient.auth.getUser();
+  const { data:{user} } = await supabaseClient.auth.getUser();
   if(user){
-    window.location.href = "/dashboard";
+    window.location.href="/dashboard.html";
   }
 }
 checkUser();
