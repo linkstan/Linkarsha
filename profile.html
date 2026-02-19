@@ -40,12 +40,13 @@
 <h1 id="username">Loading...</h1>
 
 <div class="box">
-  <div id="bio"></div>
   <div id="links"></div>
 </div>
 
 <script>
+
 const { createClient } = supabase;
+
 const supabaseClient = createClient(
   "https://pibrvhziqkaitaacbegy.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw"
@@ -54,24 +55,18 @@ const supabaseClient = createClient(
 async function loadProfile(){
 
   const path = window.location.pathname;
+  const usernameFromUrl = path.replace("/", "").toLowerCase();
 
-  // if homepage → go to index
-  if(path === "/" || path === ""){
-    window.location.href = "/";
-    return;
-  }
-
-  const username = path.split("/").pop();
-
-  if(!username){
+  if(!usernameFromUrl){
     document.getElementById("username").innerText = "User not found";
     return;
   }
 
+  // Case-insensitive username search
   const { data: profile, error } = await supabaseClient
     .from("profiles")
     .select("*")
-    .ilike("username", username)
+    .ilike("username", usernameFromUrl)
     .single();
 
   if(error || !profile){
@@ -81,30 +76,36 @@ async function loadProfile(){
 
   document.getElementById("username").innerText = profile.username;
 
-  if(profile.bio){
-    document.getElementById("bio").innerHTML =
-      "<p style='margin-bottom:20px'>" + profile.bio + "</p>";
-  }
-
-  const { data: links } = await supabaseClient
+  const { data: links, error: linksError } = await supabaseClient
     .from("links")
     .select("*")
     .eq("user_id", profile.id);
 
-  let html="";
-
-  if(links && links.length>0){
-    links.forEach(link=>{
-      html += `<a href="${link.url}" target="_blank">${link.title}</a>`;
-    });
-  }else{
-    html = "<p>No links added yet</p>";
+  if(linksError){
+    document.getElementById("links").innerHTML = "No links added.";
+    return;
   }
+
+  if(!links || links.length === 0){
+    document.getElementById("links").innerHTML = "No links added.";
+    return;
+  }
+
+  let html = "";
+
+  links.forEach(link=>{
+    html += `
+      <a href="${link.url}" target="_blank">
+        ${link.title}
+      </a>
+    `;
+  });
 
   document.getElementById("links").innerHTML = html;
 }
 
 loadProfile();
+
 </script>
 
 </body>
