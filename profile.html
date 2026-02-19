@@ -1,1 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Linkarsha</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+  <style>
+    body{
+      font-family: Arial;
+      background: linear-gradient(135deg,#6a11cb,#2575fc,#00c6ff);
+      color:white;
+      text-align:center;
+      padding:40px;
+    }
+
+    .box{
+      background: rgba(255,255,255,0.15);
+      padding:30px;
+      border-radius:20px;
+      display:inline-block;
+      margin-top:40px;
+      width:320px;
+    }
+
+    a{
+      display:block;
+      background:white;
+      color:#2575fc;
+      padding:12px;
+      margin:10px 0;
+      border-radius:12px;
+      text-decoration:none;
+      font-weight:bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1 id="username">Loading...</h1>
+
+<div class="box">
+  <div id="links"></div>
+</div>
+
+<script>
+const { createClient } = supabase;
+const supabaseClient = createClient(
+  "https://pibrvhziqkaitaacbegy.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw"
+);
+
+async function loadProfile(){
+
+  // get username from URL
+  const path = window.location.pathname;
+  const username = path.substring(1);
+
+  if(!username){
+    document.getElementById("username").innerText = "User not found";
+    return;
+  }
+
+  // get profile
+  const { data: profile, error } = await supabaseClient
+    .from("profiles")
+    .select("*")
+    .eq("username", username)
+    .single();
+
+  if(error || !profile){
+    document.getElementById("username").innerText = "User not found";
+    return;
+  }
+
+  document.getElementById("username").innerText = username;
+
+  // get links
+  const { data: links } = await supabaseClient
+    .from("links")
+    .select("*")
+    .eq("user_id", profile.id);
+
+  let html="";
+
+  links.forEach(link=>{
+    html += `<a href="${link.url}" target="_blank">${link.title}</a>`;
+  });
+
+  document.getElementById("links").innerHTML = html;
+}
+
+loadProfile();
+</script>
+
+</body>
+</html>
