@@ -43,7 +43,15 @@
   <h2 id="welcome">Loading...</h2>
   <p>Your public link:</p>
   <h3 id="publicLink"></h3>
-
+<hr style="margin:20px 0">
+<h3>Add New Link</h3>
+<input type="text" id="linkTitle" placeholder="Link title (Instagram, YouTube)" style="padding:8px;border-radius:8px;border:none;margin:5px;"><br>
+<input type="text" id="linkUrl" placeholder="https://yourlink.com" style="padding:8px;border-radius:8px;border:none;margin:5px;"><br>
+<button onclick="addLink()">Add Link</button>
+<p id="linkMsg"></p>
+<hr style="margin:20px 0">
+<h3>Your Links</h3>
+<div id="linksList"></div>
   <button onclick="logout()">Logout</button>
 </div>
 
@@ -86,6 +94,83 @@ async function logout(){
 }
 
 loadUser();
+  let currentUserId = null;
+
+async function loadUser(){
+  const { data: { user } } = await supabaseClient.auth.getUser();
+
+  if(!user){
+    window.location.href = "/";
+    return;
+  }
+
+  currentUserId = user.id;
+
+  const { data, error } = await supabaseClient
+    .from("profiles")
+    .select("*")
+    .eq("id", user.id)
+    .single();
+
+  if(error){
+    document.getElementById("welcome").innerText = "Error loading profile";
+    return;
+  }
+
+  document.getElementById("welcome").innerText =
+    "Hello, " + data.username;
+
+  document.getElementById("publicLink").innerText =
+    "linkarsha.netlify.app/" + data.username;
+
+  loadLinks();
+}
+
+async function addLink(){
+  const title = document.getElementById("linkTitle").value;
+  const url = document.getElementById("linkUrl").value;
+
+  if(!title || !url){
+    document.getElementById("linkMsg").innerText = "Enter title and URL";
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("links")
+    .insert([
+      {
+        user_id: currentUserId,
+        title: title,
+        url: url
+      }
+    ]);
+
+  if(error){
+    document.getElementById("linkMsg").innerText = error.message;
+    return;
+  }
+
+  document.getElementById("linkMsg").innerText = "Link added!";
+  document.getElementById("linkTitle").value="";
+  document.getElementById("linkUrl").value="";
+
+  loadLinks();
+}
+
+async function loadLinks(){
+  const { data, error } = await supabaseClient
+    .from("links")
+    .select("*")
+    .eq("user_id", currentUserId);
+
+  if(data){
+    let html="";
+    data.forEach(link=>{
+      html += `<p>🔗 ${link.title} - ${link.url}</p>`;
+    });
+    document.getElementById("linksList").innerHTML = html;
+  }
+}
 </script>
 
 </body>
