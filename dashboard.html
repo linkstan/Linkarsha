@@ -19,7 +19,7 @@
       border-radius:20px;
       display:inline-block;
       margin-top:40px;
-      width:300px;
+      width:320px;
     }
 
     button{
@@ -30,7 +30,26 @@
       color:#2575fc;
       font-weight:bold;
       cursor:pointer;
-      margin-top:20px;
+      margin-top:15px;
+    }
+
+    input, textarea{
+      padding:10px;
+      border-radius:10px;
+      border:none;
+      margin:6px;
+      width:85%;
+    }
+
+    a{
+      display:block;
+      background:white;
+      color:#2575fc;
+      padding:12px;
+      margin:10px 0;
+      border-radius:12px;
+      text-decoration:none;
+      font-weight:bold;
     }
   </style>
 </head>
@@ -41,17 +60,30 @@
 
 <div class="box">
   <h2 id="welcome">Loading...</h2>
+
   <p>Your public link:</p>
   <h3 id="publicLink"></h3>
-<hr style="margin:20px 0">
-<h3>Add New Link</h3>
-<input type="text" id="linkTitle" placeholder="Link title (Instagram, YouTube)" style="padding:8px;border-radius:8px;border:none;margin:5px;"><br>
-<input type="text" id="linkUrl" placeholder="https://yourlink.com" style="padding:8px;border-radius:8px;border:none;margin:5px;"><br>
-<button onclick="addLink()">Add Link</button>
-<p id="linkMsg"></p>
-<hr style="margin:20px 0">
-<h3>Your Links</h3>
-<div id="linksList"></div>
+
+  <hr>
+
+  <h3>Your Bio</h3>
+  <textarea id="bioInput" placeholder="Write your bio..."></textarea>
+  <button onclick="saveBio()">Save Bio</button>
+  <div id="bioDisplay"></div>
+
+  <hr>
+
+  <h3>Add New Link</h3>
+  <input type="text" id="linkTitle" placeholder="Instagram / YouTube">
+  <input type="text" id="linkUrl" placeholder="https://yourlink.com">
+  <button onclick="addLink()">Add Link</button>
+  <p id="linkMsg"></p>
+
+  <hr>
+
+  <h3>Your Links</h3>
+  <div id="linksList"></div>
+
   <button onclick="logout()">Logout</button>
 </div>
 
@@ -59,50 +91,10 @@
 const { createClient } = supabase;
 const supabaseClient = createClient(
   "https://pibrvhziqkaitaacbegy.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw"
+  "YOUR_ANON_KEY"
 );
 
-async function loadUser(){
-  const { data: { user } } = await supabaseClient.auth.getUser();
-
-  if(!user){
-    window.location.href = "/";
-    return;
-  }
-
-  const { data, error } = await supabaseClient
-    .from("profiles")
-    .select("*")
-    .eq("id", user.id)
-    .single();
-
-  if(error){
-    document.getElementById("welcome").innerText = "Error loading profile";
-    return;
-  }
-
-  document.getElementById("welcome").innerText =
-    "Hello, " + data.username;
-<br>
-<textarea id="bioInput" placeholder="Write your bio..." 
-style="width:80%;padding:12px;border-radius:10px;border:none;margin-top:10px;"></textarea>
-
-<br><br>
-<button onclick="saveBio()">Save Bio</button>
-
-<br><br>
-<div id="bioDisplay"></div>
-  document.getElementById("publicLink").innerText =
-    "linkarsha.netlify.app/" + data.username;
-}
-
-async function logout(){
-  await supabaseClient.auth.signOut();
-  window.location.href = "/";
-}
-
-loadUser();
-  let currentUserId = null;
+let currentUserId = null;
 
 async function loadUser(){
   const { data: { user } } = await supabaseClient.auth.getUser();
@@ -132,6 +124,32 @@ async function loadUser(){
     "linkarsha.netlify.app/" + data.username;
 
   loadLinks();
+  loadBio();
+}
+
+async function saveBio(){
+  const bio = document.getElementById("bioInput").value;
+
+  await supabaseClient
+    .from("profiles")
+    .update({ bio: bio })
+    .eq("id", currentUserId);
+
+  alert("Bio saved 😈");
+  loadBio();
+}
+
+async function loadBio(){
+  const { data } = await supabaseClient
+    .from("profiles")
+    .select("bio")
+    .eq("id", currentUserId)
+    .single();
+
+  if(data?.bio){
+    document.getElementById("bioDisplay").innerHTML =
+      "<br><b>Your Bio:</b><br>" + data.bio;
+  }
 }
 
 async function addLink(){
@@ -145,13 +163,7 @@ async function addLink(){
 
   const { error } = await supabaseClient
     .from("links")
-    .insert([
-      {
-        user_id: currentUserId,
-        title: title,
-        url: url
-      }
-    ]);
+    .insert([{ user_id: currentUserId, title: title, url: url }]);
 
   if(error){
     document.getElementById("linkMsg").innerText = error.message;
@@ -161,12 +173,11 @@ async function addLink(){
   document.getElementById("linkMsg").innerText = "Link added!";
   document.getElementById("linkTitle").value="";
   document.getElementById("linkUrl").value="";
-
   loadLinks();
 }
 
 async function loadLinks(){
-  const { data, error } = await supabaseClient
+  const { data } = await supabaseClient
     .from("links")
     .select("*")
     .eq("user_id", currentUserId);
@@ -174,55 +185,18 @@ async function loadLinks(){
   if(data){
     let html="";
     data.forEach(link=>{
-      html += `
-<a href="${link.url}" target="_blank" 
-style="
-display:block;
-background:white;
-color:#2575fc;
-padding:12px;
-margin:10px 0;
-border-radius:12px;
-text-decoration:none;
-font-weight:bold;
-">
-${link.title}
-</a>
-`;
+      html += `<a href="${link.url}" target="_blank">${link.title}</a>`;
     });
     document.getElementById("linksList").innerHTML = html;
   }
 }
-  async function saveBio() {
-  const bio = document.getElementById("bioInput").value;
 
-  const { data: { user } } = await supabase.auth.getUser();
-
-  await supabase
-    .from("profiles")
-    .update({ bio: bio })
-    .eq("id", user.id);
-
-  alert("Bio saved 😈");
-  loadBio();
+async function logout(){
+  await supabaseClient.auth.signOut();
+  window.location.href = "/";
 }
 
-async function loadBio() {
-  const { data: { user } } = await supabase.auth.getUser();
-
-  const { data } = await supabase
-    .from("profiles")
-    .select("bio")
-    .eq("id", user.id)
-    .single();
-
-  if(data?.bio){
-    document.getElementById("bioDisplay").innerHTML =
-    "<b>Your Bio:</b><br>" + data.bio;
-  }
-}
-
-loadBio();
+loadUser();
 </script>
 
 </body>
