@@ -19,6 +19,7 @@
       border-radius:20px;
       display:inline-block;
       margin-top:40px;
+      width:300px;
     }
 
     button{
@@ -39,7 +40,7 @@
 <h1>Welcome to Linkarsha</h1>
 
 <div class="box">
-  <h2 id="welcome"></h2>
+  <h2 id="welcome">Loading...</h2>
   <p>Your public link:</p>
   <h3 id="publicLink"></h3>
 
@@ -47,41 +48,44 @@
 </div>
 
 <script>
-  const { createClient } = supabase;
-  const supabaseClient = createClient(
-    "https://pibrvhziqkaitaacbegy.supabase.co",
+const { createClient } = supabase;
+const supabaseClient = createClient(
+  "https://pibrvhziqkaitaacbegy.supabase.co",
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw"
-  );
+);
 
-  async function loadUser(){
-    const { data: { user } } = await supabaseClient.auth.getUser();
+async function loadUser(){
+  const { data: { user } } = await supabaseClient.auth.getUser();
 
-    if(!user){
-      window.location.href = "/";
-      return;
-    }
-
-    const { data, error } = await supabaseClient
-      .from("profiles")
-      .select("*")
-      .eq("id", user.id)
-      .single();
-
-    if(data){
-      document.getElementById("welcome").innerText =
-        "Hello, " + data.username;
-
-      document.getElementById("publicLink").innerText =
-        "https://linkarsha.netlify.app/" + data.username;
-    }
-  }
-
-  async function logout(){
-    await supabaseClient.auth.signOut();
+  if(!user){
     window.location.href = "/";
+    return;
   }
 
-  loadUser();
+  const { data, error } = await supabaseClient
+    .from("profiles")
+    .select("*")
+    .eq("id", user.id)
+    .single();
+
+  if(error){
+    document.getElementById("welcome").innerText = "Error loading profile";
+    return;
+  }
+
+  document.getElementById("welcome").innerText =
+    "Hello, " + data.username;
+
+  document.getElementById("publicLink").innerText =
+    "linkarsha.netlify.app/" + data.username;
+}
+
+async function logout(){
+  await supabaseClient.auth.signOut();
+  window.location.href = "/";
+}
+
+loadUser();
 </script>
 
 </body>
