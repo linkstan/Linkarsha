@@ -63,7 +63,7 @@
 
     const { data, error } = await supabaseClient
       .from("profiles")
-      .select("username")
+      .select("*")
       .eq("id", user.id)
       .single();
 
@@ -72,7 +72,7 @@
         "Hello, " + data.username;
 
       document.getElementById("publicLink").innerText =
-        "linkarsha.netlify.app/" + data.username;
+        "https://linkarsha.netlify.app/" + data.username;
     }
   }
 
