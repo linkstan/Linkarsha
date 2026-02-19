@@ -1,25 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Linkarsha Dashboard</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 body{
 font-family:Arial;
+text-align:center;
 background:linear-gradient(135deg,#6a11cb,#2575fc,#00c6ff);
 color:white;
-text-align:center;
 padding:40px;
 }
+
 .box{
 background:rgba(255,255,255,0.15);
 padding:30px;
 border-radius:20px;
 display:inline-block;
-margin-top:40px;
 width:320px;
 }
+
+input{
+padding:10px;
+margin:6px;
+width:90%;
+border:none;
+border-radius:10px;
+}
+
 button{
 padding:10px 20px;
 border:none;
@@ -27,22 +36,26 @@ border-radius:20px;
 background:white;
 color:#2575fc;
 font-weight:bold;
-cursor:pointer;
 margin-top:10px;
+cursor:pointer;
 }
-input, textarea{
-padding:10px;
-border-radius:10px;
-border:none;
-margin:8px;
-width:80%;
+
+a{
+display:block;
+background:white;
+color:#2575fc;
+padding:12px;
+margin:10px 0;
+border-radius:12px;
+text-decoration:none;
+font-weight:bold;
 }
 </style>
 </head>
 
 <body>
 
-<h1>Welcome to Linkarsha</h1>
+<h1>Dashboard</h1>
 
 <div class="box">
 <h2 id="welcome">Loading...</h2>
@@ -51,23 +64,12 @@ width:80%;
 
 <hr>
 
-<h3>Your Bio</h3>
-<textarea id="bioInput" placeholder="Write your bio..."></textarea><br>
-<button onclick="saveBio()">Save Bio</button>
-<div id="bioDisplay"></div>
+<h3>Add Link</h3>
+<input id="title" placeholder="Instagram / YouTube">
+<input id="url" placeholder="https://">
+<button onclick="addLink()">Add</button>
 
-<hr>
-
-<h3>Add New Link</h3>
-<input type="text" id="linkTitle" placeholder="Link title"><br>
-<input type="text" id="linkUrl" placeholder="https://yourlink.com"><br>
-<button onclick="addLink()">Add Link</button>
-<p id="msg"></p>
-
-<hr>
-
-<h3>Your Links</h3>
-<div id="linksList"></div>
+<div id="links"></div>
 
 <button onclick="logout()">Logout</button>
 </div>
@@ -75,128 +77,75 @@ width:80%;
 <script>
 const { createClient } = supabase;
 
-const supabaseClient = createClient(
+const supabaseClient=createClient(
 "https://pibrvhziqkaitaacbegy.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw"
+"PASTE_ANON_KEY"
 );
 
-let currentUser = null;
+let userId=null;
 
-async function init(){
-const { data: { user } } = await supabaseClient.auth.getUser();
+async function load(){
+const {data:{user}}=await supabaseClient.auth.getUser();
 
 if(!user){
-window.location.href="/";
+location.href="/";
 return;
 }
 
-currentUser = user;
+userId=user.id;
 
-loadProfile();
-loadLinks();
-loadBio();
-}
-
-async function loadProfile(){
-const { data } = await supabaseClient
+const {data:profile}=await supabaseClient
 .from("profiles")
 .select("*")
-.eq("id", currentUser.id)
+.eq("id",user.id)
 .single();
 
-if(!data){
-document.getElementById("welcome").innerText="Profile error";
+if(!profile){
+location.href="/";
 return;
 }
 
-document.getElementById("welcome").innerText="Hello, "+data.username;
+document.getElementById("welcome").innerText="Hello "+profile.username;
 document.getElementById("publicLink").innerText=
-"linkarsha.vercel.app/"+data.username;
+"linkarsha.vercel.app/"+profile.username;
+
+loadLinks();
 }
 
 async function addLink(){
-const title=document.getElementById("linkTitle").value;
-const url=document.getElementById("linkUrl").value;
+const title=document.getElementById("title").value;
+const url=document.getElementById("url").value;
 
-if(!title||!url){
-document.getElementById("msg").innerText="Enter title & url";
-return;
-}
+if(!title||!url) return;
 
-const { error } = await supabaseClient
-.from("links")
-.insert([{
-user_id: currentUser.id,
-title:title,
-url:url
-}]);
-
-if(error){
-document.getElementById("msg").innerText=error.message;
-return;
-}
-
-document.getElementById("msg").innerText="Link added!";
-document.getElementById("linkTitle").value="";
-document.getElementById("linkUrl").value="";
+await supabaseClient.from("links").insert([
+{user_id:userId,title:title,url:url}
+]);
 
 loadLinks();
 }
 
 async function loadLinks(){
-const { data } = await supabaseClient
+const {data}=await supabaseClient
 .from("links")
 .select("*")
-.eq("user_id", currentUser.id);
+.eq("user_id",userId);
 
 let html="";
-
-if(!data||data.length===0){
-html="No links added yet";
-}else{
-data.forEach(link=>{
-html+=`
-<a href="${link.url}" target="_blank"
-style="display:block;background:white;color:#2575fc;padding:12px;margin:10px;border-radius:12px;text-decoration:none;font-weight:bold;">
-${link.title}
-</a>
-`;
+if(data){
+data.forEach(l=>{
+html+=`<a href="${l.url}" target="_blank">${l.title}</a>`;
 });
 }
-
-document.getElementById("linksList").innerHTML=html;
-}
-
-async function saveBio(){
-const bio=document.getElementById("bioInput").value;
-
-await supabaseClient
-.from("profiles")
-.update({bio:bio})
-.eq("id",currentUser.id);
-
-alert("Bio saved");
-loadBio();
-}
-
-async function loadBio(){
-const { data } = await supabaseClient
-.from("profiles")
-.select("bio")
-.eq("id",currentUser.id)
-.single();
-
-if(data?.bio){
-document.getElementById("bioDisplay").innerHTML="<br>"+data.bio;
-}
+document.getElementById("links").innerHTML=html;
 }
 
 async function logout(){
 await supabaseClient.auth.signOut();
-window.location.href="/";
+location.href="/";
 }
 
-init();
+load();
 </script>
 
 </body>
