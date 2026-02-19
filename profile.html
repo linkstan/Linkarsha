@@ -48,13 +48,19 @@
 const { createClient } = supabase;
 const supabaseClient = createClient(
   "https://pibrvhziqkaitaacbegy.supabase.co",
-  ""eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw""
+  "PASTE_ANON_KEY"
 );
 
 async function loadProfile(){
 
-  // 🔥 correct username detection
   const path = window.location.pathname;
+
+  // if homepage → go to index
+  if(path === "/" || path === ""){
+    window.location.href = "/";
+    return;
+  }
+
   const username = path.split("/").pop();
 
   if(!username){
@@ -62,7 +68,6 @@ async function loadProfile(){
     return;
   }
 
-  // 🔥 get profile (case insensitive)
   const { data: profile, error } = await supabaseClient
     .from("profiles")
     .select("*")
@@ -76,13 +81,11 @@ async function loadProfile(){
 
   document.getElementById("username").innerText = profile.username;
 
-  // 🔥 show bio
   if(profile.bio){
     document.getElementById("bio").innerHTML =
       "<p style='margin-bottom:20px'>" + profile.bio + "</p>";
   }
 
-  // 🔥 get links
   const { data: links } = await supabaseClient
     .from("links")
     .select("*")
