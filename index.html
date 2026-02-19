@@ -3,6 +3,7 @@
 <head>
   <title>Linkarsha</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     body {
       font-family: Arial;
@@ -28,6 +29,7 @@
       background: white;
       color: #2575fc;
       font-weight: bold;
+      margin-top:10px;
     }
 
     .box {
@@ -42,77 +44,106 @@
 <body>
 
 <h1>Linkarsha</h1>
-<p>Create your smart link profile</p>
+<p>Create your premium creator link page</p>
 
 <div class="box">
   <h2>Signup</h2>
+
   <input type="email" id="email" placeholder="Email"><br>
   <input type="password" id="password" placeholder="Password"><br>
   <input type="text" id="username" placeholder="Choose username"><br>
+
   <button onclick="signUp()">Create Account</button>
 
-<p id="message"></p>
-<br><br>
-<button onclick="login()">Login</button>
+  <p id="message"></p>
+
+  <hr style="margin:20px 0">
+
+  <h3>Already have account?</h3>
+  <button onclick="login()">Login</button>
 </div>
 
 <script>
-  const { createClient } = supabase;
-  const supabaseClient = createClient(
-    "https://pibrvhziqkaitaacbegy.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw"
-  );
+const { createClient } = supabase;
+const supabaseClient = createClient(
+  "https://pibrvhziqkaitaacbegy.supabase.co",
+  "PASTE_YOUR_ANON_KEY"
+);
 
-  async function signUp() {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const username = document.getElementById("username").value;
+async function signUp() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const username = document.getElementById("username").value;
 
-    const { data, error } = await supabaseClient.auth.signUp({
-      email: email,
-      password: password
-    });
+  if(!email || !password || !username){
+    document.getElementById("message").innerText = "Fill all fields";
+    return;
+  }
 
-    if (error) {
-      document.getElementById("message").innerText = error.message;
-      return;
-    }
+  // 🔥 signup
+  const { data, error } = await supabaseClient.auth.signUp({
+    email: email,
+    password: password
+  });
 
-    const user = data.user;
+  if(error){
+    document.getElementById("message").innerText = error.message;
+    return;
+  }
 
-    await supabaseClient.from("profiles").insert([
-      { id: user.id, username: username }
+  const user = data.user;
+
+  if(!user){
+    document.getElementById("message").innerText =
+    "Signup success. Now login.";
+    return;
+  }
+
+  // 🔥 create profile safely
+  const { error: profileError } = await supabaseClient
+    .from("profiles")
+    .insert([
+      {
+        id: user.id,
+        username: username.toLowerCase()
+      }
     ]);
 
+  if(profileError){
     document.getElementById("message").innerText =
-      "Account created! Now login below 👇";
+    profileError.message;
+    return;
   }
 
-  async function login() {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+  document.getElementById("message").innerText =
+  "Account created successfully 😈 Now login";
+}
 
-    const { error } = await supabaseClient.auth.signInWithPassword({
-      email: email,
-      password: password
-    });
+async function login() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-    if (error) {
-      document.getElementById("message").innerText = error.message;
-      return;
-    }
+  const { error } = await supabaseClient.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
 
-    window.location.href = "/dashboard.html";
+  if (error) {
+    document.getElementById("message").innerText = error.message;
+    return;
   }
 
-  async function checkUser(){
-    const { data: { user } } = await supabaseClient.auth.getUser();
-    if(user){
-      window.location.href = "/dashboard.html";
-    }
-  }
+  window.location.href = "/dashboard";
+}
 
-  checkUser();
+// auto redirect if already logged
+async function checkUser(){
+  const { data: { user } } = await supabaseClient.auth.getUser();
+  if(user){
+    window.location.href = "/dashboard";
+  }
+}
+checkUser();
 </script>
 
 </body>
