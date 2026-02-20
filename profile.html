@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Profile</title>
+<title>Linkarsha</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
 body{
 font-family:Arial;
-text-align:center;
 background:linear-gradient(135deg,#6a11cb,#2575fc,#00c6ff);
 color:white;
+text-align:center;
 padding:40px;
 }
 
@@ -18,6 +17,7 @@ background:rgba(255,255,255,0.15);
 padding:30px;
 border-radius:20px;
 display:inline-block;
+margin-top:40px;
 width:320px;
 }
 
@@ -33,15 +33,11 @@ font-weight:bold;
 }
 </style>
 </head>
-
 <body>
-
 <h1 id="username">Loading...</h1>
-
 <div class="box">
 <div id="links"></div>
 </div>
-
 <script>
 const { createClient } = supabase;
 
@@ -50,44 +46,52 @@ const supabaseClient=createClient(
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw"
 );
 
-async function load(){
+async function loadProfile(){
 
-const username=window.location.pathname.replace("/","").toLowerCase();
+// 🔥 GET USERNAME FROM URL
+let username = window.location.pathname.replace("/","");
+username = username.toLowerCase().trim();
 
 if(!username){
 document.getElementById("username").innerText="User not found";
 return;
 }
 
-const {data:profile}=await supabaseClient
+// 🔥 FIND PROFILE
+const {data:profile,error}=await supabaseClient
 .from("profiles")
 .select("*")
-.eq("username",username)
+.ilike("username", username)   // CASE INSENSITIVE
 .single();
 
-if(!profile){
+if(error || !profile){
 document.getElementById("username").innerText="User not found";
 return;
 }
 
-document.getElementById("username").innerText=profile.username;
+// show username
+document.getElementById("username").innerText="@"+profile.username;
 
+// 🔥 GET LINKS
 const {data:links}=await supabaseClient
 .from("links")
 .select("*")
 .eq("user_id",profile.id);
 
+if(!links || links.length===0){
+document.getElementById("links").innerHTML="<p>No links added</p>";
+return;
+}
+
 let html="";
-if(links){
 links.forEach(l=>{
 html+=`<a href="${l.url}" target="_blank">${l.title}</a>`;
 });
-}
+
 document.getElementById("links").innerHTML=html;
 }
 
-load();
+loadProfile();
 </script>
-
 </body>
 </html>
