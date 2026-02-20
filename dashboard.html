@@ -223,7 +223,39 @@ preview+=`<a class="linkbtn" href="${l.url}" target="_blank">${l.title}</a>`;
 document.getElementById("linksList").innerHTML=html;
 document.getElementById("previewLinks").innerHTML=preview;
 }
+async function uploadAvatar(){
 
+const file=document.getElementById("avatarUpload").files[0];
+if(!file) return alert("Choose image");
+
+const filePath=userId+"_"+Date.now();
+
+const {error:uploadError}=await supabaseClient.storage
+.from("avatars")
+.upload(filePath,file);
+
+if(uploadError){
+alert("Upload error");
+return;
+}
+
+const {data:urlData}=supabaseClient.storage
+.from("avatars")
+.getPublicUrl(filePath);
+
+const publicUrl=urlData.publicUrl;
+
+await supabaseClient
+.from("profiles")
+.update({avatar_url:publicUrl})
+.eq("id",userId);
+
+document.getElementById("avatar").style.background="url('"+publicUrl+"')";
+document.getElementById("avatar").style.backgroundSize="cover";
+document.getElementById("avatar").innerText="";
+}
+
+// KEEP THIS (already in your file)
 load();
 </script>
 
