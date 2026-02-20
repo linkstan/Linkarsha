@@ -1,128 +1,116 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Linkarsha</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>Linkarsha</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <style>
-    body{
-      font-family: Arial;
-      text-align:center;
-      background: linear-gradient(135deg,#6a11cb,#2575fc,#00c6ff);
-      color:white;
-      padding:40px;
-    }
-
-    .box{
-      background: rgba(255,255,255,0.15);
-      padding:30px;
-      border-radius:20px;
-      display:inline-block;
-    }
-
-    input{
-      padding:10px;
-      margin:8px;
-      width:260px;
-      border:none;
-      border-radius:10px;
-    }
-
-    button{
-      padding:12px 25px;
-      border:none;
-      border-radius:20px;
-      background:white;
-      color:#2575fc;
-      font-weight:bold;
-      cursor:pointer;
-      margin-top:10px;
-    }
-  </style>
+<style>
+body{
+font-family:Arial;
+text-align:center;
+background:linear-gradient(135deg,#6a11cb,#2575fc,#00c6ff);
+color:white;
+padding:40px;
+}
+input{
+padding:12px;
+margin:8px;
+width:260px;
+border-radius:10px;
+border:none;
+}
+button{
+padding:12px 22px;
+border:none;
+border-radius:22px;
+background:white;
+color:#2575fc;
+font-weight:bold;
+cursor:pointer;
+margin-top:10px;
+}
+.box{
+background:rgba(255,255,255,0.15);
+padding:30px;
+border-radius:20px;
+display:inline-block;
+}
+</style>
 </head>
 
 <body>
 
 <h1>Linkarsha</h1>
-<p>Create your premium creator link page</p>
+<p>Create your premium creator page</p>
 
 <div class="box">
-  <h2>Signup / Login</h2>
+<input id="email" placeholder="Email"><br>
+<input id="password" type="password" placeholder="Password"><br>
+<input id="username" placeholder="Username"><br>
 
-  <input id="email" type="email" placeholder="Email"><br>
-  <input id="password" type="password" placeholder="Password"><br>
-  <input id="username" type="text" placeholder="Username (for signup only)"><br>
+<button onclick="signup()">Create Account</button>
+<br><br>
+<button onclick="login()">Login</button>
 
-  <button onclick="signUp()">Create Account</button><br>
-  <button onclick="login()">Login</button>
-
-  <p id="msg"></p>
+<p id="msg"></p>
 </div>
 
 <script>
 const { createClient } = supabase;
 
-const supabaseClient = createClient(
-  "https://pibrvhziqkaitaacbegy.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw"
+const supabaseClient=createClient(
+"https://pibrvhziqkaitaacbegy.supabase.co",
+"PASTE_ANON_KEY_HERE"
 );
 
-async function signUp(){
-  const email=document.getElementById("email").value.trim();
-  const password=document.getElementById("password").value.trim();
-  const username=document.getElementById("username").value.trim().toLowerCase();
+async function signup(){
+const email=document.getElementById("email").value;
+const password=document.getElementById("password").value;
+const username=document.getElementById("username").value.toLowerCase();
 
-  if(!email||!password||!username){
-    msg.innerText="Fill all fields";
-    return;
-  }
+if(!email||!password||!username){
+msg.innerText="Fill all fields";
+return;
+}
 
-  const { data, error } = await supabaseClient.auth.signUp({
-    email:email,
-    password:password
-  });
+// create auth user
+const {data,error}=await supabaseClient.auth.signUp({
+email:email,
+password:password
+});
 
-  if(error){
-    msg.innerText=error.message;
-    return;
-  }
+if(error){
+msg.innerText=error.message;
+return;
+}
 
-  await supabaseClient.from("profiles").insert([
-    {
-      id:data.user.id,
-      username:username,
-      bio:""
-    }
-  ]);
+// create profile row
+await supabaseClient.from("profiles").insert([
+{
+id:data.user.id,
+username:username
+}
+]);
 
-  msg.innerText="Account created. Now login.";
+msg.innerText="Account created! Now login.";
 }
 
 async function login(){
-  const email=document.getElementById("email").value;
-  const password=document.getElementById("password").value;
+const email=document.getElementById("email").value;
+const password=document.getElementById("password").value;
 
-  const { error } = await supabaseClient.auth.signInWithPassword({
-    email:email,
-    password:password
-  });
+const {error}=await supabaseClient.auth.signInWithPassword({
+email:email,
+password:password
+});
 
-  if(error){
-    msg.innerText=error.message;
-    return;
-  }
-
-  window.location.href="/dashboard.html";
+if(error){
+msg.innerText=error.message;
+return;
 }
 
-async function check(){
- const { data:{user} } = await supabaseClient.auth.getUser();
- if(user){
-   window.location.href="/dashboard.html";
- }
+window.location.href="/dashboard.html";
 }
-check();
 </script>
-
 </body>
 </html>
