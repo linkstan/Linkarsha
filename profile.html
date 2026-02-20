@@ -8,7 +8,7 @@
 <style>
 body{
 margin:0;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
 background:radial-gradient(circle at top,#f8fafc,#eef2ff,#f1f5f9);
 min-height:100vh;
 display:flex;
@@ -44,23 +44,8 @@ background-size:cover;
 background-position:center;
 }
 
-.username{
-font-size:26px;
-font-weight:700;
-}
-
-.bio{
-color:#555;
-margin-top:6px;
-margin-bottom:15px;
-font-size:15px;
-}
-
-.views{
-font-size:13px;
-color:#888;
-margin-bottom:20px;
-}
+.username{font-size:26px;font-weight:700;}
+.bio{color:#555;margin:6px 0 15px;}
 
 .link{
 display:block;
@@ -73,34 +58,21 @@ color:#111;
 background:white;
 box-shadow:0 15px 30px rgba(0,0,0,0.12);
 transition:0.25s;
-font-size:16px;
 }
 
-.link:hover{
-transform:scale(1.05);
-}
-
-.footer{
-margin-top:26px;
-font-size:12px;
-color:#999;
-}
+.link:hover{transform:scale(1.05);}
+.footer{margin-top:25px;font-size:12px;color:#999;}
 </style>
 </head>
 
 <body>
 
 <div class="card">
-
 <div class="avatar" id="avatar">U</div>
 <div class="username" id="username">@user</div>
-<div class="bio" id="bio">Creator</div>
-<div class="views" id="viewsBox"></div>
-
+<div class="bio" id="bio"></div>
 <div id="links"></div>
-
 <div class="footer">Linkarsha</div>
-
 </div>
 
 <script>
@@ -115,32 +87,29 @@ let username=window.location.pathname.replace("/","").toLowerCase();
 
 async function load(){
 
-const {data:profile,error}=await supabaseClient
+const {data:profile}=await supabaseClient
 .from("profiles")
 .select("*")
 .ilike("username",username)
 .single();
 
-if(error || !profile){
+if(!profile){
 document.body.innerHTML="<h2>User not found</h2>";
 return;
 }
 
-/* 🔥 increase views */
+// increase views
 await supabaseClient
 .from("profiles")
 .update({views:(profile.views||0)+1})
 .eq("id",profile.id);
 
-/* username */
 document.getElementById("username").innerText="@"+profile.username;
 
-/* bio */
 if(profile.bio){
 document.getElementById("bio").innerText=profile.bio;
 }
 
-/* avatar */
 if(profile.avatar){
 document.getElementById("avatar").style.background="url('"+profile.avatar+"')";
 document.getElementById("avatar").innerText="";
@@ -148,25 +117,35 @@ document.getElementById("avatar").innerText="";
 document.getElementById("avatar").innerText=profile.username.charAt(0).toUpperCase();
 }
 
-/* show views only if enabled */
-if(profile.show_views){
-document.getElementById("viewsBox").innerText="👁 "+(profile.views+1)+" views";
-}
-
-/* links */
+// links
 const {data:links}=await supabaseClient
 .from("links")
 .select("*")
 .eq("user_id",profile.id);
 
 let html="";
-if(links){
 links.forEach(l=>{
-html+=`<a class="link" href="${l.url}" target="_blank">${l.title}</a>`;
+html+=`<a class="link" onclick="trackClick('${l.id}','${l.url}')" href="${l.url}" target="_blank">${l.title}</a>`;
 });
-}
 
 document.getElementById("links").innerHTML=html;
+}
+
+// 🔥 CLICK TRACK
+async function trackClick(id,url){
+
+const {data}=await supabaseClient
+.from("links")
+.select("clicks")
+.eq("id",id)
+.single();
+
+await supabaseClient
+.from("links")
+.update({clicks:(data.clicks||0)+1})
+.eq("id",id);
+
+window.open(url,"_blank");
 }
 
 load();
