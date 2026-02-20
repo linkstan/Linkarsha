@@ -33,14 +33,8 @@ padding:25px;
 box-shadow:0 10px 30px rgba(0,0,0,0.06);
 }
 
-.left{
-width:340px;
-}
-
-.right{
-flex:1;
-min-width:300px;
-}
+.left{width:340px;}
+.right{flex:1;min-width:300px;}
 
 .previewCard{
 background:linear-gradient(135deg,#eef2ff,#f5f3ff);
@@ -50,17 +44,19 @@ text-align:center;
 }
 
 .avatar{
-width:70px;
-height:70px;
+width:80px;
+height:80px;
 border-radius:50%;
 background:#6366f1;
 color:white;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:26px;
+font-size:28px;
 margin:auto;
-margin-bottom:10px;
+margin-bottom:12px;
+background-size:cover;
+background-position:center;
 }
 
 .linkbtn{
@@ -147,7 +143,6 @@ const supabaseClient=createClient(
 );
 
 let userId=null;
-let usernameGlobal="";
 
 async function load(){
 
@@ -160,13 +155,16 @@ return;
 
 userId=user.id;
 
-const {data:profile}=await supabaseClient
+const {data:profile,error}=await supabaseClient
 .from("profiles")
 .select("*")
 .eq("id",user.id)
 .single();
 
-usernameGlobal=profile.username;
+if(error || !profile){
+alert("Profile not found");
+return;
+}
 
 document.getElementById("previewUsername").innerText="@"+profile.username;
 document.getElementById("avatar").innerText=profile.username.charAt(0).toUpperCase();
@@ -174,6 +172,11 @@ document.getElementById("avatar").innerText=profile.username.charAt(0).toUpperCa
 if(profile.bio){
 document.getElementById("previewBio").innerText=profile.bio;
 document.getElementById("bioInput").value=profile.bio;
+}
+
+if(profile.avatar_url){
+document.getElementById("avatar").style.background=`url('${profile.avatar_url}')`;
+document.getElementById("avatar").innerText="";
 }
 
 loadLinks();
@@ -215,47 +218,50 @@ const {data}=await supabaseClient
 let html="";
 let preview="";
 
+if(data){
 data.forEach(l=>{
 html+=`<div>${l.title}</div>`;
 preview+=`<a class="linkbtn" href="${l.url}" target="_blank">${l.title}</a>`;
 });
+}
 
 document.getElementById("linksList").innerHTML=html;
 document.getElementById("previewLinks").innerHTML=preview;
 }
+
 async function uploadAvatar(){
 
 const file=document.getElementById("avatarUpload").files[0];
 if(!file) return alert("Choose image");
 
-const filePath=userId+"_"+Date.now();
+const filePath="avatar_"+userId+"_"+Date.now()+".png";
 
 const {error:uploadError}=await supabaseClient.storage
 .from("avatars")
-.upload(filePath,file);
+.upload(filePath,file,{upsert:true});
 
 if(uploadError){
-alert("Upload error");
+alert(uploadError.message);
 return;
 }
 
-const {data:urlData}=supabaseClient.storage
+const {data}=supabaseClient.storage
 .from("avatars")
 .getPublicUrl(filePath);
 
-const publicUrl=urlData.publicUrl;
+const publicUrl=data.publicUrl;
 
 await supabaseClient
 .from("profiles")
 .update({avatar_url:publicUrl})
 .eq("id",userId);
 
-document.getElementById("avatar").style.background="url('"+publicUrl+"')";
-document.getElementById("avatar").style.backgroundSize="cover";
+document.getElementById("avatar").style.background=`url('${publicUrl}')`;
 document.getElementById("avatar").innerText="";
+
+alert("Photo saved");
 }
 
-// KEEP THIS (already in your file)
 load();
 </script>
 
