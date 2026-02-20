@@ -3,7 +3,6 @@
 <head>
 <title>Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
 body{
 font-family:Arial;
@@ -12,7 +11,6 @@ background:linear-gradient(135deg,#6a11cb,#2575fc,#00c6ff);
 color:white;
 padding:40px;
 }
-
 .box{
 background:rgba(255,255,255,0.15);
 padding:30px;
@@ -20,7 +18,6 @@ border-radius:20px;
 display:inline-block;
 width:320px;
 }
-
 input{
 padding:10px;
 margin:6px;
@@ -28,7 +25,6 @@ width:90%;
 border:none;
 border-radius:10px;
 }
-
 button{
 padding:10px 20px;
 border:none;
@@ -39,7 +35,6 @@ font-weight:bold;
 margin-top:10px;
 cursor:pointer;
 }
-
 a{
 display:block;
 background:white;
@@ -52,34 +47,26 @@ font-weight:bold;
 }
 </style>
 </head>
-
 <body>
-
 <h1>Dashboard</h1>
-
 <div class="box">
 <h2 id="welcome">Loading...</h2>
 <p>Your public link:</p>
 <h3 id="publicLink"></h3>
-
 <hr>
-
-<h3>Add Link</h3>
 <input id="title" placeholder="Instagram / YouTube">
 <input id="url" placeholder="https://">
-<button onclick="addLink()">Add</button>
-
+<button onclick="addLink()">Add Link</button>
 <div id="links"></div>
-
+<br>
 <button onclick="logout()">Logout</button>
 </div>
-
 <script>
 const { createClient } = supabase;
 
 const supabaseClient=createClient(
 "https://pibrvhziqkaitaacbegy.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw"
+"PASTE_ANON_KEY_HERE"
 );
 
 let userId=null;
@@ -94,6 +81,7 @@ return;
 
 userId=user.id;
 
+// get profile
 const {data:profile}=await supabaseClient
 .from("profiles")
 .select("*")
@@ -101,11 +89,12 @@ const {data:profile}=await supabaseClient
 .single();
 
 if(!profile){
-location.href="/";
+document.getElementById("welcome").innerText="Profile not found";
 return;
 }
 
 document.getElementById("welcome").innerText="Hello "+profile.username;
+
 document.getElementById("publicLink").innerText=
 "linkarsha.vercel.app/"+profile.username;
 
@@ -132,11 +121,9 @@ const {data}=await supabaseClient
 .eq("user_id",userId);
 
 let html="";
-if(data){
 data.forEach(l=>{
 html+=`<a href="${l.url}" target="_blank">${l.title}</a>`;
 });
-}
 document.getElementById("links").innerHTML=html;
 }
 
@@ -147,6 +134,5 @@ location.href="/";
 
 load();
 </script>
-
 </body>
 </html>
