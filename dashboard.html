@@ -114,14 +114,12 @@ margin-bottom:10px;
 <div class="container">
 
 <div class="left">
-
 <div class="previewCard">
 <div class="avatar" id="avatar">U</div>
 <div id="previewUsername">@username</div>
 <div id="previewBio" style="color:#666;font-size:14px;margin:8px 0">creator bio</div>
 <div id="previewLinks"></div>
 </div>
-
 </div>
 
 <div class="right">
@@ -130,6 +128,9 @@ margin-bottom:10px;
 <div class="sectionTitle">Analytics</div>
 <div class="statBox" id="viewStat">👁 0 Profile Views</div>
 <div class="statBox" id="linkStat">🔗 0 Total Links</div>
+
+<div class="sectionTitle">Link Clicks</div>
+<div id="clickStats"></div>
 
 <hr style="margin:25px 0">
 
@@ -147,7 +148,6 @@ margin-bottom:10px;
 <div id="linksList"></div>
 
 </div>
-
 </div>
 
 <script>
@@ -192,10 +192,10 @@ document.getElementById("avatar").innerText="";
 document.getElementById("avatar").innerText=profile.username.charAt(0).toUpperCase();
 }
 
-// 🔥 analytics
+// 🔥 profile views
 document.getElementById("viewStat").innerText="👁 "+(profile.views||0)+" Profile Views";
 
-// links count
+// links
 const {data:links}=await supabaseClient
 .from("links")
 .select("*")
@@ -204,6 +204,26 @@ const {data:links}=await supabaseClient
 document.getElementById("linkStat").innerText="🔗 "+(links?.length||0)+" Total Links";
 
 loadLinks();
+loadClickStats();
+}
+
+async function loadClickStats(){
+
+const {data}=await supabaseClient
+.from("links")
+.select("*")
+.eq("user_id",userId);
+
+let html="";
+
+data.forEach(l=>{
+html+=`
+<div class="statBox" style="background:#111;">
+${l.title} → ${l.clicks||0} clicks
+</div>`;
+});
+
+document.getElementById("clickStats").innerHTML=html;
 }
 
 async function saveBio(){
