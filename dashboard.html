@@ -4,104 +4,25 @@
 <title>Linkarsha Studio</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-body{
-margin:0;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
-background:#f6f7fb;
-}
-
-.header{
-padding:20px 40px;
-font-weight:700;
-font-size:20px;
-background:white;
-box-shadow:0 2px 10px rgba(0,0,0,0.05);
-}
-
-.container{
-display:flex;
-gap:40px;
-padding:40px;
-flex-wrap:wrap;
-}
-
-.left,.right{
-background:white;
-border-radius:20px;
-padding:25px;
-box-shadow:0 10px 30px rgba(0,0,0,0.06);
-}
-
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;background:#f6f7fb;}
+.header{padding:20px 40px;font-weight:700;font-size:20px;background:white;box-shadow:0 2px 10px rgba(0,0,0,0.05);}
+.container{display:flex;gap:40px;padding:40px;flex-wrap:wrap;}
+.left,.right{background:white;border-radius:20px;padding:25px;box-shadow:0 10px 30px rgba(0,0,0,0.06);}
 .left{width:340px;}
 .right{flex:1;min-width:300px;}
 
-.previewCard{
-background:linear-gradient(135deg,#eef2ff,#f5f3ff);
-border-radius:25px;
-padding:25px;
-text-align:center;
-}
+.previewCard{background:linear-gradient(135deg,#eef2ff,#f5f3ff);border-radius:25px;padding:25px;text-align:center;}
+.avatar{width:90px;height:90px;border-radius:50%;background:#6366f1;color:white;display:flex;align-items:center;justify-content:center;font-size:32px;margin:auto;margin-bottom:12px;background-size:cover;background-position:center;}
 
-.avatar{
-width:90px;
-height:90px;
-border-radius:50%;
-background:#6366f1;
-color:white;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:32px;
-margin:auto;
-margin-bottom:12px;
-background-size:cover;
-background-position:center;
-}
-
-.linkbtn{
-display:block;
-background:white;
-padding:13px;
-margin:10px 0;
-border-radius:14px;
-text-decoration:none;
-color:#111;
-font-weight:600;
-box-shadow:0 8px 18px rgba(0,0,0,0.06);
-}
-
-input{
-width:100%;
-padding:13px;
-margin:8px 0;
-border-radius:12px;
-border:1px solid #eee;
-}
-
-button{
-padding:13px 18px;
-border:none;
-border-radius:14px;
-background:#6366f1;
-color:white;
-font-weight:600;
-cursor:pointer;
-margin-top:8px;
-}
-
-.sectionTitle{
-font-weight:700;
-margin-top:10px;
-margin-bottom:10px;
-}
+.linkbtn{display:block;background:white;padding:13px;margin:10px 0;border-radius:14px;text-decoration:none;color:#111;font-weight:600;box-shadow:0 8px 18px rgba(0,0,0,0.06);}
+input{width:100%;padding:13px;margin:8px 0;border-radius:12px;border:1px solid #eee;}
+button{padding:13px 18px;border:none;border-radius:14px;background:#6366f1;color:white;font-weight:600;cursor:pointer;margin-top:8px;}
+.sectionTitle{font-weight:700;margin-top:10px;margin-bottom:10px;}
 </style>
 </head>
 <body>
-
 <div class="header">Linkarsha Studio</div>
-
 <div class="container">
-
 <div class="left">
 <div class="previewCard">
 <div class="avatar" id="avatar">U</div>
@@ -110,28 +31,20 @@ margin-bottom:10px;
 <div id="previewLinks"></div>
 </div>
 </div>
-
 <div class="right">
-
 <div class="sectionTitle">Profile</div>
 <input type="file" id="avatarUpload">
 <button onclick="uploadAvatar()">Upload Photo</button>
-
 <input id="bioInput" placeholder="Write your bio">
 <button onclick="saveBio()">Save Bio</button>
-
 <hr style="margin:25px 0">
-
 <div class="sectionTitle">Add Link</div>
 <input id="title" placeholder="Instagram / YouTube">
 <input id="url" placeholder="https://">
 <button onclick="addLink()">Add Link</button>
-
 <div id="linksList"></div>
-
 </div>
 </div>
-
 <script>
 const { createClient } = supabase;
 
@@ -141,6 +54,7 @@ const supabaseClient=createClient(
 );
 
 let userId=null;
+let usernameGlobal="";
 
 async function load(){
 
@@ -153,31 +67,38 @@ return;
 
 userId=user.id;
 
-// get profile
-const {data:profile}=await supabaseClient
+// 🔥 FORCE CREATE PROFILE IF NOT EXISTS
+let {data:profile}=await supabaseClient
 .from("profiles")
 .select("*")
 .eq("id",user.id)
 .single();
 
 if(!profile){
-alert("Profile not found");
-return;
+
+const email=user.email || "user";
+const username=email.split("@")[0];
+
+await supabaseClient.from("profiles").insert([
+{id:user.id,username:username}
+]);
+
+profile={id:user.id,username:username};
 }
+
+usernameGlobal=profile.username;
 
 document.getElementById("previewUsername").innerText="@"+profile.username;
 document.getElementById("avatar").innerText=profile.username.charAt(0).toUpperCase();
 
-// avatar show if exists
-if(profile.avatar_url){
-document.getElementById("avatar").style.background="url('"+profile.avatar_url+"')";
-document.getElementById("avatar").innerText="";
-}
-
-// bio
 if(profile.bio){
 document.getElementById("previewBio").innerText=profile.bio;
 document.getElementById("bioInput").value=profile.bio;
+}
+
+if(profile.avatar){
+document.getElementById("avatar").style.background=`url('${profile.avatar}')`;
+document.getElementById("avatar").innerText="";
 }
 
 loadLinks();
@@ -206,7 +127,6 @@ await supabaseClient.from("links").insert([
 
 document.getElementById("title").value="";
 document.getElementById("url").value="";
-
 loadLinks();
 }
 
@@ -243,10 +163,7 @@ const {error}=await supabaseClient.storage
 .from("avatars")
 .upload(filePath,file,{upsert:true});
 
-if(error){
-alert(error.message);
-return;
-}
+if(error){ alert(error.message); return; }
 
 const {data}=supabaseClient.storage
 .from("avatars")
@@ -256,17 +173,15 @@ const publicUrl=data.publicUrl;
 
 await supabaseClient
 .from("profiles")
-.update({avatar_url:publicUrl})
+.update({avatar:publicUrl})
 .eq("id",userId);
 
-document.getElementById("avatar").style.background="url('"+publicUrl+"')";
+document.getElementById("avatar").style.background=`url('${publicUrl}')`;
 document.getElementById("avatar").innerText="";
-
 alert("Profile photo saved");
 }
 
 load();
 </script>
-
 </body>
 </html>
