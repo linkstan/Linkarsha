@@ -44,15 +44,15 @@ text-align:center;
 }
 
 .avatar{
-width:80px;
-height:80px;
+width:90px;
+height:90px;
 border-radius:50%;
 background:#6366f1;
 color:white;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:28px;
+font-size:30px;
 margin:auto;
 margin-bottom:12px;
 background-size:cover;
@@ -118,6 +118,7 @@ margin-bottom:10px;
 <div class="sectionTitle">Profile</div>
 <input type="file" id="avatarUpload">
 <button onclick="uploadAvatar()">Upload Photo</button>
+
 <input id="bioInput" placeholder="Write your bio">
 <button onclick="saveBio()">Save Bio</button>
 
@@ -131,7 +132,6 @@ margin-bottom:10px;
 <div id="linksList"></div>
 
 </div>
-
 </div>
 
 <script>
@@ -146,7 +146,7 @@ let userId=null;
 
 async function load(){
 
-const {data:{user}}=await supabaseClient.auth.getUser();
+const {data:{user}} = await supabaseClient.auth.getUser();
 
 if(!user){
 location.href="/";
@@ -158,7 +158,7 @@ userId=user.id;
 const {data:profile,error}=await supabaseClient
 .from("profiles")
 .select("*")
-.eq("id",user.id)
+.eq("id",userId)
 .single();
 
 if(error || !profile){
@@ -167,16 +167,19 @@ return;
 }
 
 document.getElementById("previewUsername").innerText="@"+profile.username;
-document.getElementById("avatar").innerText=profile.username.charAt(0).toUpperCase();
 
+// avatar load
+if(profile.avatar_url){
+document.getElementById("avatar").style.background=`url('${profile.avatar_url}')`;
+document.getElementById("avatar").innerHTML="";
+}else{
+document.getElementById("avatar").innerText=profile.username.charAt(0).toUpperCase();
+}
+
+// bio
 if(profile.bio){
 document.getElementById("previewBio").innerText=profile.bio;
 document.getElementById("bioInput").value=profile.bio;
-}
-
-if(profile.avatar_url){
-document.getElementById("avatar").style.background=`url('${profile.avatar_url}')`;
-document.getElementById("avatar").innerText="";
 }
 
 loadLinks();
@@ -234,11 +237,11 @@ async function uploadAvatar(){
 const file=document.getElementById("avatarUpload").files[0];
 if(!file) return alert("Choose image");
 
-const filePath="avatar_"+userId+"_"+Date.now()+".png";
+const fileName="avatar_"+userId+".png";
 
 const {error:uploadError}=await supabaseClient.storage
 .from("avatars")
-.upload(filePath,file,{upsert:true});
+.upload(fileName,file,{upsert:true});
 
 if(uploadError){
 alert(uploadError.message);
@@ -247,9 +250,9 @@ return;
 
 const {data}=supabaseClient.storage
 .from("avatars")
-.getPublicUrl(filePath);
+.getPublicUrl(fileName);
 
-const publicUrl=data.publicUrl;
+const publicUrl=data.publicUrl+"?t="+new Date().getTime();
 
 await supabaseClient
 .from("profiles")
@@ -257,9 +260,9 @@ await supabaseClient
 .eq("id",userId);
 
 document.getElementById("avatar").style.background=`url('${publicUrl}')`;
-document.getElementById("avatar").innerText="";
+document.getElementById("avatar").innerHTML="";
 
-alert("Photo saved");
+alert("Photo saved successfully");
 }
 
 load();
