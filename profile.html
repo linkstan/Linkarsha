@@ -15,6 +15,7 @@ box-sizing:border-box;
 font-family:'Inter',sans-serif;
 }
 
+/* DEFAULT LUXURY */
 body{
 background:#ffffff;
 min-height:100vh;
@@ -26,11 +27,7 @@ justify-content:center;
 width:100%;
 max-width:520px;
 padding:60px 22px;
-}
-
-.profile{
 text-align:center;
-margin-bottom:40px;
 }
 
 .avatar{
@@ -66,9 +63,7 @@ margin-top:35px;
 }
 
 .link{
-display:flex;
-align-items:center;
-justify-content:center;
+display:block;
 width:100%;
 padding:18px;
 margin:14px 0;
@@ -84,14 +79,38 @@ transition:0.25s;
 .link:hover{
 background:#111;
 color:white;
-transform:scale(1.02);
 }
 
 .footer{
 margin-top:60px;
-text-align:center;
 font-size:13px;
 color:#bbb;
+}
+
+/* DARK THEME */
+body.dark{
+background:#0e0e0e;
+color:white;
+}
+
+body.dark .link{
+background:#1b1b1b;
+color:white;
+}
+
+body.dark .link:hover{
+background:white;
+color:black;
+}
+
+/* CREATOR PINK */
+body.creator{
+background:linear-gradient(135deg,#ffe4ec,#ffffff);
+}
+
+/* MINIMAL */
+body.minimal{
+background:#f8f8f8;
 }
 </style>
 </head>
@@ -100,13 +119,12 @@ color:#bbb;
 
 <div class="container">
 
-<div class="profile">
 <div class="avatar" id="avatar">U</div>
 <div class="username" id="username">@user</div>
 <div class="bio" id="bio">Creator</div>
-</div>
 
 <div class="links" id="links"></div>
+
 <div class="footer">Linkarsha</div>
 
 </div>
@@ -116,26 +134,27 @@ const { createClient } = supabase;
 
 const supabaseClient=createClient(
 "https://pibrvhziqkaitaacbegy.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw"
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw"
 );
 
-// 🔥 STRONG USERNAME DETECTOR
-let path = window.location.pathname;
-path = path.replaceAll("/","");
-path = path.split("?")[0];
-let username = path.toLowerCase();
+let username=window.location.pathname.replace("/","").toLowerCase();
 
 async function load(){
 
-const {data:profile,error}=await supabaseClient
+const {data:profile}=await supabaseClient
 .from("profiles")
 .select("*")
 .ilike("username",username)
 .single();
 
-if(error || !profile){
-document.body.innerHTML="<h2 style='font-family:Inter'>User not found</h2>";
+if(!profile){
+document.body.innerHTML="<h2>User not found</h2>";
 return;
+}
+
+/* APPLY THEME */
+if(profile.theme){
+document.body.classList.add(profile.theme);
 }
 
 document.getElementById("username").innerText="@"+profile.username;
@@ -157,11 +176,9 @@ const {data:links}=await supabaseClient
 .eq("user_id",profile.id);
 
 let html="";
-if(links){
 links.forEach(l=>{
 html+=`<a class="link" href="${l.url}" target="_blank">${l.title}</a>`;
 });
-}
 
 document.getElementById("links").innerHTML=html;
 }
