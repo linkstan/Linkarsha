@@ -8,32 +8,37 @@
 body{
 font-family:Arial;
 text-align:center;
-background:linear-gradient(135deg,#6a11cb,#2575fc,#00c6ff);
+background:linear-gradient(135deg,#667eea,#764ba2);
 color:white;
-padding:40px;
+padding:60px;
 }
-input{
-padding:12px;
-margin:8px;
-width:260px;
-border-radius:10px;
-border:none;
-}
-button{
-padding:12px 22px;
-border:none;
-border-radius:22px;
-background:white;
-color:#2575fc;
-font-weight:bold;
-cursor:pointer;
-margin-top:10px;
-}
+
 .box{
-background:rgba(255,255,255,0.15);
+background:white;
+color:black;
 padding:30px;
 border-radius:20px;
 display:inline-block;
+width:320px;
+}
+
+input{
+width:90%;
+padding:12px;
+margin:8px;
+border-radius:10px;
+border:1px solid #ddd;
+}
+
+button{
+padding:12px 20px;
+border:none;
+border-radius:20px;
+background:#667eea;
+color:white;
+font-weight:bold;
+cursor:pointer;
+margin-top:10px;
 }
 </style>
 </head>
@@ -41,18 +46,19 @@ display:inline-block;
 <body>
 
 <h1>Linkarsha</h1>
-<p>Create your premium creator page</p>
+<p>Create your creator page</p>
 
 <div class="box">
+
 <input id="email" placeholder="Email"><br>
 <input id="password" type="password" placeholder="Password"><br>
 <input id="username" placeholder="Username"><br>
 
+<p id="msg"></p>
+
 <button onclick="signup()">Create Account</button>
-<br><br>
 <button onclick="login()">Login</button>
 
-<p id="msg"></p>
 </div>
 
 <script>
@@ -64,9 +70,10 @@ const supabaseClient=createClient(
 );
 
 async function signup(){
-const email=document.getElementById("email").value;
-const password=document.getElementById("password").value;
-const username=document.getElementById("username").value.toLowerCase();
+
+const email=document.getElementById("email").value.trim();
+const password=document.getElementById("password").value.trim();
+const username=document.getElementById("username").value.trim().toLowerCase();
 
 if(!email||!password||!username){
 msg.innerText="Fill all fields";
@@ -84,18 +91,33 @@ msg.innerText=error.message;
 return;
 }
 
-// create profile row
-await supabaseClient.from("profiles").insert([
-{
-id:data.user.id,
-username:username
-}
-]);
+const user=data.user;
 
-msg.innerText="Account created! Now login.";
+if(!user){
+msg.innerText="Signup failed";
+return;
+}
+
+// 🔴 CREATE PROFILE ROW (MOST IMPORTANT)
+const {error:profileError}=await supabaseClient
+.from("profiles")
+.insert([{
+id:user.id,
+username:username,
+bio:"",
+avatar_url:""
+}]);
+
+if(profileError){
+msg.innerText="Profile create error: "+profileError.message;
+return;
+}
+
+msg.innerText="Account created. Now login.";
 }
 
 async function login(){
+
 const email=document.getElementById("email").value;
 const password=document.getElementById("password").value;
 
@@ -109,8 +131,9 @@ msg.innerText=error.message;
 return;
 }
 
-window.location.href="/dashboard.html";
+window.location.href="/dashboard";
 }
 </script>
+
 </body>
 </html>
