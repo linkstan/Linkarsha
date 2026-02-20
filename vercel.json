@@ -1,7 +1,7 @@
 {
-  "routes": [
-    { "src": "/", "dest": "/index.html" },
-    { "src": "/dashboard", "dest": "/dashboard.html" },
-    { "src": "/(.*)", "dest": "/profile.html" }
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/dashboard", "destination": "/dashboard.html" },
+    { "source": "/:username", "destination": "/profile.html" }
   ]
 }
