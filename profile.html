@@ -28,7 +28,6 @@ max-width:520px;
 padding:60px 22px;
 }
 
-/* profile */
 .profile{
 text-align:center;
 margin-bottom:40px;
@@ -54,7 +53,6 @@ margin-bottom:18px;
 .username{
 font-size:26px;
 font-weight:700;
-letter-spacing:-0.5px;
 }
 
 .bio{
@@ -63,7 +61,6 @@ color:#777;
 font-size:15px;
 }
 
-/* links */
 .links{
 margin-top:35px;
 }
@@ -90,7 +87,6 @@ color:white;
 transform:scale(1.02);
 }
 
-/* footer */
 .footer{
 margin-top:60px;
 text-align:center;
@@ -111,7 +107,6 @@ color:#bbb;
 </div>
 
 <div class="links" id="links"></div>
-
 <div class="footer">Linkarsha</div>
 
 </div>
@@ -124,18 +119,22 @@ const supabaseClient=createClient(
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw"
 );
 
-let username=window.location.pathname.replace("/","").toLowerCase();
+// 🔥 STRONG USERNAME DETECTOR
+let path = window.location.pathname;
+path = path.replaceAll("/","");
+path = path.split("?")[0];
+let username = path.toLowerCase();
 
 async function load(){
 
-const {data:profile}=await supabaseClient
+const {data:profile,error}=await supabaseClient
 .from("profiles")
 .select("*")
 .ilike("username",username)
 .single();
 
-if(!profile){
-document.body.innerHTML="<h2>User not found</h2>";
+if(error || !profile){
+document.body.innerHTML="<h2 style='font-family:Inter'>User not found</h2>";
 return;
 }
 
@@ -158,9 +157,11 @@ const {data:links}=await supabaseClient
 .eq("user_id",profile.id);
 
 let html="";
+if(links){
 links.forEach(l=>{
 html+=`<a class="link" href="${l.url}" target="_blank">${l.title}</a>`;
 });
+}
 
 document.getElementById("links").innerHTML=html;
 }
