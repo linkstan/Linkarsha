@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Dashboard</title>
+<title>Linkarsha Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
 body{
 font-family:Arial;
@@ -18,7 +17,7 @@ background:rgba(255,255,255,0.15);
 padding:30px;
 border-radius:20px;
 display:inline-block;
-width:320px;
+width:340px;
 }
 
 input{
@@ -52,28 +51,21 @@ font-weight:bold;
 }
 </style>
 </head>
-
 <body>
-
 <h1>Dashboard</h1>
-
 <div class="box">
 <h2 id="welcome">Loading...</h2>
 <p>Your public link:</p>
 <h3 id="publicLink"></h3>
-
 <hr>
-
 <h3>Add Link</h3>
 <input id="title" placeholder="Instagram / YouTube">
 <input id="url" placeholder="https://">
-<button onclick="addLink()">Add</button>
-
+<button onclick="addLink()">Add Link</button>
 <div id="links"></div>
-
+<br>
 <button onclick="logout()">Logout</button>
 </div>
-
 <script>
 const { createClient } = supabase;
 
@@ -83,42 +75,37 @@ const supabaseClient=createClient(
 );
 
 let userId=null;
-let usernameGlobal=null;
 
 async function load(){
 
-// 🔐 get logged user
-const {data:{user}}=await supabaseClient.auth.getUser();
+const {data:{user}} = await supabaseClient.auth.getUser();
 
 if(!user){
 location.href="/";
 return;
 }
 
-userId=user.id;
+userId = user.id;
 
-// 🔥 get profile
-const {data:profile,error}=await supabaseClient
+// get profile
+const {data:profile,error} = await supabaseClient
 .from("profiles")
 .select("*")
 .eq("id",user.id)
 .single();
 
 if(error || !profile){
-document.getElementById("welcome").innerText="Profile not found";
+document.getElementById("welcome").innerText="Profile error";
 return;
 }
 
-usernameGlobal=profile.username;
-
 document.getElementById("welcome").innerText="Hello "+profile.username;
+
 document.getElementById("publicLink").innerText=
 "https://linkarsha.vercel.app/"+profile.username;
 
-// 🚀 AUTO REDIRECT TO PUBLIC PAGE AFTER LOGIN
-setTimeout(()=>{
-window.location.href="/"+profile.username;
-},1500);
+// IMPORTANT: NO AUTO REDIRECT HERE
+// dashboard will stay dashboard
 
 loadLinks();
 }
@@ -127,11 +114,14 @@ async function addLink(){
 const title=document.getElementById("title").value;
 const url=document.getElementById("url").value;
 
-if(!title||!url) return;
+if(!title || !url) return;
 
 await supabaseClient.from("links").insert([
 {user_id:userId,title:title,url:url}
 ]);
+
+document.getElementById("title").value="";
+document.getElementById("url").value="";
 
 loadLinks();
 }
@@ -146,6 +136,7 @@ let html="";
 data.forEach(l=>{
 html+=`<a href="${l.url}" target="_blank">${l.title}</a>`;
 });
+
 document.getElementById("links").innerHTML=html;
 }
 
