@@ -4,6 +4,7 @@
 <title>Linkarsha</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 body{
 margin:0;
@@ -87,7 +88,9 @@ color:#aaa;
 }
 </style>
 </head>
+
 <body>
+
 <div class="card">
 <div class="avatar" id="avatar">U</div>
 <div class="username" id="username">@user</div>
@@ -95,6 +98,7 @@ color:#aaa;
 <div id="links"></div>
 <div class="footer">Powered by Linkarsha</div>
 </div>
+
 <script>
 const { createClient } = supabase;
 
@@ -103,18 +107,18 @@ const supabaseClient=createClient(
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw"
 );
 
-// get username from URL
-let username=window.location.pathname.replace("/","");
+// GET USERNAME FROM URL (case-insensitive fix)
+let username=decodeURIComponent(window.location.pathname.replace("/","")).toLowerCase();
 
 async function load(){
 
-const {data:profile}=await supabaseClient
+const {data:profile,error}=await supabaseClient
 .from("profiles")
 .select("*")
-.eq("username",username)
+.ilike("username",username)
 .single();
 
-if(!profile){
+if(error || !profile){
 document.body.innerHTML="<h2 style='font-family:sans-serif'>User not found</h2>";
 return;
 }
@@ -140,14 +144,18 @@ const {data:links}=await supabaseClient
 .eq("user_id",profile.id);
 
 let html="";
+
+if(links){
 links.forEach(l=>{
 html+=`<a class="link" href="${l.url}" target="_blank">${l.title}</a>`;
 });
+}
 
 document.getElementById("links").innerHTML=html;
 }
 
 load();
 </script>
+
 </body>
 </html>
