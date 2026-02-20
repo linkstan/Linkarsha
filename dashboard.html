@@ -36,6 +36,15 @@ box-shadow:0 10px 30px rgba(0,0,0,0.06);
 .left{width:340px;}
 .right{flex:1;min-width:300px;}
 
+.statBox{
+background:linear-gradient(135deg,#6366f1,#4f46e5);
+color:white;
+padding:18px;
+border-radius:16px;
+margin-bottom:12px;
+font-weight:600;
+}
+
 .previewCard{
 background:linear-gradient(135deg,#eef2ff,#f5f3ff);
 border-radius:25px;
@@ -44,17 +53,17 @@ text-align:center;
 }
 
 .avatar{
-width:90px;
-height:90px;
+width:70px;
+height:70px;
 border-radius:50%;
 background:#6366f1;
 color:white;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:32px;
+font-size:26px;
 margin:auto;
-margin-bottom:12px;
+margin-bottom:10px;
 background-size:cover;
 background-position:center;
 }
@@ -62,27 +71,27 @@ background-position:center;
 .linkbtn{
 display:block;
 background:white;
-padding:13px;
-margin:10px 0;
-border-radius:14px;
+padding:12px;
+margin:8px 0;
+border-radius:12px;
 text-decoration:none;
 color:#111;
 font-weight:600;
 box-shadow:0 8px 18px rgba(0,0,0,0.06);
 }
 
-input,select{
+input{
 width:100%;
-padding:13px;
+padding:12px;
 margin:8px 0;
-border-radius:12px;
+border-radius:10px;
 border:1px solid #eee;
 }
 
 button{
-padding:13px 18px;
+padding:12px 18px;
 border:none;
-border-radius:14px;
+border-radius:12px;
 background:#6366f1;
 color:white;
 font-weight:600;
@@ -105,35 +114,30 @@ margin-bottom:10px;
 <div class="container">
 
 <div class="left">
+
 <div class="previewCard">
 <div class="avatar" id="avatar">U</div>
 <div id="previewUsername">@username</div>
 <div id="previewBio" style="color:#666;font-size:14px;margin:8px 0">creator bio</div>
 <div id="previewLinks"></div>
 </div>
+
 </div>
 
 <div class="right">
 
-<div class="sectionTitle">Profile</div>
-<input type="file" id="avatarUpload">
-<button onclick="uploadAvatar()">Upload Photo</button>
+<!-- 🔥 ANALYTICS -->
+<div class="sectionTitle">Analytics</div>
+<div class="statBox" id="viewStat">👁 0 Profile Views</div>
+<div class="statBox" id="linkStat">🔗 0 Total Links</div>
 
+<hr style="margin:25px 0">
+
+<div class="sectionTitle">Profile</div>
 <input id="bioInput" placeholder="Write your bio">
 <button onclick="saveBio()">Save Bio</button>
 
-<hr style="margin:30px 0">
-
-<div class="sectionTitle">Theme</div>
-<select id="themeSelect">
-<option value="luxury">Luxury Light</option>
-<option value="dark">Dark Premium</option>
-<option value="creator">Soft Creator</option>
-<option value="minimal">Minimal White</option>
-</select>
-<button onclick="saveTheme()">Save Theme</button>
-
-<hr style="margin:30px 0">
+<hr style="margin:25px 0">
 
 <div class="sectionTitle">Add Link</div>
 <input id="title" placeholder="Instagram / YouTube">
@@ -143,6 +147,7 @@ margin-bottom:10px;
 <div id="linksList"></div>
 
 </div>
+
 </div>
 
 <script>
@@ -166,30 +171,37 @@ return;
 
 userId=user.id;
 
+// profile
 const {data:profile}=await supabaseClient
 .from("profiles")
 .select("*")
 .eq("id",user.id)
 .single();
 
-if(!profile) return;
-
 document.getElementById("previewUsername").innerText="@"+profile.username;
-document.getElementById("avatar").innerText=profile.username.charAt(0).toUpperCase();
-
-if(profile.avatar){
-document.getElementById("avatar").style.background="url('"+profile.avatar+"')";
-document.getElementById("avatar").innerText="";
-}
 
 if(profile.bio){
 document.getElementById("previewBio").innerText=profile.bio;
 document.getElementById("bioInput").value=profile.bio;
 }
 
-if(profile.theme){
-document.getElementById("themeSelect").value=profile.theme;
+if(profile.avatar){
+document.getElementById("avatar").style.background="url('"+profile.avatar+"')";
+document.getElementById("avatar").innerText="";
+}else{
+document.getElementById("avatar").innerText=profile.username.charAt(0).toUpperCase();
 }
+
+// 🔥 analytics
+document.getElementById("viewStat").innerText="👁 "+(profile.views||0)+" Profile Views";
+
+// links count
+const {data:links}=await supabaseClient
+.from("links")
+.select("*")
+.eq("user_id",userId);
+
+document.getElementById("linkStat").innerText="🔗 "+(links?.length||0)+" Total Links";
 
 loadLinks();
 }
@@ -205,17 +217,6 @@ await supabaseClient
 document.getElementById("previewBio").innerText=bio;
 }
 
-async function saveTheme(){
-const theme=document.getElementById("themeSelect").value;
-
-await supabaseClient
-.from("profiles")
-.update({theme:theme})
-.eq("id",userId);
-
-alert("Theme updated");
-}
-
 async function addLink(){
 const title=document.getElementById("title").value;
 const url=document.getElementById("url").value;
@@ -223,13 +224,13 @@ const url=document.getElementById("url").value;
 if(!title||!url) return;
 
 await supabaseClient.from("links").insert([
-{user_id:userId,title:title,url:url}
+{user_id:userId,title:title,url:url,clicks:0}
 ]);
 
 document.getElementById("title").value="";
 document.getElementById("url").value="";
 
-loadLinks();
+load();
 }
 
 async function loadLinks(){
@@ -241,50 +242,13 @@ const {data}=await supabaseClient
 let html="";
 let preview="";
 
-if(data){
 data.forEach(l=>{
 html+=`<div>${l.title}</div>`;
 preview+=`<a class="linkbtn" href="${l.url}" target="_blank">${l.title}</a>`;
 });
-}
 
 document.getElementById("linksList").innerHTML=html;
 document.getElementById("previewLinks").innerHTML=preview;
-}
-
-async function uploadAvatar(){
-
-const file=document.getElementById("avatarUpload").files[0];
-if(!file) return alert("Choose image");
-
-const filePath="avatar_"+userId+".png";
-
-await supabaseClient.storage.from("avatars").remove([filePath]);
-
-const {error}=await supabaseClient.storage
-.from("avatars")
-.upload(filePath,file,{upsert:true});
-
-if(error){
-alert(error.message);
-return;
-}
-
-const {data}=supabaseClient.storage
-.from("avatars")
-.getPublicUrl(filePath);
-
-const publicUrl=data.publicUrl;
-
-await supabaseClient
-.from("profiles")
-.update({avatar:publicUrl})
-.eq("id",userId);
-
-document.getElementById("avatar").style.background="url('"+publicUrl+"')";
-document.getElementById("avatar").innerText="";
-
-alert("Profile photo saved");
 }
 
 load();
