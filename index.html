@@ -405,10 +405,110 @@ font-size:24px;
 }
 
 }
+  /* ===== FLOATING STICKY NAVBAR ===== */
+
+.topbar{
+position:fixed;
+top:18px;
+left:50%;
+transform:translateX(-50%);
+width:92%;
+max-width:1100px;
+z-index:9999;
+
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(18px);
+border-radius:28px;
+padding:14px 18px;
+
+display:flex;
+align-items:center;
+justify-content:space-between;
+
+box-shadow:0 10px 40px rgba(0,0,0,0.25);
+border:1px solid rgba(255,255,255,0.12);
+}
+
+/* logo */
+.logoText{
+font-size:20px;
+font-weight:700;
+letter-spacing:0.4px;
+}
+
+/* right buttons */
+.topActions{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+/* login */
+.loginBtn{
+padding:10px 18px;
+border-radius:14px;
+background:rgba(255,255,255,0.15);
+text-decoration:none;
+font-weight:600;
+color:white;
+}
+
+/* signup */
+.signupBtn{
+padding:11px 22px;
+border-radius:18px;
+background:linear-gradient(90deg,#6a5cff,#8f7bff);
+color:white;
+text-decoration:none;
+font-weight:700;
+}
+
+/* menu icon */
+.menuBtn{
+font-size:22px;
+padding:8px 12px;
+border-radius:10px;
+background:rgba(255,255,255,0.12);
+}
+
+/* mobile responsive */
+@media(max-width:600px){
+
+.logoText{
+font-size:18px;
+}
+
+.loginBtn{
+padding:8px 14px;
+font-size:13px;
+}
+
+.signupBtn{
+padding:9px 16px;
+font-size:13px;
+}
+
+.topbar{
+padding:12px 14px;
+}
+
+}
 </style>
 </head>
 
 <body>
+  <!-- FLOATING NAVBAR -->
+<div class="topbar">
+
+<div class="logoText">Linkarsha</div>
+
+<div class="topActions">
+<a href="/" class="loginBtn">Log in</a>
+<a href="/" class="signupBtn">Sign up free</a>
+<div class="menuBtn">☰</div>
+</div>
+
+</div>
 
 <div class="bg"></div>
 <div class="blob blob1"></div>
