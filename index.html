@@ -6,6 +6,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+{box-sizing:border-box;}
+
 body{
 margin:0;
 font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
@@ -16,70 +18,117 @@ align-items:center;
 justify-content:center;
 }
 
+/ glass card */
 .card{
 width:420px;
 max-width:92%;
-background:white;
-border-radius:30px;
-padding:40px 30px;
-box-shadow:0 40px 80px rgba(0,0,0,0.12);
+background:rgba(255,255,255,0.75);
+backdrop-filter:blur(20px);
+border-radius:28px;
+padding:40px 28px;
 text-align:center;
+box-shadow:0 30px 80px rgba(0,0,0,0.12);
+animation:fade 0.6s ease;
+}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(15px);}
+to{opacity:1;}
 }
 
 .logo{
 font-size:34px;
 font-weight:800;
-margin-bottom:8px;
+margin-bottom:6px;
 }
 
 .tag{
 color:#666;
-margin-bottom:25px;
+margin-bottom:22px;
+}
+
+.search{
+width:100%;
+padding:16px;
+border-radius:16px;
+border:1px solid #eee;
+font-size:15px;
+margin-bottom:20px;
+outline:none;
+}
+
+hr{
+border:none;
+border-top:1px solid #eee;
+margin:18px 0;
+}
+
+.title{
+font-size:22px;
+font-weight:700;
+margin-bottom:16px;
 }
 
 input{
 width:100%;
+max-width:100%;
 padding:16px;
-margin:8px 0;
-border-radius:14px;
+margin:10px 0;
+border-radius:16px;
 border:1px solid #eee;
 font-size:15px;
+display:block;
+outline:none;
 }
 
 button{
 width:100%;
 padding:16px;
-margin-top:10px;
 border:none;
-border-radius:14px;
-font-weight:700;
-cursor:pointer;
+border-radius:18px;
 background:linear-gradient(135deg,#6366f1,#7c3aed);
 color:white;
+font-weight:700;
+font-size:15px;
+cursor:pointer;
+margin-top:10px;
+transition:0.25s;
 }
 
-.searchBox{
-margin-bottom:25px;
+button:hover{
+transform:scale(1.02);
+box-shadow:0 10px 25px rgba(99,102,241,0.3);
+}
+
+.loginBtn{
+margin-top:16px;
+background:linear-gradient(135deg,#8b5cf6,#6366f1);
 }
 </style>
 </head>
 
 <body>
+
 <div class="card">
 
 <div class="logo">Linkarsha</div>
-<div class="tag">Create • Share • Discover creators</div>
+<div class="tag">Create. Share. Discover creators.</div>
 
-<input class="searchBox" id="search" placeholder="Search creators...">
+<input class="search" placeholder="Search creators..." oninput="searchUser(this.value)">
 
-<hr style="margin:20px 0">
+<hr>
+
+<div class="title">Create account</div>
 
 <input id="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
+<input id="password" placeholder="Password" type="password">
 <input id="username" placeholder="Username">
 
 <button onclick="signup()">Create Account</button>
-<button onclick="login()">Login</button>
+
+<hr>
+
+<button class="loginBtn" onclick="login()">Login</button>
 
 </div>
 
@@ -91,43 +140,77 @@ const supabaseClient=createClient(
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw"
 );
 
-document.getElementById("search").addEventListener("keypress",function(e){
-if(e.key==="Enter"){
-let u=this.value.toLowerCase().trim();
-if(u) window.location="/"+u;
-}
-});
-
+// SIGNUP
 async function signup(){
 
 const email=document.getElementById("email").value;
 const password=document.getElementById("password").value;
-const username=document.getElementById("username").value.toLowerCase();
+const username=document.getElementById("username").value;
 
-if(!email||!password||!username){alert("Fill all");return;}
-
-const {data,error}=await supabaseClient.auth.signUp({email,password});
-
-if(error){alert(error.message);return;}
-
-await supabaseClient.from("profiles").insert([
-{id:data.user.id,username:username}
-]);
-
-alert("Account created. Login now.");
+if(!email||!password||!username){
+alert("Fill all fields");
+return;
 }
 
+const {data,error}=await supabaseClient.auth.signUp({
+email:email,
+password:password
+});
+
+if(error){
+alert(error.message);
+return;
+}
+
+const user=data.user;
+
+await supabaseClient.from("profiles").insert([
+{
+id:user.id,
+username:username,
+theme:"luxury",
+verified:false
+}
+]);
+
+alert("Account created. Now login.");
+}
+
+// LOGIN
 async function login(){
 
 const email=document.getElementById("email").value;
 const password=document.getElementById("password").value;
 
-const {error}=await supabaseClient.auth.signInWithPassword({email,password});
+const {data,error}=await supabaseClient.auth.signInWithPassword({
+email:email,
+password:password
+});
 
-if(error){alert(error.message);return;}
+if(error){
+alert(error.message);
+return;
+}
 
 location.href="/dashboard";
 }
+
+// SEARCH USERS
+async function searchUser(q){
+
+if(q.length<2) return;
+
+const {data}=await supabaseClient
+.from("profiles")
+.select("username")
+.ilike("username",q+"%")
+.limit(5);
+
+if(data && data.length>0){
+location.href="/"+data[0].username;
+}
+}
 </script>
+
 </body>
 </html>
