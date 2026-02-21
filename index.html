@@ -19,21 +19,18 @@ justify-content:center;
 .box{
 width:380px;
 max-width:92%;
-background:rgba(255,255,255,0.85);
-backdrop-filter:blur(20px);
+background:rgba(255,255,255,0.9);
 padding:40px 25px;
-border-radius:28px;
+border-radius:24px;
 text-align:center;
 box-shadow:0 30px 80px rgba(0,0,0,0.12);
 }
-
-h1{margin-top:0;}
 
 input{
 width:100%;
 padding:14px;
 margin:10px 0;
-border-radius:14px;
+border-radius:12px;
 border:1px solid #eee;
 font-size:15px;
 }
@@ -41,7 +38,7 @@ font-size:15px;
 button{
 padding:14px;
 border:none;
-border-radius:14px;
+border-radius:12px;
 background:#6366f1;
 color:white;
 font-weight:600;
@@ -57,10 +54,6 @@ border-radius:12px;
 background:#f5f5f5;
 margin:6px 0;
 cursor:pointer;
-}
-
-.result:hover{
-background:#ececec;
 }
 </style>
 </head>
@@ -99,7 +92,7 @@ const supabaseClient=createClient(
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw"
 );
 
-// SEARCH FUNCTION
+// SEARCH USERS
 async function searchUser(){
 const q=document.getElementById("searchInput").value.toLowerCase();
 
@@ -131,39 +124,71 @@ window.location.href="/"+username;
 
 // SIGNUP
 async function signup(){
-const email=emailInput.value;
-const password=passwordInput.value;
-const username=usernameInput.value.toLowerCase();
+
+const email=document.getElementById("email").value;
+const password=document.getElementById("password").value;
+const username=document.getElementById("username").value.toLowerCase();
+const msg=document.getElementById("msg");
 
 if(!email||!password||!username){
 msg.innerText="Fill all fields";
 return;
 }
 
-const {data,error}=await supabaseClient.auth.signUp({email,password});
-if(error){msg.innerText=error.message;return;}
+const {data,error}=await supabaseClient.auth.signUp({
+email:email,
+password:password
+});
 
-await supabaseClient.from("profiles").insert([
-{id:data.user.id,username:username}
-]);
+if(error){
+msg.innerText=error.message;
+return;
+}
 
-msg.innerText="Account created. Login now.";
+if(!data.user){
+msg.innerText="Signup success. Now login.";
+return;
+}
+
+// create profile row
+const {error:profileError}=await supabaseClient
+.from("profiles")
+.insert([{id:data.user.id,username:username}]);
+
+if(profileError){
+msg.innerText=profileError.message;
+return;
+}
+
+msg.innerText="Account created. Now login.";
 }
 
 // LOGIN
 async function login(){
+
+const email=document.getElementById("email").value;
+const password=document.getElementById("password").value;
+const msg=document.getElementById("msg");
+
 const {error}=await supabaseClient.auth.signInWithPassword({
-email:emailInput.value,
-password:passwordInput.value
+email:email,
+password:password
 });
-if(error){msg.innerText=error.message;return;}
+
+if(error){
+msg.innerText=error.message;
+return;
+}
+
 window.location.href="/dashboard";
 }
 
-// auto login
+// AUTO LOGIN
 async function check(){
 const {data:{user}}=await supabaseClient.auth.getUser();
-if(user) window.location.href="/dashboard";
+if(user){
+window.location.href="/dashboard";
+}
 }
 check();
 </script>
