@@ -4,180 +4,241 @@
 <title>Linkarsha Studio</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;background:#f6f7fb;}
-.header{padding:20px 40px;font-weight:700;font-size:20px;background:white;box-shadow:0 2px 10px rgba(0,0,0,0.05);}
-.container{display:flex;gap:40px;padding:40px;flex-wrap:wrap;}
-.left,.right{background:white;border-radius:20px;padding:25px;box-shadow:0 10px 30px rgba(0,0,0,0.06);}
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+background:#f6f7fb;
+}
+
+.header{
+padding:22px 40px;
+font-weight:700;
+font-size:22px;
+background:white;
+box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+
+.container{
+display:flex;
+gap:40px;
+padding:40px;
+flex-wrap:wrap;
+}
+
+.left,.right{
+background:white;
+border-radius:22px;
+padding:28px;
+box-shadow:0 10px 30px rgba(0,0,0,0.06);
+}
+
 .left{width:340px;}
-.right{flex:1;min-width:300px;}
+.right{flex:1;min-width:320px;}
 
-.previewCard{border-radius:25px;padding:25px;text-align:center;background:#fff;}
-.avatar{width:70px;height:70px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;margin:auto;margin-bottom:10px;background:#6366f1;color:white;background-size:cover;background-position:center;}
-.linkbtn{display:block;padding:12px;margin:8px 0;border-radius:12px;text-decoration:none;font-weight:600;background:white;color:#111;box-shadow:0 5px 15px rgba(0,0,0,0.05);}
-.featured{background:linear-gradient(135deg,#7c3aed,#6366f1);color:white;}
+.previewCard{
+background:linear-gradient(135deg,#eef2ff,#f5f3ff);
+border-radius:25px;
+padding:28px;
+text-align:center;
+}
 
-.statBox{background:linear-gradient(135deg,#6366f1,#4f46e5);color:white;padding:12px;border-radius:12px;margin-bottom:8px;font-weight:600;}
+.avatar{
+width:92px;
+height:92px;
+border-radius:50%;
+background:#6366f1;
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:34px;
+margin:auto;
+margin-bottom:12px;
+}
 
-.sectionTitle{font-weight:700;margin-top:18px;margin-bottom:8px;}
-input,select{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #eee;}
-button{padding:8px 12px;border:none;border-radius:8px;background:#6366f1;color:white;font-weight:600;cursor:pointer;margin-top:6px;}
+.linkbtn{
+display:block;
+background:white;
+padding:14px;
+margin:10px 0;
+border-radius:16px;
+text-decoration:none;
+color:#111;
+font-weight:600;
+box-shadow:0 8px 18px rgba(0,0,0,0.06);
+}
 
-.linkRow{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;margin:6px 0;background:#fafafa;}
+input{
+width:100%;
+padding:14px;
+margin:9px 0;
+border-radius:14px;
+border:1px solid #eee;
+font-size:14px;
+}
+
+button{
+padding:14px 18px;
+border:none;
+border-radius:16px;
+background:linear-gradient(135deg,#6366f1,#7c3aed);
+color:white;
+font-weight:700;
+cursor:pointer;
+margin-top:10px;
+}
+
+.sectionTitle{
+font-weight:700;
+margin-top:8px;
+margin-bottom:12px;
+font-size:18px;
+}
 </style>
 </head>
-
 <body>
-
-<div class="header">Linkarsha Studio</div>
-
+<div class="header">Linkarsha Creator Studio 💰</div>
 <div class="container">
-
+<!-- LEFT PREVIEW -->
 <div class="left">
-<div class="previewCard" id="previewCard">
+<div class="previewCard">
 <div class="avatar" id="avatar">U</div>
 <div id="previewUsername">@username</div>
-<div id="previewBio" style="margin:6px 0;color:#666"></div>
+<div id="previewBio" style="color:#666;font-size:14px;margin:8px 0"></div>
 <div id="previewLinks"></div>
 </div>
 </div>
-
+<!-- RIGHT CONTROL PANEL -->
 <div class="right">
-
-<div class="sectionTitle">Analytics</div>
-<div class="statBox" id="viewStat">👁 0 Views</div>
-<div id="clickStats"></div>
-
 <div class="sectionTitle">Profile</div>
-<input id="bioInput" placeholder="Write bio">
+<input id="bioInput" placeholder="Write your bio">
 <button onclick="saveBio()">Save Bio</button>
-
+<hr style="margin:25px 0">
 <div class="sectionTitle">Add Link</div>
-<input id="title" placeholder="Instagram / YouTube">
+<input id="title" placeholder="Link title">
 <input id="url" placeholder="https://">
-<button onclick="addLink()">Add Link</button>
-
-<div class="sectionTitle">Your Links</div>
-<div id="linksList"></div>
-
-<div class="sectionTitle">🎨 Theme</div>
-<select id="themeSelect">
-<option value="default">Default Luxury</option>
-<option value="glass">Glass Premium</option>
-<option value="dark">Dark Creator</option>
-<option value="neon">Neon Influencer</option>
-<option value="minimal">Minimal Clean</option>
-</select>
-<button onclick="saveTheme()">Apply Theme</button>
-
+<label style="display:block;margin-top:8px;font-weight:600">
+<input type="checkbox" id="paidToggle"> Paid Link (earn money) 💰
+</label>
+<input id="price" placeholder="Price ₹" style="display:none">
+<input id="lockedMsg" placeholder="Message after unlock" style="display:none">
+<div id="linksList" style="margin-top:20px"></div>
 </div>
 </div>
-
 <script>
 const { createClient } = supabase;
+
 const supabaseClient=createClient(
 "https://pibrvhziqkaitaacbegy.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw"
+"PASTE_ANON_KEY"
 );
 
 let userId=null;
-let linksData=[];
+
+// show hide paid fields
+document.getElementById("paidToggle").addEventListener("change",()=>{
+const on=document.getElementById("paidToggle").checked;
+document.getElementById("price").style.display=on?"block":"none";
+document.getElementById("lockedMsg").style.display=on?"block":"none";
+});
 
 async function load(){
+
 const {data:{user}}=await supabaseClient.auth.getUser();
 if(!user){location.href="/";return;}
+
 userId=user.id;
 
-const {data:profile}=await supabaseClient.from("profiles").select("*").eq("id",userId).single();
+const {data:profile}=await supabaseClient
+.from("profiles")
+.select("*")
+.eq("id",user.id)
+.single();
 
 document.getElementById("previewUsername").innerText="@"+profile.username;
-document.getElementById("previewBio").innerText=profile.bio||"";
-document.getElementById("viewStat").innerText="👁 "+(profile.views||0)+" Views";
-
-if(profile.avatar){
-document.getElementById("avatar").style.background=`url('${profile.avatar}')`;
-document.getElementById("avatar").innerText="";
-}else{
 document.getElementById("avatar").innerText=profile.username.charAt(0).toUpperCase();
-}
 
-document.getElementById("bioInput").value=profile.bio||"";
-document.getElementById("themeSelect").value=profile.theme||"default";
+if(profile.bio){
+document.getElementById("previewBio").innerText=profile.bio;
+document.getElementById("bioInput").value=profile.bio;
+}
 
 loadLinks();
 }
 
 async function saveBio(){
 const bio=document.getElementById("bioInput").value;
-await supabaseClient.from("profiles").update({bio:bio}).eq("id",userId);
-load();
+
+await supabaseClient
+.from("profiles")
+.update({bio:bio})
+.eq("id",userId);
+
+document.getElementById("previewBio").innerText=bio;
 }
 
 async function addLink(){
+
 const title=document.getElementById("title").value;
 const url=document.getElementById("url").value;
-if(!title||!url)return;
+const isPaid=document.getElementById("paidToggle").checked;
+const price=document.getElementById("price").value||0;
+const msg=document.getElementById("lockedMsg").value||"Unlock to access";
+
+if(!title||!url){alert("Enter title & url");return;}
 
 await supabaseClient.from("links").insert([
-{user_id:userId,title:title,url:url,featured:false,position:Date.now(),clicks:0}
+{
+user_id:userId,
+title:title,
+url:url,
+is_paid:isPaid,
+price:price,
+locked_message:msg
+}
 ]);
 
 document.getElementById("title").value="";
 document.getElementById("url").value="";
-loadLinks();
-}
+document.getElementById("price").value="";
+document.getElementById("lockedMsg").value="";
+document.getElementById("paidToggle").checked=false;
+document.getElementById("price").style.display="none";
+document.getElementById("lockedMsg").style.display="none";
 
-async function setFeatured(id){
-await supabaseClient.from("links").update({featured:false}).eq("user_id",userId);
-await supabaseClient.from("links").update({featured:true}).eq("id",id);
 loadLinks();
 }
 
 async function loadLinks(){
+
 const {data}=await supabaseClient
 .from("links")
 .select("*")
-.eq("user_id",userId)
-.order("featured",{ascending:false})
-.order("position",{ascending:true});
-
-linksData=data;
+.eq("user_id",userId);
 
 let html="";
 let preview="";
-let clicksHtml="";
 
-linksData.forEach(l=>{
-html+=`
-<div class="linkRow">
-<div>${l.title} ${l.featured?'⭐':''}</div>
-<div><button onclick="setFeatured('${l.id}')">⭐</button></div>
-</div>
-`;
+data.forEach(l=>{
 
-clicksHtml+=`<div class="statBox" style="background:#111">${l.title} → ${l.clicks||0} clicks</div>`;
+let badge=l.is_paid?` 🔒 ₹${l.price}`:"";
 
-if(l.featured){
-preview+=`<a class="linkbtn featured">${l.title}</a>`;
+html+=`<div>${l.title}${badge}</div>`;
+
+if(l.is_paid){
+preview+=`<div class="linkbtn">🔒 ${l.title} — ₹${l.price}</div>`;
 }else{
-preview+=`<a class="linkbtn">${l.title}</a>`;
+preview+=`<a class="linkbtn" href="${l.url}" target="_blank">${l.title}</a>`;
 }
+
 });
 
 document.getElementById("linksList").innerHTML=html;
 document.getElementById("previewLinks").innerHTML=preview;
-document.getElementById("clickStats").innerHTML=clicksHtml;
-}
-
-async function saveTheme(){
-const theme=document.getElementById("themeSelect").value;
-await supabaseClient.from("profiles").update({theme:theme}).eq("id",userId);
-alert("Theme updated 🔥");
 }
 
 load();
 </script>
-
 </body>
 </html>
