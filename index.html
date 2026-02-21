@@ -6,8 +6,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-{box-sizing:border-box;}
-
 body{
 margin:0;
 font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
@@ -18,117 +16,78 @@ align-items:center;
 justify-content:center;
 }
 
-/ glass card */
-.card{
-width:420px;
+.box{
+width:380px;
 max-width:92%;
-background:rgba(255,255,255,0.75);
+background:rgba(255,255,255,0.85);
 backdrop-filter:blur(20px);
+padding:40px 25px;
 border-radius:28px;
-padding:40px 28px;
 text-align:center;
 box-shadow:0 30px 80px rgba(0,0,0,0.12);
-animation:fade 0.6s ease;
 }
 
-@keyframes fade{
-from{opacity:0;transform:translateY(15px);}
-to{opacity:1;}
-}
-
-.logo{
-font-size:34px;
-font-weight:800;
-margin-bottom:6px;
-}
-
-.tag{
-color:#666;
-margin-bottom:22px;
-}
-
-.search{
-width:100%;
-padding:16px;
-border-radius:16px;
-border:1px solid #eee;
-font-size:15px;
-margin-bottom:20px;
-outline:none;
-}
-
-hr{
-border:none;
-border-top:1px solid #eee;
-margin:18px 0;
-}
-
-.title{
-font-size:22px;
-font-weight:700;
-margin-bottom:16px;
-}
+h1{margin-top:0;}
 
 input{
 width:100%;
-max-width:100%;
-padding:16px;
+padding:14px;
 margin:10px 0;
-border-radius:16px;
+border-radius:14px;
 border:1px solid #eee;
 font-size:15px;
-display:block;
-outline:none;
 }
 
 button{
-width:100%;
-padding:16px;
+padding:14px;
 border:none;
-border-radius:18px;
-background:linear-gradient(135deg,#6366f1,#7c3aed);
+border-radius:14px;
+background:#6366f1;
 color:white;
-font-weight:700;
-font-size:15px;
+font-weight:600;
+width:100%;
 cursor:pointer;
 margin-top:10px;
-transition:0.25s;
 }
 
-button:hover{
-transform:scale(1.02);
-box-shadow:0 10px 25px rgba(99,102,241,0.3);
+.result{
+text-align:left;
+padding:12px;
+border-radius:12px;
+background:#f5f5f5;
+margin:6px 0;
+cursor:pointer;
 }
 
-.loginBtn{
-margin-top:16px;
-background:linear-gradient(135deg,#8b5cf6,#6366f1);
+.result:hover{
+background:#ececec;
 }
 </style>
 </head>
 
 <body>
 
-<div class="card">
+<div class="box">
 
-<div class="logo">Linkarsha</div>
-<div class="tag">Create. Share. Discover creators.</div>
+<h1>Linkarsha</h1>
+<p>Create. Share. Discover creators.</p>
 
-<input class="search" placeholder="Search creators..." oninput="searchUser(this.value)">
+<!-- SEARCH -->
+<input id="searchInput" placeholder="Search creators..." onkeyup="searchUser()">
+<div id="results"></div>
 
-<hr>
+<hr style="margin:25px 0">
 
-<div class="title">Create account</div>
-
+<h3>Create account</h3>
 <input id="email" placeholder="Email">
-<input id="password" placeholder="Password" type="password">
+<input id="password" type="password" placeholder="Password">
 <input id="username" placeholder="Username">
-
 <button onclick="signup()">Create Account</button>
 
-<hr>
+<p id="msg"></p>
 
-<button class="loginBtn" onclick="login()">Login</button>
+<hr style="margin:20px 0">
+<button onclick="login()">Login</button>
 
 </div>
 
@@ -140,76 +99,73 @@ const supabaseClient=createClient(
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw"
 );
 
-// SIGNUP
-async function signup(){
+// SEARCH FUNCTION
+async function searchUser(){
+const q=document.getElementById("searchInput").value.toLowerCase();
 
-const email=document.getElementById("email").value;
-const password=document.getElementById("password").value;
-const username=document.getElementById("username").value;
-
-if(!email||!password||!username){
-alert("Fill all fields");
+if(q.length<1){
+document.getElementById("results").innerHTML="";
 return;
 }
 
-const {data,error}=await supabaseClient.auth.signUp({
-email:email,
-password:password
+const {data}=await supabaseClient
+.from("profiles")
+.select("username,verified")
+.ilike("username","%"+q+"%")
+.limit(8);
+
+let html="";
+data.forEach(u=>{
+html+=`
+<div class="result" onclick="openProfile('${u.username}')">
+@${u.username} ${u.verified?'✔':''}
+</div>`;
 });
 
-if(error){
-alert(error.message);
+document.getElementById("results").innerHTML=html;
+}
+
+function openProfile(username){
+window.location.href="/"+username;
+}
+
+// SIGNUP
+async function signup(){
+const email=emailInput.value;
+const password=passwordInput.value;
+const username=usernameInput.value.toLowerCase();
+
+if(!email||!password||!username){
+msg.innerText="Fill all fields";
 return;
 }
 
-const user=data.user;
+const {data,error}=await supabaseClient.auth.signUp({email,password});
+if(error){msg.innerText=error.message;return;}
 
 await supabaseClient.from("profiles").insert([
-{
-id:user.id,
-username:username,
-theme:"luxury",
-verified:false
-}
+{id:data.user.id,username:username}
 ]);
 
-alert("Account created. Now login.");
+msg.innerText="Account created. Login now.";
 }
 
 // LOGIN
 async function login(){
-
-const email=document.getElementById("email").value;
-const password=document.getElementById("password").value;
-
-const {data,error}=await supabaseClient.auth.signInWithPassword({
-email:email,
-password:password
+const {error}=await supabaseClient.auth.signInWithPassword({
+email:emailInput.value,
+password:passwordInput.value
 });
-
-if(error){
-alert(error.message);
-return;
+if(error){msg.innerText=error.message;return;}
+window.location.href="/dashboard";
 }
 
-location.href="/dashboard";
+// auto login
+async function check(){
+const {data:{user}}=await supabaseClient.auth.getUser();
+if(user) window.location.href="/dashboard";
 }
-
-// SEARCH USERS
-async function searchUser(q){
-
-if(q.length<2) return;
-
-const {data}=await supabaseClient
-.from("profiles")
-.select("username")
-.ilike("username",q+"%")
-.limit(5);
-
-if(data && data.length>0){
-location.href="/"+data[0].username;
-}
-}
+check();
 </script>
 
 </body>
