@@ -4,6 +4,7 @@
 <title>Linkarsha Studio</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 body{
 margin:0;
@@ -13,7 +14,7 @@ background:#f6f7fb;
 
 .header{
 padding:22px 40px;
-font-weight:700;
+font-weight:800;
 font-size:22px;
 background:white;
 box-shadow:0 2px 10px rgba(0,0,0,0.05);
@@ -95,12 +96,22 @@ margin-top:8px;
 margin-bottom:12px;
 font-size:18px;
 }
+
+.stat{
+background:#f1f5ff;
+padding:12px;
+border-radius:12px;
+margin:6px 0;
+font-weight:600;
+}
 </style>
 </head>
+
 <body>
-<div class="header">Linkarsha Creator Studio 💰</div>
+<div class="header">Linkarsha Creator Studio 💎</div>
+
 <div class="container">
-<!-- LEFT PREVIEW -->
+
 <div class="left">
 <div class="previewCard">
 <div class="avatar" id="avatar">U</div>
@@ -109,23 +120,39 @@ font-size:18px;
 <div id="previewLinks"></div>
 </div>
 </div>
-<!-- RIGHT CONTROL PANEL -->
+
 <div class="right">
-<div class="sectionTitle">Profile</div>
-<input id="bioInput" placeholder="Write your bio">
+
+<div class="sectionTitle">Bio</div>
+<input id="bioInput" placeholder="Write bio">
 <button onclick="saveBio()">Save Bio</button>
+
 <hr style="margin:25px 0">
+
 <div class="sectionTitle">Add Link</div>
-<input id="title" placeholder="Link title">
+<input id="title" placeholder="Title">
 <input id="url" placeholder="https://">
-<label style="display:block;margin-top:8px;font-weight:600">
-<input type="checkbox" id="paidToggle"> Paid Link (earn money) 💰
+
+<label>
+<input type="checkbox" id="paidToggle"> Paid link 💰
 </label>
+
 <input id="price" placeholder="Price ₹" style="display:none">
-<input id="lockedMsg" placeholder="Message after unlock" style="display:none">
-<div id="linksList" style="margin-top:20px"></div>
+<input id="lockedMsg" placeholder="Unlock message" style="display:none">
+
+<button onclick="addLink()">Add Link</button>
+
+<div id="linksList"></div>
+
+<hr style="margin:25px 0">
+
+<div class="sectionTitle">Analytics</div>
+<div class="stat" id="viewCount">Profile Views: 0</div>
+<div class="stat" id="totalLinks">Total Links: 0</div>
+
 </div>
 </div>
+
 <script>
 const { createClient } = supabase;
 
@@ -136,9 +163,8 @@ const supabaseClient=createClient(
 
 let userId=null;
 
-// show hide paid fields
 document.getElementById("paidToggle").addEventListener("change",()=>{
-const on=document.getElementById("paidToggle").checked;
+let on=document.getElementById("paidToggle").checked;
 document.getElementById("price").style.display=on?"block":"none";
 document.getElementById("lockedMsg").style.display=on?"block":"none";
 });
@@ -150,11 +176,7 @@ if(!user){location.href="/";return;}
 
 userId=user.id;
 
-const {data:profile}=await supabaseClient
-.from("profiles")
-.select("*")
-.eq("id",user.id)
-.single();
+const {data:profile}=await supabaseClient.from("profiles").select("*").eq("id",userId).single();
 
 document.getElementById("previewUsername").innerText="@"+profile.username;
 document.getElementById("avatar").innerText=profile.username.charAt(0).toUpperCase();
@@ -164,78 +186,55 @@ document.getElementById("previewBio").innerText=profile.bio;
 document.getElementById("bioInput").value=profile.bio;
 }
 
+document.getElementById("viewCount").innerText="Profile Views: "+(profile.views||0);
+
 loadLinks();
 }
 
 async function saveBio(){
-const bio=document.getElementById("bioInput").value;
-
-await supabaseClient
-.from("profiles")
-.update({bio:bio})
-.eq("id",userId);
-
+let bio=document.getElementById("bioInput").value;
+await supabaseClient.from("profiles").update({bio}).eq("id",userId);
 document.getElementById("previewBio").innerText=bio;
 }
 
 async function addLink(){
 
-const title=document.getElementById("title").value;
-const url=document.getElementById("url").value;
-const isPaid=document.getElementById("paidToggle").checked;
-const price=document.getElementById("price").value||0;
-const msg=document.getElementById("lockedMsg").value||"Unlock to access";
-
-if(!title||!url){alert("Enter title & url");return;}
+let title=document.getElementById("title").value;
+let url=document.getElementById("url").value;
+let paid=document.getElementById("paidToggle").checked;
+let price=document.getElementById("price").value||0;
+let msg=document.getElementById("lockedMsg").value||"Unlock";
 
 await supabaseClient.from("links").insert([
-{
-user_id:userId,
-title:title,
-url:url,
-is_paid:isPaid,
-price:price,
-locked_message:msg
-}
+{user_id:userId,title,url,is_paid:paid,price,locked_message:msg}
 ]);
 
 document.getElementById("title").value="";
 document.getElementById("url").value="";
-document.getElementById("price").value="";
-document.getElementById("lockedMsg").value="";
-document.getElementById("paidToggle").checked=false;
-document.getElementById("price").style.display="none";
-document.getElementById("lockedMsg").style.display="none";
-
 loadLinks();
 }
 
 async function loadLinks(){
 
-const {data}=await supabaseClient
-.from("links")
-.select("*")
-.eq("user_id",userId);
+const {data}=await supabaseClient.from("links").select("*").eq("user_id",userId);
 
 let html="";
 let preview="";
 
 data.forEach(l=>{
 
-let badge=l.is_paid?` 🔒 ₹${l.price}`:"";
-
-html+=`<div>${l.title}${badge}</div>`;
+html+=`<div>${l.title}</div>`;
 
 if(l.is_paid){
-preview+=`<div class="linkbtn">🔒 ${l.title} — ₹${l.price}</div>`;
+preview+=`<div class="linkbtn">🔒 ${l.title} ₹${l.price}</div>`;
 }else{
 preview+=`<a class="linkbtn" href="${l.url}" target="_blank">${l.title}</a>`;
 }
-
 });
 
 document.getElementById("linksList").innerHTML=html;
 document.getElementById("previewLinks").innerHTML=preview;
+document.getElementById("totalLinks").innerText="Total Links: "+data.length;
 }
 
 load();
