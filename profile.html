@@ -129,6 +129,137 @@ background:#ffffff;
 }
 .theme-minimal .card{background:white;box-shadow:none;border:1px solid #eee;}
 .theme-minimal .link{background:#f1f5f9;color:#111;}
+  /* ===============================
+MOBILE RESPONSIVE SYSTEM
+=============================== */
+
+@media (max-width: 1024px){
+
+.container{
+flex-direction:column;
+padding:20px;
+gap:20px;
+}
+
+.left,.right{
+width:100%;
+}
+
+.header{
+padding:18px 20px;
+font-size:18px;
+}
+
+.previewCard{
+padding:22px;
+}
+
+}
+
+/* MOBILE PHONE */
+@media (max-width: 768px){
+
+body{
+padding:0;
+}
+
+/* stack layout */
+.container{
+flex-direction:column;
+padding:12px;
+gap:16px;
+}
+
+/* cards full width */
+.left,.right{
+width:100%;
+border-radius:18px;
+padding:18px;
+}
+
+/* header smaller */
+.header{
+font-size:16px;
+padding:16px;
+text-align:center;
+}
+
+/* avatar */
+.avatar{
+width:80px;
+height:80px;
+font-size:28px;
+}
+
+/* buttons big for thumb */
+button{
+width:100%;
+padding:16px;
+border-radius:14px;
+font-size:15px;
+}
+
+/* inputs */
+input{
+width:100%;
+padding:14px;
+font-size:15px;
+}
+
+/* link buttons */
+.linkbtn{
+padding:15px;
+font-size:15px;
+}
+
+/* preview card */
+.previewCard{
+padding:20px;
+}
+
+/* collapse spacing */
+.sectionTitle{
+font-size:16px;
+}
+
+/* hero text (homepage) */
+.title{
+font-size:34px !important;
+line-height:1.2;
+}
+
+.subtitle{
+font-size:15px !important;
+}
+
+/* nav mobile */
+.nav{
+flex-direction:column;
+gap:12px;
+padding:18px;
+text-align:center;
+}
+
+.hero{
+padding:30px 18px;
+}
+
+}
+
+/* SMALL MOBILE */
+@media (max-width: 420px){
+
+.title{
+font-size:28px !important;
+}
+
+.avatar{
+width:70px;
+height:70px;
+font-size:24px;
+}
+
+}
 </style>
 </head>
 
