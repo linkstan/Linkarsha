@@ -5,16 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-{margin:0;padding:0;box-sizing:border-box}
+*{margin:0;padding:0;box-sizing:border-box}
 
 body{
 font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica;
-background:#07070c;
+background:#0b0b12;
 color:white;
 overflow-x:hidden;
 }
 
-/ animated gradient bg /
+/* ===== animated gradient background ===== */
 .bg{
 position:fixed;
 width:100%;
@@ -30,7 +30,7 @@ animation:move 18s ease infinite;
 100%{background-position:0% 50%}
 }
 
-/ glow blobs /
+/* ===== glow blobs ===== */
 .blob{
 position:absolute;
 width:600px;
@@ -43,266 +43,911 @@ z-index:-1;
 .blob1{background:#7c3aed;top:-200px;left:-200px;}
 .blob2{background:#6366f1;bottom:-200px;right:-200px;}
 
-/ ===== FLOATING TOP BAR ===== /
+/* ===== NAV ===== */
+.nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:26px 60px;
+position:relative;
+z-index:10;
+}
+
+.logo{
+font-weight:900;
+font-size:22px;
+letter-spacing:.5px;
+}
+
+.navbtn{
+text-decoration:none;
+padding:12px 20px;
+border-radius:24px;
+background:white;
+color:black;
+font-weight:700;
+margin-left:10px;
+transition:0.3s;
+}
+.navbtn:hover{
+transform:scale(1.05);
+}
+
+/* ===== HERO ===== */
+.hero{
+min-height:95vh;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+padding:40px;
+position:relative;
+}
+
+.heroBox{
+max-width:1000px;
+}
+
+.title{
+font-size:70px;
+font-weight:900;
+line-height:1.05;
+letter-spacing:-1px;
+}
+
+.subtitle{
+margin-top:24px;
+font-size:20px;
+color:#cfcfe7;
+}
+
+.cta{
+margin-top:40px;
+}
+
+.cta a{
+display:inline-block;
+margin:10px;
+padding:18px 34px;
+border-radius:30px;
+font-weight:800;
+text-decoration:none;
+transition:0.3s;
+}
+
+.primary{
+background:white;
+color:black;
+}
+.secondary{
+border:1px solid rgba(255,255,255,.4);
+color:white;
+}
+.cta a:hover{
+transform:scale(1.08);
+}
+
+/* ===== floating phone preview ===== */
+.previewWrap{
+margin-top:80px;
+display:flex;
+justify-content:center;
+}
+
+.phone{
+width:320px;
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(30px);
+border-radius:36px;
+padding:22px;
+box-shadow:0 40px 120px rgba(0,0,0,.7);
+animation:float 4s ease-in-out infinite;
+}
+@keyframes float{
+0%,100%{transform:translateY(0)}
+50%{transform:translateY(-18px)}
+}
+
+.link{
+background:white;
+color:black;
+padding:14px;
+border-radius:14px;
+margin:10px 0;
+font-weight:700;
+}
+
+/* ===== creator strip ===== */
+.creatorStrip{
+margin:120px 0;
+overflow:hidden;
+white-space:nowrap;
+}
+.creatorStrip img{
+height:220px;
+width:180px;
+object-fit:cover;
+border-radius:24px;
+margin:0 15px;
+box-shadow:0 30px 60px rgba(0,0,0,.6);
+animation:scroll 30s linear infinite;
+}
+@keyframes scroll{
+0%{transform:translateX(0)}
+100%{transform:translateX(-50%)}
+}
+
+/* ===== features ===== */
+.section{
+padding:120px 40px;
+text-align:center;
+}
+
+.heading{
+font-size:48px;
+font-weight:900;
+}
+
+.sub{
+margin-top:16px;
+color:#aaa;
+font-size:18px;
+}
+
+.grid{
+margin-top:70px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:30px;
+max-width:1100px;
+margin-left:auto;
+margin-right:auto;
+}
+
+.card{
+background:rgba(255,255,255,0.06);
+backdrop-filter:blur(20px);
+border-radius:26px;
+padding:30px;
+transition:0.35s;
+}
+.card:hover{
+transform:translateY(-12px) scale(1.03);
+}
+
+/* ===== image section ===== */
+.imageSection{
+display:flex;
+align-items:center;
+justify-content:center;
+flex-wrap:wrap;
+gap:60px;
+padding:120px 40px;
+}
+
+.imageSection img{
+width:400px;
+border-radius:30px;
+box-shadow:0 40px 90px rgba(0,0,0,.6);
+}
+
+.imageText{
+max-width:500px;
+}
+
+.imageText h2{
+font-size:42px;
+margin-bottom:20px;
+}
+
+.imageText p{
+color:#bbb;
+font-size:18px;
+}
+
+/* ===== CTA BAR ===== */
+.ctabar{
+margin:120px auto;
+max-width:1000px;
+background:linear-gradient(135deg,#6366f1,#7c3aed);
+padding:60px;
+border-radius:30px;
+text-align:center;
+}
+.ctabar h2{
+font-size:40px;
+}
+.ctabar a{
+margin-top:30px;
+display:inline-block;
+background:white;
+color:black;
+padding:18px 34px;
+border-radius:26px;
+font-weight:800;
+text-decoration:none;
+}
+
+.footer{
+text-align:center;
+color:#777;
+padding:60px 20px;
+font-size:14px;
+}
+  /* ===============================
+MOBILE RESPONSIVE SYSTEM
+=============================== */
+
+@media (max-width: 1024px){
+
+.container{
+flex-direction:column;
+padding:20px;
+gap:20px;
+}
+
+.left,.right{
+width:100%;
+}
+
+.header{
+padding:18px 20px;
+font-size:18px;
+}
+
+.previewCard{
+padding:22px;
+}
+
+}
+
+/* MOBILE PHONE */
+@media (max-width: 768px){
+
+body{
+padding:0;
+}
+
+/* stack layout */
+.container{
+flex-direction:column;
+padding:12px;
+gap:16px;
+}
+
+/* cards full width */
+.left,.right{
+width:100%;
+border-radius:18px;
+padding:18px;
+}
+
+/* header smaller */
+.header{
+font-size:16px;
+padding:16px;
+text-align:center;
+}
+
+/* avatar */
+.avatar{
+width:80px;
+height:80px;
+font-size:28px;
+}
+
+/* buttons big for thumb */
+button{
+width:100%;
+padding:16px;
+border-radius:14px;
+font-size:15px;
+}
+
+/* inputs */
+input{
+width:100%;
+padding:14px;
+font-size:15px;
+}
+
+/* link buttons */
+.linkbtn{
+padding:15px;
+font-size:15px;
+}
+
+/* preview card */
+.previewCard{
+padding:20px;
+}
+
+/* collapse spacing */
+.sectionTitle{
+font-size:16px;
+}
+
+/* hero text (homepage) */
+.title{
+font-size:34px !important;
+line-height:1.2;
+}
+
+.subtitle{
+font-size:15px !important;
+}
+
+/* nav mobile */
+.nav{
+flex-direction:column;
+gap:12px;
+padding:18px;
+text-align:center;
+}
+
+.hero{
+padding:30px 18px;
+}
+
+}
+
+/* SMALL MOBILE */
+@media (max-width: 420px){
+
+.title{
+font-size:28px !important;
+}
+
+.avatar{
+width:70px;
+height:70px;
+font-size:24px;
+}
+
+}
+  /* ===== FLOATING STICKY NAVBAR ===== */
+
 .topbar{
 position:fixed;
 top:18px;
 left:50%;
 transform:translateX(-50%);
 width:92%;
-max-width:1150px;
-z-index:999;
+max-width:1100px;
+z-index:9999;
+
 background:rgba(255,255,255,0.08);
 backdrop-filter:blur(18px);
-border-radius:40px;
-padding:14px 22px;
+border-radius:28px;
+padding:14px 18px;
+
 display:flex;
-justify-content:space-between;
 align-items:center;
-box-shadow:0 10px 40px rgba(0,0,0,0.3);
+justify-content:space-between;
+
+box-shadow:0 10px 40px rgba(0,0,0,0.25);
 border:1px solid rgba(255,255,255,0.12);
 }
 
-.logo{
-font-weight:800;
-font-size:18px;
+/* logo */
+.logoText{
+font-size:20px;
+font-weight:700;
+letter-spacing:0.4px;
 }
 
-.top-actions{
+/* right buttons */
+.topActions{
 display:flex;
 align-items:center;
 gap:12px;
 }
 
-.login{
+/* login */
+.loginBtn{
 padding:10px 18px;
+border-radius:14px;
 background:rgba(255,255,255,0.15);
+text-decoration:none;
+font-weight:600;
+color:white;
+}
+
+/* signup */
+.signupBtn{
+padding:11px 22px;
 border-radius:18px;
+background:linear-gradient(90deg,#6a5cff,#8f7bff);
+color:white;
+text-decoration:none;
+font-weight:700;
+}
+
+/* menu icon */
+.menuBtn{
+font-size:22px;
+padding:8px 12px;
+border-radius:10px;
+background:rgba(255,255,255,0.12);
+}
+
+/* mobile responsive */
+@media(max-width:600px){
+
+.logoText{
+font-size:18px;
+}
+
+.loginBtn{
+padding:8px 14px;
+font-size:13px;
+}
+
+.signupBtn{
+padding:9px 16px;
+font-size:13px;
+}
+
+.topbar{
+padding:12px 14px;
+}
+
+}
+</style>
+</head>
+
+<body>
+  <!-- ===== STICKY TOP BAR ===== -->
+<div class="topbar">
+  <div class="logo">Linkarsha</div>
+
+  <div class="top-actions">
+    <a href="/" class="login">Log in</a>
+    <a href="/" class="signup">Sign up free</a>
+    <div class="menu">≡</div>
+  </div>
+</div>
+
+
+<!-- ===== HERO SECTION ===== -->
+<section class="hero">
+
+  <!-- LEFT SIDE -->
+  <div class="hero-left">
+
+    <h1 class="headline">
+      The Creator Economy OS.<br>
+      Not just a link.
+    </h1>
+
+    <p class="sub">
+      Sell. Monetize. Grow.  
+      Linkarsha powers your entire creator business from one powerful link.
+    </p>
+
+    <!-- USERNAME CLAIM BOX -->
+    <div class="claim-box">
+      <div class="claim-left">
+        linkarsha.com/<span>username</span>
+      </div>
+
+      <button class="claim-btn">Claim your username</button>
+
+      <div class="free-badge">It's Free</div>
+    </div>
+
+  </div>
+
+
+  <!-- RIGHT SIDE MOVING VISUALS -->
+  <div class="hero-right">
+
+    <div class="scroll-column">
+      <img src="creator1.jpg.PNG">
+      <img src="creator2.jpg.PNG">
+      <img src="creator3.jpg.PNG">
+      <img src="creator4.jpg.PNG">
+      <img src="creator5.jpg.PNG">
+    </div>
+
+    <div class="scroll-column reverse">
+      <img src="setup1.jpg.PNG">
+      <img src="setup2.jpg.PNG">
+      <img src="setup3.jpg.PNG">
+      <img src="setup4.jpg.PNG">
+      <img src="setup5.jpg.PNG">
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<style>
+
+/* ===== BODY ===== */
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+background:black;
+color:white;
+overflow-x:hidden;
+}
+
+
+/* ===== TOP BAR ===== */
+.
+topbar{
+position:fixed;
+top:20px;
+left:50%;
+transform:translateX(-50%);
+width:92%;
+max-width:1100px;
+background:rgba(255,255,255,0
+.
+06);
+backdrop-filter:blur(14px);
+border-radius:40px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:14px 22px;
+z-index:999;
+}
+
+.
+logo{
+font-weight:700;
+font-size:18px;
+}
+
+.
+top-actions{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.
+login{
+padding:10px 18px;
+background:#2a2a2a;
+border-radius:20px;
 text-decoration:none;
 color:white;
 font-size:14px;
 }
 
-.signup{
-padding:11px 22px;
+.
+signup{
+padding:10px 20px;
 background:white;
 color:black;
 border-radius:22px;
 text-decoration:none;
-font-weight:700;
-font-size:14px;
+font-weight:600;
+font-size:1
+4px;
 }
 
-.menu{
+.
+m
+enu{
 font-size:22px;
-opacity:.8;
+opacity:
+.
+8;
 }
 
-/ ===== HERO ===== /
-.hero{
+
+/* ===== HERO ===== */
+.
+hero{
 display:flex;
-min-height:100vh;
-padding-top:140px;
+m
+in-height:1
+0
+0vh;
+padding-top:1
+20px;
 }
 
-/ LEFT /
-.hero-left{
+/* LEFT */
+.
+hero-left{
 width:50%;
-padding:80px 60px;
-}
-
-.headline{
-font-size:70px;
-line-height:1.05;
-font-weight:900;
-letter-spacing:-1px;
-}
-
-.sub{
-margin-top:22px;
-font-size:20px;
-color:#bdbddd;
-max-width:520px;
-}
-
-/ CLAIM BOX /
-.claim-box{
-margin-top:40px;
-background:rgba(255,255,255,0.06);
-backdrop-filter:blur(16px);
-border-radius:20px;
-padding:18px;
+padding:40px 60px 20px 60px; /* 
+m
+oved upward */
 display:flex;
-align-items:center;
-gap:16px;
+flex-direction:colu
+m
+n;
+justify-content:flex-start;
+}
+
+.
+headline{
+font-size:64px;
+line-height:1
+.
+05;
+m
+argin:0;
+font-weight:800;
+}
+
+.
+sub{
+m
+argin-top:20px;
+font-size:1
+8px;
+color:#bbb;
+m
+ax-width:520px;
+}
+
+/* CLAI
+M
+ BOX */
+.
+clai
+m
+-box{
+m
+argin-top:40px;
+background:rgba(255,255,255,0
+.
+06);
+backdrop-filter:blur(1
+6px);
+border-radius:20px;
+padding:1
+8px;
+display:flex;
+align-ite
+m
+s:center;
+gap:1
+6px;
 position:relative;
 width:fit-content;
 }
 
-.claim-left{
-font-size:18px;
+.
+clai
+m
+-left{
+font-size:1
+8px;
 color:#aaa;
 }
-.claim-left span{color:white;}
 
-.claim-btn{
-background:#6366f1;
-border:none;
-padding:14px 22px;
+.
+clai
+m
+-left span{
 color:white;
-border-radius:16px;
-font-weight:700;
+}
+
+.
+clai
+m
+-btn{
+background:#5865F2;
+border:none;
+padding:1
+4px 22px;
+color:white;
+border-radius:1
+6px;
+font-weight:600;
 cursor:pointer;
 }
 
-.free-badge{
+.
+free-badge{
 position:absolute;
-top:-12px;
+top:-
+1
+2px;
 right:20px;
 background:linear-gradient(90deg,#00ffa3,#00c3ff);
 color:black;
 font-size:12px;
 padding:4px 10px;
 border-radius:20px;
-font-weight:800;
+font-weight:700;
 }
 
-/ RIGHT GIF STRIP /
+
+/* RIGHT VISUALS */
 .hero-right{
 width:50%;
 display:flex;
-align-items:center;
-overflow:hidden;
 justify-content:center;
-}
-
-.scroll-row{
-display:flex;
 gap:20px;
-animation:scroll 35s linear infinite;
+overflow:hidden;
 }
 
-.scroll-row img{
-width:200px;
-height:300px;
-object-fit:cover;
+.scroll-column{
+display:flex;
+flex-direction:column;
+gap:20px;
+animation:scroll 18s linear infinite;
+}
+
+.scroll-column.reverse{
+animation-direction:reverse;
+}
+
+.scroll-column img{
+width:240px;
 border-radius:26px;
-box-shadow:0 30px 60px rgba(0,0,0,.7);
 }
 
 @keyframes scroll{
-0%{transform:translateX(0)}
-100%{transform:translateX(-50%)}
+0%{transform:translateY(0)}
+100%{transform:translateY(-50%)}
 }
 
-/ ===== MOBILE ===== */
+
+/* ===== MOBILE ===== */
 @media(max-width:900px){
 
 .hero{
 flex-direction:column;
-padding-top:120px;
 }
 
 .hero-left{
-width:100%;
+width:1
+00%;
+padding:1
+20px 24px 40px;
 text-align:center;
-padding:40px 24px;
 }
 
 .hero-right{
-width:100%;
-margin-top:30px;
+width:1
+00%;
+overflow:hidden;
+padding:20px;
 }
 
-.headline{font-size:40px}
-.sub{font-size:16px;margin:auto}
-
-.claim-box{
+.scroll-column{
 flex-direction:row;
-justify-content:center;
-margin-left:auto;
-margin-right:auto;
+animation:scrollX 1
+8s linear infinite;
 }
 
-.scroll-row img{
-width:160px;
-height:240px;
+.scroll-column.reverse{
+display:none;
+}
+
+.scroll-column img{
+width:220px;
+}
+
+@keyframes scrollX{
+0%{transform:translateX(0)}
+1
+00%{transform:translateX(-50%)}
+}
+
+.headline{
+font-size:42px;
 }
 
 }
 
 </style>
-</head>
+  <!-- FLOATING NAVBAR -->
+<div class="topbar">
 
-<body>
+<div class="logoText">Linkarsha</div>
+
+<div class="topActions">
+<a href="/" class="loginBtn">Log in</a>
+<a href="/" class="signupBtn">Sign up free</a>
+<div class="menuBtn">☰</div>
+</div>
+
+</div>
 
 <div class="bg"></div>
-<div class="blob blob1"></div>
+<div class="blob blob
+1
+"></div>
 <div class="blob blob2"></div>
 
-<!-- TOP BAR -->
-<div class="topbar">
-<div class="logo">Linkarsha</div>
-
-<div class="top-actions">
-<a href="/" class="login">Log in</a>
-<a href="/" class="signup">Sign up free</a>
-<div class="menu">≡</div>
+<!-- NAV -->
+<div class="nav">
+<div class="logo">Linkarsha®</div>
+<div>
+<a class="navbtn" href="/">Login</a>
+<a class="navbtn" href="/dashboard">Open Studio</a>
 </div>
 </div>
 
 <!-- HERO -->
-<section class="hero">
+<div class="hero">
+<div class="heroBox">
 
-<div class="hero-left">
-
-<h1 class="headline">
+<div class="title">
 The Creator Economy OS.<br>
-Not just a link.
-</h1>
+Not Just A Link.
+</div>
 
-<p class="sub">
-Sell. Monetize. Grow.<br>
+<div class="subtitle">
+Sell. Monetize. Grow.  
 Linkarsha powers your entire creator business from one powerful link.
-</p>
-
-<div class="claim-box">
-<div class="claim-left">
-linkarsha.com/<span>username</span>
 </div>
 
-<button class="claim-btn">Claim username</button>
-<div class="free-badge">It's Free</div>
+<div class="cta">
+<a class="primary" href="/">Claim Your Username</a>
+<a class="secondary" href="/dashboard">Open Studio</a>
+</div>
+
+<div class="previewWrap">
+<div class="phone">
+<div class="link">Instagram</div>
+<div class="link">YouTube</div>
+<div class="link">Premium Course 🔒 ₹499</div>
+<div class="link">Join Community</div>
+</div>
 </div>
 
 </div>
+</div>
 
-<!-- RIGHT MOVING IMAGES -->
-<div class="hero-right">
-<div class="scroll-row">
-
+<!-- CREATOR STRIP -->
+<div class="creatorStrip">
 <img src="creator1.jpg.PNG">
 <img src="creator2.jpg.PNG">
 <img src="creator3.jpg.PNG">
 <img src="creator4.jpg.PNG">
 <img src="creator5.jpg.PNG">
+<img src="creator1.jpg.PNG">
+<img src="creator2.jpg.PNG">
+<img src="creator3.jpg.PNG">
+<img src="creator4.jpg.PNG">
+<img src="creator5.jpg.PNG">
+</div>
+
+<!-- FEATURES -->
+<div class="section">
+<div class="heading">Everything to run your creator empire</div>
+<div class="sub">Monetize, track, scale — all in one platform.</div>
+
+<div class="grid">
+<div class="card">💰 Paid Links & Digital Products</div>
+<div class="card">📊 Advanced Analytics Dashboard</div>
+<div class="card">🎨 Luxury Viral Themes</div>
+<div class="card">🚀 Built For Growth</div>
+</div>
+</div>
+
+<!-- IMAGE SECTION -->
+<div class="imageSection">
 <img src="setup1.jpg.PNG">
-<img src="setup2.jpg.PNG">
-<img src="setup3.jpg.PNG">
-<img src="setup4.jpg.PNG">
-<img src="setup5.jpg.PNG">
-
-<!-- repeat for smooth scroll -->
-<img src="creator1.jpg.PNG">
-<img src="creator2.jpg.PNG">
-<img src="creator3.jpg.PNG">
-<img src="creator4.jpg.PNG">
-<img src="creator5.jpg.PNG">
-
+<div class="imageText">
+<h2>Turn followers into income</h2>
+<p>Lock premium content, sell courses, build communities and grow your brand with full control.</p>
 </div>
 </div>
 
-</section>
+<!-- FINAL CTA -->
+<div class="ctabar">
+<h2>Secure your creator name before it’s gone.</h2>
+<a href="/">Create Free Account</a>
+</div>
+
+<div class="footer">
+© Linkarsha — Creator Operating System
+</div>
 
 </body>
 </html>
