@@ -497,6 +497,287 @@ padding:12px 14px;
 </head>
 
 <body>
+  <!-- ===== STICKY TOP BAR ===== -->
+<div class="topbar">
+  <div class="logo">Linkarsha</div>
+
+  <div class="top-actions">
+    <a href="/" class="login">Log in</a>
+    <a href="/" class="signup">Sign up free</a>
+    <div class="menu">≡</div>
+  </div>
+</div>
+
+
+<!-- ===== HERO SECTION ===== -->
+<section class="hero">
+
+  <!-- LEFT SIDE -->
+  <div class="hero-left">
+
+    <h1 class="headline">
+      The Creator Economy OS.<br>
+      Not just a link.
+    </h1>
+
+    <p class="sub">
+      Sell. Monetize. Grow.  
+      Linkarsha powers your entire creator business from one powerful link.
+    </p>
+
+    <!-- USERNAME CLAIM BOX -->
+    <div class="claim-box">
+      <div class="claim-left">
+        linkarsha.com/<span>username</span>
+      </div>
+
+      <button class="claim-btn">Claim your username</button>
+
+      <div class="free-badge">It's Free</div>
+    </div>
+
+  </div>
+
+
+  <!-- RIGHT SIDE MOVING VISUALS -->
+  <div class="hero-right">
+
+    <div class="scroll-column">
+      <img src="creator1.jpg.PNG">
+      <img src="creator2.jpg.PNG">
+      <img src="creator3.jpg.PNG">
+      <img src="creator4.jpg.PNG">
+      <img src="creator5.jpg.PNG">
+    </div>
+
+    <div class="scroll-column reverse">
+      <img src="setup1.jpg.PNG">
+      <img src="setup2.jpg.PNG">
+      <img src="setup3.jpg.PNG">
+      <img src="setup4.jpg.PNG">
+      <img src="setup5.jpg.PNG">
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<style>
+
+/* ===== BODY ===== */
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+background:black;
+color:white;
+overflow-x:hidden;
+}
+
+
+/* ===== TOP BAR ===== */
+.topbar{
+position:fixed;
+top:20px;
+left:50%;
+transform:translateX(-50%);
+width:92%;
+max-width:1100px;
+background:rgba(255,255,255,0.06);
+backdrop-filter:blur(14px);
+border-radius:40px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:14px 22px;
+z-index:999;
+}
+
+.logo{
+font-weight:700;
+font-size:18px;
+}
+
+.top-actions{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.login{
+padding:10px 18px;
+background:#2a2a2a;
+border-radius:20px;
+text-decoration:none;
+color:white;
+font-size:14px;
+}
+
+.signup{
+padding:10px 20px;
+background:white;
+color:black;
+border-radius:22px;
+text-decoration:none;
+font-weight:600;
+font-size:14px;
+}
+
+.menu{
+font-size:22px;
+opacity:.8;
+}
+
+
+/* ===== HERO ===== */
+.hero{
+display:flex;
+min-height:100vh;
+padding-top:120px;
+}
+
+/* LEFT */
+.hero-left{
+width:50%;
+padding:80px 60px;
+}
+
+.headline{
+font-size:64px;
+line-height:1.05;
+margin:0;
+font-weight:800;
+}
+
+.sub{
+margin-top:20px;
+font-size:18px;
+color:#bbb;
+max-width:520px;
+}
+
+/* CLAIM BOX */
+.claim-box{
+margin-top:40px;
+background:rgba(255,255,255,0.06);
+backdrop-filter:blur(16px);
+border-radius:20px;
+padding:18px;
+display:flex;
+align-items:center;
+gap:16px;
+position:relative;
+width:fit-content;
+}
+
+.claim-left{
+font-size:18px;
+color:#aaa;
+}
+
+.claim-left span{
+color:white;
+}
+
+.claim-btn{
+background:#5865F2;
+border:none;
+padding:14px 22px;
+color:white;
+border-radius:16px;
+font-weight:600;
+cursor:pointer;
+}
+
+.free-badge{
+position:absolute;
+top:-12px;
+right:20px;
+background:linear-gradient(90deg,#00ffa3,#00c3ff);
+color:black;
+font-size:12px;
+padding:4px 10px;
+border-radius:20px;
+font-weight:700;
+}
+
+
+/* RIGHT VISUALS */
+.hero-right{
+width:50%;
+display:flex;
+justify-content:center;
+gap:20px;
+overflow:hidden;
+}
+
+.scroll-column{
+display:flex;
+flex-direction:column;
+gap:20px;
+animation:scroll 18s linear infinite;
+}
+
+.scroll-column.reverse{
+animation-direction:reverse;
+}
+
+.scroll-column img{
+width:240px;
+border-radius:26px;
+}
+
+@keyframes scroll{
+0%{transform:translateY(0)}
+100%{transform:translateY(-50%)}
+}
+
+
+/* ===== MOBILE ===== */
+@media(max-width:900px){
+
+.hero{
+flex-direction:column;
+}
+
+.hero-left{
+width:100%;
+padding:120px 24px 40px;
+text-align:center;
+}
+
+.hero-right{
+width:100%;
+overflow:hidden;
+padding:20px;
+}
+
+.scroll-column{
+flex-direction:row;
+animation:scrollX 18s linear infinite;
+}
+
+.scroll-column.reverse{
+display:none;
+}
+
+.scroll-column img{
+width:220px;
+}
+
+@keyframes scrollX{
+0%{transform:translateX(0)}
+100%{transform:translateX(-50%)}
+}
+
+.headline{
+font-size:42px;
+}
+
+}
+
+</style>
   <!-- FLOATING NAVBAR -->
 <div class="topbar">
 
