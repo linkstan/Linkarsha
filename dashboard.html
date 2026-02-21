@@ -6,94 +6,241 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;background:#f6f7fb;}
-.header{padding:20px 40px;font-weight:700;font-size:20px;background:white;box-shadow:0 2px 10px rgba(0,0,0,0.05);}
-.container{display:flex;gap:40px;padding:40px;flex-wrap:wrap;}
-.left,.right{background:white;border-radius:20px;padding:25px;box-shadow:0 10px 30px rgba(0,0,0,0.06);}
-.left{width:340px;}
-.right{flex:1;min-width:300px;}
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+background:#f4f6fb;
+}
 
-.previewCard{border-radius:25px;padding:25px;text-align:center;background:#fff;}
-.avatar{width:70px;height:70px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;margin:auto;margin-bottom:10px;background:#6366f1;color:white;background-size:cover;background-position:center;}
-.linkbtn{display:block;padding:12px;margin:8px 0;border-radius:12px;text-decoration:none;font-weight:600;background:white;color:#111;box-shadow:0 5px 15px rgba(0,0,0,0.05);}
-.featured{background:linear-gradient(135deg,#7c3aed,#6366f1);color:white;}
+/* TOP BAR */
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 30px;
+background:white;
+box-shadow:0 2px 10px rgba(0,0,0,0.05);
+font-weight:700;
+font-size:18px;
+}
 
-.statBox{background:linear-gradient(135deg,#6366f1,#4f46e5);color:white;padding:12px;border-radius:12px;margin-bottom:8px;font-weight:600;}
+.logout{
+cursor:pointer;
+font-weight:600;
+color:#6366f1;
+}
 
-.sectionTitle{font-weight:700;margin-top:18px;margin-bottom:8px;}
-input,select{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #eee;}
-button{padding:8px 12px;border:none;border-radius:8px;background:#6366f1;color:white;font-weight:600;cursor:pointer;margin-top:6px;}
+/* LAYOUT */
+.container{
+max-width:1100px;
+margin:40px auto;
+padding:0 20px;
+display:grid;
+grid-template-columns:340px 1fr;
+gap:30px;
+}
 
-.linkRow{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;margin:6px 0;background:#fafafa;}
+/* PREVIEW */
+.previewCard{
+background:white;
+border-radius:22px;
+padding:30px;
+box-shadow:0 10px 30px rgba(0,0,0,0.06);
+text-align:center;
+}
+
+.avatar{
+width:80px;
+height:80px;
+border-radius:50%;
+background:#6366f1;
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:30px;
+margin:auto;
+margin-bottom:12px;
+background-size:cover;
+background-position:center;
+}
+
+.linkbtn{
+display:block;
+padding:12px;
+margin:8px 0;
+border-radius:12px;
+text-decoration:none;
+font-weight:600;
+background:#f1f5ff;
+color:#111;
+}
+
+/* RIGHT SIDE */
+.panel{
+background:white;
+border-radius:22px;
+box-shadow:0 10px 30px rgba(0,0,0,0.06);
+padding:10px 20px;
+}
+
+/* COLLAPSE */
+.section{
+border-bottom:1px solid #eee;
+padding:10px 0;
+}
+
+.sectionHeader{
+display:flex;
+justify-content:space-between;
+align-items:center;
+cursor:pointer;
+font-weight:700;
+padding:10px 0;
+}
+
+.sectionContent{
+display:none;
+padding-bottom:15px;
+}
+
+input,select{
+width:100%;
+padding:10px;
+margin:6px 0;
+border-radius:8px;
+border:1px solid #eee;
+}
+
+button{
+padding:8px 12px;
+border:none;
+border-radius:8px;
+background:#6366f1;
+color:white;
+font-weight:600;
+cursor:pointer;
+margin-top:6px;
+}
+
+.stat{
+background:#f1f5ff;
+padding:10px;
+border-radius:8px;
+margin:6px 0;
+font-weight:600;
+}
 </style>
 </head>
 
 <body>
 
-<div class="header">Linkarsha Studio</div>
+<div class="header">
+<div>Linkarsha Studio</div>
+<div class="logout" onclick="logout()">Logout</div>
+</div>
 
 <div class="container">
 
-<div class="left">
-<div class="previewCard" id="previewCard">
+<!-- LEFT PREVIEW -->
+<div class="previewCard">
 <div class="avatar" id="avatar">U</div>
 <div id="previewUsername">@username</div>
-<div id="previewBio" style="margin:6px 0;color:#666"></div>
+<div id="previewBio" style="color:#666;margin:6px 0"></div>
 <div id="previewLinks"></div>
 </div>
+
+<!-- RIGHT PANEL -->
+<div class="panel">
+
+<!-- PROFILE -->
+<div class="section">
+<div class="sectionHeader" onclick="toggle(this)">
+<span>Profile</span>
+<span>▼</span>
 </div>
-
-<div class="right">
-
-<div class="sectionTitle">Analytics</div>
-<div class="statBox" id="viewStat">👁 0 Views</div>
-<div id="clickStats"></div>
-
-<div class="sectionTitle">Profile</div>
+<div class="sectionContent">
 <input id="bioInput" placeholder="Write bio">
 <button onclick="saveBio()">Save Bio</button>
+</div>
+</div>
 
-<div class="sectionTitle">Add Link</div>
-<input id="title" placeholder="Instagram / YouTube">
-<input id="url" placeholder="https://">
-<button onclick="addLink()">Add Link</button>
-
-<div class="sectionTitle">Your Links</div>
-<div id="linksList"></div>
-
-<div class="sectionTitle">🎨 Theme</div>
+<!-- THEME -->
+<div class="section">
+<div class="sectionHeader" onclick="toggle(this)">
+<span>Theme & Design</span>
+<span>▼</span>
+</div>
+<div class="sectionContent">
 <select id="themeSelect">
 <option value="default">Default Luxury</option>
 <option value="glass">Glass Premium</option>
 <option value="dark">Dark Creator</option>
-<option value="neon">Neon Influencer</option>
 <option value="minimal">Minimal Clean</option>
 </select>
 <button onclick="saveTheme()">Apply Theme</button>
+</div>
+</div>
+
+<!-- ADD LINK -->
+<div class="section">
+<div class="sectionHeader" onclick="toggle(this)">
+<span>Add Link</span>
+<span>▼</span>
+</div>
+<div class="sectionContent">
+<input id="title" placeholder="Title">
+<input id="url" placeholder="https://">
+<button onclick="addLink()">Add Link</button>
+<div id="linksList"></div>
+</div>
+</div>
+
+<!-- ANALYTICS -->
+<div class="section">
+<div class="sectionHeader" onclick="toggle(this)">
+<span>Analytics</span>
+<span>▼</span>
+</div>
+<div class="sectionContent">
+<div class="stat" id="viewStat">0 Views</div>
+<div id="clickStats"></div>
+</div>
+</div>
 
 </div>
 </div>
 
 <script>
 const { createClient } = supabase;
+
 const supabaseClient=createClient(
 "https://pibrvhziqkaitaacbegy.supabase.co",
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw"
 );
 
 let userId=null;
-let linksData=[];
+
+function toggle(el){
+const content=el.nextElementSibling;
+content.style.display = content.style.display==="block"?"none":"block";
+}
 
 async function load(){
 const {data:{user}}=await supabaseClient.auth.getUser();
 if(!user){location.href="/";return;}
 userId=user.id;
 
-const {data:profile}=await supabaseClient.from("profiles").select("*").eq("id",userId).single();
+const {data:profile}=await supabaseClient
+.from("profiles")
+.select("*")
+.eq("id",userId)
+.single();
 
 document.getElementById("previewUsername").innerText="@"+profile.username;
 document.getElementById("previewBio").innerText=profile.bio||"";
-document.getElementById("viewStat").innerText="👁 "+(profile.views||0)+" Views";
+document.getElementById("bioInput").value=profile.bio||"";
+document.getElementById("viewStat").innerText=(profile.views||0)+" Views";
 
 if(profile.avatar){
 document.getElementById("avatar").style.background=`url('${profile.avatar}')`;
@@ -102,7 +249,6 @@ document.getElementById("avatar").innerText="";
 document.getElementById("avatar").innerText=profile.username.charAt(0).toUpperCase();
 }
 
-document.getElementById("bioInput").value=profile.bio||"";
 document.getElementById("themeSelect").value=profile.theme||"default";
 
 loadLinks();
@@ -110,8 +256,14 @@ loadLinks();
 
 async function saveBio(){
 const bio=document.getElementById("bioInput").value;
-await supabaseClient.from("profiles").update({bio:bio}).eq("id",userId);
+await supabaseClient.from("profiles").update({bio}).eq("id",userId);
 load();
+}
+
+async function saveTheme(){
+const theme=document.getElementById("themeSelect").value;
+await supabaseClient.from("profiles").update({theme}).eq("id",userId);
+alert("Theme updated");
 }
 
 async function addLink(){
@@ -120,17 +272,11 @@ const url=document.getElementById("url").value;
 if(!title||!url)return;
 
 await supabaseClient.from("links").insert([
-{user_id:userId,title:title,url:url,featured:false,position:Date.now(),clicks:0}
+{user_id:userId,title,url,featured:false,position:Date.now(),clicks:0}
 ]);
 
 document.getElementById("title").value="";
 document.getElementById("url").value="";
-loadLinks();
-}
-
-async function setFeatured(id){
-await supabaseClient.from("links").update({featured:false}).eq("user_id",userId);
-await supabaseClient.from("links").update({featured:true}).eq("id",id);
 loadLinks();
 }
 
@@ -139,41 +285,26 @@ const {data}=await supabaseClient
 .from("links")
 .select("*")
 .eq("user_id",userId)
-.order("featured",{ascending:false})
 .order("position",{ascending:true});
-
-linksData=data;
 
 let html="";
 let preview="";
-let clicksHtml="";
+let clickHtml="";
 
-linksData.forEach(l=>{
-html+=`
-<div class="linkRow">
-<div>${l.title} ${l.featured?'⭐':''}</div>
-<div><button onclick="setFeatured('${l.id}')">⭐</button></div>
-</div>
-`;
-
-clicksHtml+=`<div class="statBox" style="background:#111">${l.title} → ${l.clicks||0} clicks</div>`;
-
-if(l.featured){
-preview+=`<a class="linkbtn featured">${l.title}</a>`;
-}else{
+data.forEach(l=>{
+html+=`<div>${l.title}</div>`;
 preview+=`<a class="linkbtn">${l.title}</a>`;
-}
+clickHtml+=`<div class="stat">${l.title} → ${l.clicks||0} clicks</div>`;
 });
 
 document.getElementById("linksList").innerHTML=html;
 document.getElementById("previewLinks").innerHTML=preview;
-document.getElementById("clickStats").innerHTML=clicksHtml;
+document.getElementById("clickStats").innerHTML=clickHtml;
 }
 
-async function saveTheme(){
-const theme=document.getElementById("themeSelect").value;
-await supabaseClient.from("profiles").update({theme:theme}).eq("id",userId);
-alert("Theme updated 🔥");
+async function logout(){
+await supabaseClient.auth.signOut();
+location.href="/";
 }
 
 load();
