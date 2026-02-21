@@ -1,8 +1,12 @@
 <!DOCTYPE html>
+
+
 <html>
 <head>
 <title>Linkarsha — Creator Economy Platform</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
 <style>
 body{
@@ -10,18 +14,18 @@ margin:0;
 font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica;
 color:#111;
 overflow-x:hidden;
-background:black;
+background:#0c0c0f;
 }
 
-/* animated gradient background /
+/* animated luxury gradient */
 .bg{
 position:fixed;
 width:100%;
 height:100%;
 z-index:-1;
-background:linear-gradient(270deg,#0f0c29,#302b63,#24243e,#1a1a2e);
+background:linear-gradient(270deg,#0f0c29,#302b63,#24243e,#000000,#1a1a2e);
 background-size:800% 800%;
-animation:gradientMove 18s ease infinite;
+animation:gradientMove 20s ease infinite;
 }
 
 @keyframes gradientMove{
@@ -30,7 +34,7 @@ animation:gradientMove 18s ease infinite;
 100%{background-position:0% 50%}
 }
 
-/ nav /
+/* NAV */
 .nav{
 display:flex;
 justify-content:space-between;
@@ -40,24 +44,24 @@ color:white;
 }
 
 .logo{
-font-weight:700;
+font-weight:800;
 font-size:22px;
 letter-spacing:0.5px;
 }
 
-.navbtn{
+.navright a{
 padding:10px 18px;
-border-radius:20px;
+border-radius:22px;
 background:white;
 color:black;
 text-decoration:none;
 font-weight:600;
-margin-left:10px;
+margin-left:12px;
 }
 
-/ hero /
+/* HERO */
 .hero{
-min-height:90vh;
+min-height:85vh;
 display:flex;
 align-items:center;
 justify-content:center;
@@ -71,37 +75,86 @@ color:white;
 }
 
 .title{
-font-size:58px;
-font-weight:800;
-line-height:1.1;
+font-size:64px;
+font-weight:900;
+line-height:1.05;
+letter-spacing:-1px;
 }
 
 .subtitle{
-margin-top:18px;
+margin-top:20px;
 font-size:18px;
-color:#ddd;
+color:#d1d1d1;
 }
 
 .cta{
-margin-top:30px;
+margin-top:35px;
 }
 
 .cta a{
-padding:16px 26px;
-border-radius:28px;
+padding:16px 28px;
+border-radius:30px;
 background:white;
 color:black;
 text-decoration:none;
 font-weight:700;
 margin:10px;
 display:inline-block;
+transition:0.3s;
 }
 
-/ glass features */
+.cta a:hover{
+transform:scale(1.08);
+}
+
+/* glass search + signup */
+.mainbox{
+max-width:420px;
+margin:60px auto;
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(18px);
+padding:35px;
+border-radius:26px;
+box-shadow:0 30px 80px rgba(0,0,0,0.5);
+color:white;
+}
+
+input{
+width:100%;
+padding:15px;
+margin:10px 0;
+border-radius:14px;
+border:none;
+font-size:15px;
+outline:none;
+}
+
+button{
+padding:15px;
+border:none;
+border-radius:14px;
+background:white;
+color:black;
+font-weight:700;
+width:100%;
+cursor:pointer;
+margin-top:10px;
+}
+
+.result{
+text-align:left;
+padding:12px;
+border-radius:12px;
+background:white;
+color:black;
+margin:6px 0;
+cursor:pointer;
+font-weight:600;
+}
+
+/* FEATURES */
 .section{
 padding:90px 40px;
-display:flex;
-justify-content:center;
 }
 
 .features{
@@ -109,7 +162,7 @@ display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
 gap:30px;
 max-width:1100px;
-width:100%;
+margin:auto;
 }
 
 .card{
@@ -118,93 +171,217 @@ backdrop-filter:blur(16px);
 border-radius:26px;
 padding:30px;
 color:white;
-box-shadow:0 20px 60px rgba(0,0,0,0.3);
+box-shadow:0 20px 60px rgba(0,0,0,0.4);
 transition:0.35s;
 }
 
 .card:hover{
-transform:translateY(-8px) scale(1.02);
-}
-
-.card h3{
-margin-top:0;
+transform:translateY(-10px) scale(1.02);
 }
 
 .footer{
 text-align:center;
-padding:40px;
+padding:50px;
 color:#aaa;
 font-size:13px;
 }
 </style>
+
+
 </head>
+
 
 <body>
 
+
 <div class="bg"></div>
 
+
 <!-- NAV -->
+
+
 <div class="nav">
 <div class="logo">Linkarsha</div>
-<div>
-<a class="navbtn" href="/dashboard">Dashboard</a>
-<a class="navbtn" href="/">Login</a>
+<div class="navright">
+<a href="/dashboard">Dashboard</a>
 </div>
 </div>
 
+
 <!-- HERO -->
+
+
 <div class="hero">
 <div class="heroBox">
 
+
 <div class="title">
-Your Entire Creator Business.<br>
-One Premium Link.
+Build Your Creator Empire.<br>
+One Powerful Link.
 </div>
+
 
 <div class="subtitle">
-Build your creator empire.  
-Sell. Grow. Analyse. Monetize.  
-All from one powerful link.
+Sell content. Earn money. Track growth.  
+Everything from one premium creator page.
 </div>
+
 
 <div class="cta">
+<a href="#join">Start Building</a>
 <a href="/dashboard">Open Dashboard</a>
-<a href="/">Create Account</a>
 </div>
+
 
 </div>
 </div>
+
+
+<!-- SIGNUP + SEARCH -->
+
+
+<div class="mainbox" id="join">
+
+
+<h2 style="margin-top:0">Create your Linkarsha</h2>
+
+
+<input id="searchInput" placeholder="Search creators..." onkeyup="searchUser()">
+<div id="results"></div>
+
+
+<hr style="margin:25px 0;border-color:#333">
+
+
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+<input id="username" placeholder="Username">
+<button onclick="signup()">Create Account</button>
+
+
+<p id="msg"></p>
+
+
+<hr style="margin:20px 0;border-color:#333">
+<button onclick="login()">Login</button>
+
+
+</div>
+
 
 <!-- FEATURES -->
+
+
 <div class="section">
 <div class="features">
 
-<div class="card">
-<h3>💰 Monetize Links</h3>
-Earn from paid links, courses, content and exclusive drops.
-</div>
 
 <div class="card">
-<h3>📊 Deep Analytics</h3>
-Track profile views, clicks and growth like a pro creator.
+<h3>💰 Earn from links</h3>
+Sell courses, premium content & private access.
 </div>
+
 
 <div class="card">
-<h3>🎨 Premium Themes</h3>
-Luxury themes for influencers & brands.
+<h3>📊 Creator analytics</h3>
+Track profile views, clicks & growth.
 </div>
+
 
 <div class="card">
-<h3>🚀 Built for Growth</h3>
-From 0 to viral — Linkarsha scales with you.
+<h3>🎨 Luxury themes</h3>
+Premium designs for creators & brands.
 </div>
+
+
+<div class="card">
+<h3>🚀 Built to go viral</h3>
+From zero to millions — scale fast.
+</div>
+
 
 </div>
 </div>
+
 
 <div class="footer">
 © Linkarsha — Creator economy platform
 </div>
+
+
+<script>
+const { createClient } = supabase;
+
+const supabaseClient=createClient(
+"https://pibrvhziqkaitaacbegy.supabase.co",
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw"
+);
+
+// SEARCH
+async function searchUser(){
+const q=document.getElementById("searchInput").value.toLowerCase();
+if(q.length<1){document.getElementById("results").innerHTML="";return;}
+
+const {data}=await supabaseClient
+.from("profiles")
+.select("username,verified")
+.ilike("username","%"+q+"%")
+.limit(8);
+
+let html="";
+data.forEach(u=>{
+html+=`<div class="result" onclick="openProfile('${u.username}')">
+@${u.username} ${u.verified?'✔':''}
+</div>`;
+});
+document.getElementById("results").innerHTML=html;
+}
+
+function openProfile(username){
+window.location.href="/"+username;
+}
+
+// SIGNUP
+async function signup(){
+const email=emailInput.value;
+const password=passwordInput.value;
+const username=usernameInput.value.toLowerCase();
+const msg=document.getElementById("msg");
+
+if(!email||!password||!username){msg.innerText="Fill all fields";return;}
+
+const {data,error}=await supabaseClient.auth.signUp({email,password});
+if(error){msg.innerText=error.message;return;}
+if(!data.user){msg.innerText="Signup success. Now login.";return;}
+
+const {error:profileError}=await supabaseClient
+.from("profiles").insert([{id:data.user.id,username:username}]);
+
+if(profileError){msg.innerText=profileError.message;return;}
+
+msg.innerText="Account created. Now login.";
+}
+
+// LOGIN
+async function login(){
+const email=emailInput.value;
+const password=passwordInput.value;
+const msg=document.getElementById("msg");
+
+const {error}=await supabaseClient.auth.signInWithPassword({email,password});
+if(error){msg.innerText=error.message;return;}
+
+window.location.href="/dashboard";
+}
+
+// AUTO LOGIN
+async function check(){
+const {data:{user}}=await supabaseClient.auth.getUser();
+if(user){window.location.href="/dashboard";}
+}
+check();
+</script>
+
 
 </body>
 </html>
