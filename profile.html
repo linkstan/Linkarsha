@@ -9,23 +9,21 @@
 body{
 margin:0;
 font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+background:linear-gradient(135deg,#eef2ff,#f5f3ff);
 min-height:100vh;
 display:flex;
 align-items:center;
 justify-content:center;
-transition:0.4s;
 }
 
-/* container */
 .card{
 width:360px;
 max-width:92%;
-border-radius:28px;
+background:white;
+border-radius:30px;
 padding:40px 25px;
 text-align:center;
-box-shadow:0 30px 80px rgba(0,0,0,0.15);
-backdrop-filter:blur(20px);
-transition:0.4s;
+box-shadow:0 30px 80px rgba(0,0,0,0.12);
 }
 
 .avatar{
@@ -34,43 +32,24 @@ height:95px;
 border-radius:50%;
 margin:auto;
 margin-bottom:14px;
+background:linear-gradient(135deg,#7c3aed,#6366f1);
 display:flex;
 align-items:center;
 justify-content:center;
+color:white;
 font-size:36px;
 font-weight:700;
-color:white;
-background:#6366f1;
-background-size:cover;
-background-position:center;
 }
 
 .username{
 font-size:22px;
 font-weight:700;
-display:flex;
-align-items:center;
-justify-content:center;
-gap:6px;
-}
-
-.verified{
-width:18px;
-height:18px;
-background:#1da1f2;
-border-radius:50%;
-display:inline-flex;
-align-items:center;
-justify-content:center;
-color:white;
-font-size:12px;
 }
 
 .bio{
-margin-top:6px;
-margin-bottom:18px;
+color:#666;
+margin:10px 0 20px;
 font-size:14px;
-opacity:0.8;
 }
 
 .link{
@@ -80,72 +59,19 @@ margin:12px 0;
 border-radius:16px;
 text-decoration:none;
 font-weight:600;
-transition:0.25s;
+color:#111;
+background:#f8f9ff;
 }
 
-.link:hover{transform:scale(1.04);}
-
-.footer{
-margin-top:18px;
-font-size:12px;
-opacity:0.5;
-}
-
-/* THEMES */
-
-/* default luxury */
-.theme-default{
-background:linear-gradient(135deg,#eef2ff,#f5f3ff,#fafafa);
-}
-.theme-default .card{background:rgba(255,255,255,0.85);}
-.theme-default .link{background:white;color:#111;box-shadow:0 12px 25px rgba(0,0,0,0.08);}
-
-/* glass premium */
-.theme-glass{
-background:linear-gradient(135deg,#667eea,#764ba2);
-}
-.theme-glass .card{background:rgba(255,255,255,0.15);color:white;}
-.theme-glass .link{background:rgba(255,255,255,0.2);color:white;}
-
-/* dark creator */
-.theme-dark{
-background:#0f172a;
-color:white;
-}
-.theme-dark .card{background:#020617;}
-.theme-dark .link{background:#111827;color:white;}
-
-/* neon influencer */
-.theme-neon{
-background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);
-color:white;
-}
-.theme-neon .card{background:rgba(0,0,0,0.4);}
-.theme-neon .link{background:linear-gradient(135deg,#ff00cc,#3333ff);color:white;}
-
-/* minimal clean */
-.theme-minimal{
-background:#ffffff;
-}
-.theme-minimal .card{background:white;box-shadow:none;border:1px solid #eee;}
-.theme-minimal .link{background:#f1f5f9;color:#111;}
 </style>
 </head>
 
-<body class="theme-default">
-
+<body>
 <div class="card">
-
 <div class="avatar" id="avatar">U</div>
-
 <div class="username" id="username">@user</div>
-
 <div class="bio" id="bio"></div>
-
 <div id="links"></div>
-
-<div class="footer">Powered by Linkarsha</div>
-
 </div>
 
 <script>
@@ -160,58 +86,36 @@ let username=window.location.pathname.replace("/","").toLowerCase();
 
 async function load(){
 
-const {data:profile}=await supabaseClient
-.from("profiles")
-.select("*")
-.ilike("username",username)
-.single();
+const {data:profile}=await supabaseClient.from("profiles").select("*").eq("username",username).single();
 
 if(!profile){
 document.body.innerHTML="<h2>User not found</h2>";
 return;
 }
 
-// APPLY THEME
-const theme=profile.theme||"default";
-document.body.className="theme-"+theme;
-
-// username + verified
-let nameHTML="@"+profile.username;
-if(profile.verified===true){
-nameHTML+=` <span class="verified">✓</span>`;
-}
-document.getElementById("username").innerHTML=nameHTML;
-
-// bio
+document.getElementById("username").innerText="@"+profile.username;
 document.getElementById("bio").innerText=profile.bio||"";
 
-// avatar
-if(profile.avatar){
-document.getElementById("avatar").style.background=`url('${profile.avatar}')`;
-document.getElementById("avatar").innerText="";
-}else{
 document.getElementById("avatar").innerText=profile.username.charAt(0).toUpperCase();
-}
 
-// links
-const {data:links}=await supabaseClient
-.from("links")
-.select("*")
-.eq("user_id",profile.id)
-.order("featured",{ascending:false})
-.order("position",{ascending:true});
+// add view
+await supabaseClient.from("profiles").update({views:(profile.views||0)+1}).eq("id",profile.id);
+
+const {data:links}=await supabaseClient.from("links").select("*").eq("user_id",profile.id).order("position",{ascending:true});
 
 let html="";
 links.forEach(l=>{
+if(l.is_paid){
+html+=`<div class="link">🔒 ${l.title} ₹${l.price}</div>`;
+}else{
 html+=`<a class="link" href="${l.url}" target="_blank">${l.title}</a>`;
+}
 });
 
 document.getElementById("links").innerHTML=html;
-
 }
 
 load();
 </script>
-
 </body>
 </html>
