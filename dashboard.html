@@ -24,8 +24,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;bac
 input,select{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #eee;}
 button{padding:8px 12px;border:none;border-radius:8px;background:#6366f1;color:white;font-weight:600;cursor:pointer;margin-top:6px;}
 
-.linkRow{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;margin:6px 0;background:#fafafa;cursor:grab;}
-.dragging{opacity:0.4;}
+.linkRow{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;margin:6px 0;background:#fafafa;}
 </style>
 </head>
 
@@ -59,23 +58,18 @@ button{padding:8px 12px;border:none;border-radius:8px;background:#6366f1;color:w
 <input id="url" placeholder="https://">
 <button onclick="addLink()">Add Link</button>
 
-<div class="sectionTitle">Your Links (Drag to reorder)</div>
+<div class="sectionTitle">Your Links</div>
 <div id="linksList"></div>
 
-<div class="sectionTitle">Design</div>
-<label>Background</label>
-<input type="color" id="bgColor">
-<label>Text</label>
-<input type="color" id="textColor">
-<label>Button</label>
-<input type="color" id="btnColor">
-<select id="fontSelect">
-<option value="default">Default</option>
-<option value="serif">Serif</option>
-<option value="mono">Mono</option>
-<option value="modern">Modern</option>
+<div class="sectionTitle">🎨 Theme</div>
+<select id="themeSelect">
+<option value="default">Default Luxury</option>
+<option value="glass">Glass Premium</option>
+<option value="dark">Dark Creator</option>
+<option value="neon">Neon Influencer</option>
+<option value="minimal">Minimal Clean</option>
 </select>
-<button onclick="saveDesign()">Save Design</button>
+<button onclick="saveTheme()">Apply Theme</button>
 
 </div>
 </div>
@@ -108,22 +102,10 @@ document.getElementById("avatar").innerText="";
 document.getElementById("avatar").innerText=profile.username.charAt(0).toUpperCase();
 }
 
-document.getElementById("bgColor").value=profile.bg_color||"#ffffff";
-document.getElementById("textColor").value=profile.text_color||"#111111";
-document.getElementById("btnColor").value=profile.button_color||"#ffffff";
-document.getElementById("fontSelect").value=profile.font||"default";
+document.getElementById("bioInput").value=profile.bio||"";
+document.getElementById("themeSelect").value=profile.theme||"default";
 
-applyDesign(profile);
 loadLinks();
-}
-
-function applyDesign(profile){
-const card=document.getElementById("previewCard");
-card.style.background=profile.bg_color||"#fff";
-card.style.color=profile.text_color||"#111";
-if(profile.font==="serif")card.style.fontFamily="serif";
-if(profile.font==="mono")card.style.fontFamily="monospace";
-if(profile.font==="modern")card.style.fontFamily="Inter,sans-serif";
 }
 
 async function saveBio(){
@@ -138,7 +120,7 @@ const url=document.getElementById("url").value;
 if(!title||!url)return;
 
 await supabaseClient.from("links").insert([
-{user_id:userId,title:title,url:url,featured:false,position:Date.now()}
+{user_id:userId,title:title,url:url,featured:false,position:Date.now(),clicks:0}
 ]);
 
 document.getElementById("title").value="";
@@ -162,94 +144,36 @@ const {data}=await supabaseClient
 
 linksData=data;
 
-renderLinks();
-renderPreview();
-enableDrag();
-}
-
-function renderLinks(){
 let html="";
+let preview="";
 let clicksHtml="";
+
 linksData.forEach(l=>{
 html+=`
-<div class="linkRow" draggable="true" data-id="${l.id}">
+<div class="linkRow">
 <div>${l.title} ${l.featured?'⭐':''}</div>
 <div><button onclick="setFeatured('${l.id}')">⭐</button></div>
 </div>
 `;
+
 clicksHtml+=`<div class="statBox" style="background:#111">${l.title} → ${l.clicks||0} clicks</div>`;
+
+if(l.featured){
+preview+=`<a class="linkbtn featured">${l.title}</a>`;
+}else{
+preview+=`<a class="linkbtn">${l.title}</a>`;
+}
 });
+
 document.getElementById("linksList").innerHTML=html;
+document.getElementById("previewLinks").innerHTML=preview;
 document.getElementById("clickStats").innerHTML=clicksHtml;
 }
 
-function renderPreview(){
-let html="";
-linksData.forEach(l=>{
-if(l.featured){
-html+=`<a class="linkbtn featured">${l.title}</a>`;
-}else{
-html+=`<a class="linkbtn">${l.title}</a>`;
-}
-});
-document.getElementById("previewLinks").innerHTML=html;
-}
-
-function enableDrag(){
-const draggables=document.querySelectorAll(".linkRow");
-const container=document.getElementById("linksList");
-
-draggables.forEach(d=>{
-d.addEventListener("dragstart",()=>d.classList.add("dragging"));
-d.addEventListener("dragend",()=>{
-d.classList.remove("dragging");
-saveOrder();
-});
-});
-
-container.addEventListener("dragover",e=>{
-e.preventDefault();
-const after=getAfter(container,e.clientY);
-const dragging=document.querySelector(".dragging");
-if(!dragging)return;
-if(after==null)container.appendChild(dragging);
-else container.insertBefore(dragging,after);
-});
-}
-
-function getAfter(container,y){
-const els=[...container.querySelectorAll(".linkRow:not(.dragging)")];
-return els.reduce((closest,child)=>{
-const box=child.getBoundingClientRect();
-const offset=y-box.top-box.height/2;
-if(offset<0 && offset>closest.offset){
-return{offset:offset,element:child};
-}else return closest;
-},{offset:Number.NEGATIVE_INFINITY}).element;
-}
-
-async function saveOrder(){
-const rows=document.querySelectorAll(".linkRow");
-let pos=1;
-for(const r of rows){
-const id=r.getAttribute("data-id");
-await supabaseClient.from("links").update({position:pos}).eq("id",id);
-pos++;
-}
-loadLinks();
-}
-
-async function saveDesign(){
-const bg=document.getElementById("bgColor").value;
-const text=document.getElementById("textColor").value;
-const btn=document.getElementById("btnColor").value;
-const font=document.getElementById("fontSelect").value;
-
-await supabaseClient.from("profiles")
-.update({bg_color:bg,text_color:text,button_color:btn,font:font})
-.eq("id",userId);
-
-load();
+async function saveTheme(){
+const theme=document.getElementById("themeSelect").value;
+await supabaseClient.from("profiles").update({theme:theme}).eq("id",userId);
+alert("Theme updated 🔥");
 }
 
 load();
