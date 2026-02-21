@@ -15,17 +15,17 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;bac
 
 .previewCard{border-radius:25px;padding:25px;text-align:center;background:#fff;}
 .avatar{width:70px;height:70px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;margin:auto;margin-bottom:10px;background:#6366f1;color:white;background-size:cover;background-position:center;}
-
 .linkbtn{display:block;padding:12px;margin:8px 0;border-radius:12px;text-decoration:none;font-weight:600;background:white;color:#111;box-shadow:0 5px 15px rgba(0,0,0,0.05);}
 .featured{background:linear-gradient(135deg,#7c3aed,#6366f1);color:white;}
 
-.statBox{background:linear-gradient(135deg,#6366f1,#4f46e5);color:white;padding:16px;border-radius:14px;margin-bottom:10px;font-weight:600;}
+.statBox{background:linear-gradient(135deg,#6366f1,#4f46e5);color:white;padding:12px;border-radius:12px;margin-bottom:8px;font-weight:600;}
 
-input,select{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #eee;}
-button{padding:10px 14px;border:none;border-radius:10px;background:#6366f1;color:white;font-weight:600;cursor:pointer;margin-top:6px;}
+.sectionTitle{font-weight:700;margin-top:18px;margin-bottom:8px;}
+input,select{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #eee;}
+button{padding:8px 12px;border:none;border-radius:8px;background:#6366f1;color:white;font-weight:600;cursor:pointer;margin-top:6px;}
 
-.sectionTitle{font-weight:700;margin-top:15px;margin-bottom:10px;}
-.linkRow{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #eee;}
+.linkRow{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;margin:6px 0;background:#fafafa;cursor:grab;}
+.dragging{opacity:0.4;}
 </style>
 </head>
 
@@ -39,7 +39,7 @@ button{padding:10px 14px;border:none;border-radius:10px;background:#6366f1;color
 <div class="previewCard" id="previewCard">
 <div class="avatar" id="avatar">U</div>
 <div id="previewUsername">@username</div>
-<div id="previewBio" style="margin:8px 0;color:#666"></div>
+<div id="previewBio" style="margin:6px 0;color:#666"></div>
 <div id="previewLinks"></div>
 </div>
 </div>
@@ -48,26 +48,19 @@ button{padding:10px 14px;border:none;border-radius:10px;background:#6366f1;color
 
 <div class="sectionTitle">Analytics</div>
 <div class="statBox" id="viewStat">👁 0 Views</div>
-<div class="statBox" id="totalLinks">🔗 0 Links</div>
 <div id="clickStats"></div>
-
-<hr style="margin:25px 0">
 
 <div class="sectionTitle">Profile</div>
 <input id="bioInput" placeholder="Write bio">
 <button onclick="saveBio()">Save Bio</button>
-
-<hr style="margin:25px 0">
 
 <div class="sectionTitle">Add Link</div>
 <input id="title" placeholder="Instagram / YouTube">
 <input id="url" placeholder="https://">
 <button onclick="addLink()">Add Link</button>
 
-<div class="sectionTitle">Your Links</div>
+<div class="sectionTitle">Your Links (Drag to reorder)</div>
 <div id="linksList"></div>
-
-<hr style="margin:25px 0">
 
 <div class="sectionTitle">Design</div>
 <label>Background</label>
@@ -89,23 +82,24 @@ button{padding:10px 14px;border:none;border-radius:10px;background:#6366f1;color
 
 <script>
 const { createClient } = supabase;
-
 const supabaseClient=createClient(
 "https://pibrvhziqkaitaacbegy.supabase.co",
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw"
 );
 
 let userId=null;
+let linksData=[];
 
 async function load(){
 const {data:{user}}=await supabaseClient.auth.getUser();
 if(!user){location.href="/";return;}
 userId=user.id;
 
-const {data:profile}=await supabaseClient.from("profiles").select("*").eq("id",user.id).single();
+const {data:profile}=await supabaseClient.from("profiles").select("*").eq("id",userId).single();
 
 document.getElementById("previewUsername").innerText="@"+profile.username;
 document.getElementById("previewBio").innerText=profile.bio||"";
+document.getElementById("viewStat").innerText="👁 "+(profile.views||0)+" Views";
 
 if(profile.avatar){
 document.getElementById("avatar").style.background=`url('${profile.avatar}')`;
@@ -114,21 +108,19 @@ document.getElementById("avatar").innerText="";
 document.getElementById("avatar").innerText=profile.username.charAt(0).toUpperCase();
 }
 
-document.getElementById("viewStat").innerText="👁 "+(profile.views||0)+" Views";
 document.getElementById("bgColor").value=profile.bg_color||"#ffffff";
 document.getElementById("textColor").value=profile.text_color||"#111111";
 document.getElementById("btnColor").value=profile.button_color||"#ffffff";
 document.getElementById("fontSelect").value=profile.font||"default";
 
-loadLinks();
 applyDesign(profile);
+loadLinks();
 }
 
 function applyDesign(profile){
 const card=document.getElementById("previewCard");
 card.style.background=profile.bg_color||"#fff";
 card.style.color=profile.text_color||"#111";
-
 if(profile.font==="serif")card.style.fontFamily="serif";
 if(profile.font==="mono")card.style.fontFamily="monospace";
 if(profile.font==="modern")card.style.fontFamily="Inter,sans-serif";
@@ -145,7 +137,9 @@ const title=document.getElementById("title").value;
 const url=document.getElementById("url").value;
 if(!title||!url)return;
 
-await supabaseClient.from("links").insert([{user_id:userId,title:title,url:url,featured:false,clicks:0}]);
+await supabaseClient.from("links").insert([
+{user_id:userId,title:title,url:url,featured:false,position:Date.now()}
+]);
 
 document.getElementById("title").value="";
 document.getElementById("url").value="";
@@ -159,36 +153,90 @@ loadLinks();
 }
 
 async function loadLinks(){
-const {data}=await supabaseClient.from("links").select("*").eq("user_id",userId).order("featured",{ascending:false});
+const {data}=await supabaseClient
+.from("links")
+.select("*")
+.eq("user_id",userId)
+.order("featured",{ascending:false})
+.order("position",{ascending:true});
 
-let dash="";
-let preview="";
+linksData=data;
+
+renderLinks();
+renderPreview();
+enableDrag();
+}
+
+function renderLinks(){
+let html="";
 let clicksHtml="";
-let total=0;
-
-data.forEach(l=>{
-total++;
-
-dash+=`
-<div class="linkRow">
+linksData.forEach(l=>{
+html+=`
+<div class="linkRow" draggable="true" data-id="${l.id}">
 <div>${l.title} ${l.featured?'⭐':''}</div>
 <div><button onclick="setFeatured('${l.id}')">⭐</button></div>
 </div>
 `;
-
 clicksHtml+=`<div class="statBox" style="background:#111">${l.title} → ${l.clicks||0} clicks</div>`;
+});
+document.getElementById("linksList").innerHTML=html;
+document.getElementById("clickStats").innerHTML=clicksHtml;
+}
 
+function renderPreview(){
+let html="";
+linksData.forEach(l=>{
 if(l.featured){
-preview+=`<a class="linkbtn featured">${l.title}</a>`;
+html+=`<a class="linkbtn featured">${l.title}</a>`;
 }else{
-preview+=`<a class="linkbtn">${l.title}</a>`;
+html+=`<a class="linkbtn">${l.title}</a>`;
 }
 });
+document.getElementById("previewLinks").innerHTML=html;
+}
 
-document.getElementById("linksList").innerHTML=dash;
-document.getElementById("previewLinks").innerHTML=preview;
-document.getElementById("clickStats").innerHTML=clicksHtml;
-document.getElementById("totalLinks").innerText="🔗 "+total+" Links";
+function enableDrag(){
+const draggables=document.querySelectorAll(".linkRow");
+const container=document.getElementById("linksList");
+
+draggables.forEach(d=>{
+d.addEventListener("dragstart",()=>d.classList.add("dragging"));
+d.addEventListener("dragend",()=>{
+d.classList.remove("dragging");
+saveOrder();
+});
+});
+
+container.addEventListener("dragover",e=>{
+e.preventDefault();
+const after=getAfter(container,e.clientY);
+const dragging=document.querySelector(".dragging");
+if(!dragging)return;
+if(after==null)container.appendChild(dragging);
+else container.insertBefore(dragging,after);
+});
+}
+
+function getAfter(container,y){
+const els=[...container.querySelectorAll(".linkRow:not(.dragging)")];
+return els.reduce((closest,child)=>{
+const box=child.getBoundingClientRect();
+const offset=y-box.top-box.height/2;
+if(offset<0 && offset>closest.offset){
+return{offset:offset,element:child};
+}else return closest;
+},{offset:Number.NEGATIVE_INFINITY}).element;
+}
+
+async function saveOrder(){
+const rows=document.querySelectorAll(".linkRow");
+let pos=1;
+for(const r of rows){
+const id=r.getAttribute("data-id");
+await supabaseClient.from("links").update({position:pos}).eq("id",id);
+pos++;
+}
+loadLinks();
 }
 
 async function saveDesign(){
