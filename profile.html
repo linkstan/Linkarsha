@@ -9,7 +9,7 @@
 body{
 margin:0;
 font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
-background:radial-gradient(circle at top,#f8fafc,#eef2ff,#f1f5f9);
+background:linear-gradient(135deg,#eef2ff,#f5f3ff,#fafafa);
 min-height:100vh;
 display:flex;
 align-items:center;
@@ -17,62 +17,103 @@ justify-content:center;
 }
 
 .card{
-width:420px;
+width:360px;
 max-width:92%;
-background:rgba(255,255,255,0.75);
-backdrop-filter:blur(25px);
-border-radius:32px;
-padding:40px 28px;
+background:rgba(255,255,255,0.8);
+backdrop-filter:blur(20px);
+border-radius:28px;
+padding:40px 25px;
 text-align:center;
-box-shadow:0 40px 120px rgba(0,0,0,0.18);
+box-shadow:0 30px 80px rgba(0,0,0,0.12);
 }
 
 .avatar{
-width:110px;
-height:110px;
+width:95px;
+height:95px;
 border-radius:50%;
 margin:auto;
 margin-bottom:14px;
-background:linear-gradient(135deg,#7c3aed,#6366f1,#4f46e5);
+background:linear-gradient(135deg,#7c3aed,#6366f1);
 display:flex;
 align-items:center;
 justify-content:center;
 color:white;
-font-size:40px;
+font-size:36px;
 font-weight:700;
 background-size:cover;
 background-position:center;
 }
 
-.username{font-size:26px;font-weight:700;}
-.bio{color:#555;margin:6px 0 15px;}
+.username{
+font-size:22px;
+font-weight:700;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:6px;
+}
+
+.verified{
+width:18px;
+height:18px;
+background:#1da1f2;
+border-radius:50%;
+display:inline-flex;
+align-items:center;
+justify-content:center;
+color:white;
+font-size:12px;
+font-weight:700;
+}
+
+.bio{
+color:#666;
+margin-top:6px;
+margin-bottom:18px;
+font-size:14px;
+}
 
 .link{
 display:block;
-padding:18px;
-margin:14px 0;
-border-radius:18px;
+padding:15px;
+margin:12px 0;
+border-radius:16px;
 text-decoration:none;
 font-weight:600;
 color:#111;
 background:white;
-box-shadow:0 15px 30px rgba(0,0,0,0.12);
+box-shadow:0 12px 25px rgba(0,0,0,0.08);
 transition:0.25s;
 }
 
-.link:hover{transform:scale(1.05);}
-.footer{margin-top:25px;font-size:12px;color:#999;}
+.link:hover{
+transform:scale(1.03);
+}
+
+.footer{
+margin-top:20px;
+font-size:12px;
+color:#aaa;
+}
 </style>
 </head>
 
 <body>
 
 <div class="card">
+
 <div class="avatar" id="avatar">U</div>
-<div class="username" id="username">@user</div>
+
+<div class="username" id="username">
+@user
+</div>
+
 <div class="bio" id="bio"></div>
+
 <div id="links"></div>
-<div class="footer">Linkarsha</div>
+
+<div class="footer">Powered by Linkarsha</div>
+
 </div>
 
 <script>
@@ -98,20 +139,21 @@ document.body.innerHTML="<h2>User not found</h2>";
 return;
 }
 
-// increase views
-await supabaseClient
-.from("profiles")
-.update({views:(profile.views||0)+1})
-.eq("id",profile.id);
+// username + verified
+let nameHTML="@"+profile.username;
 
-document.getElementById("username").innerText="@"+profile.username;
-
-if(profile.bio){
-document.getElementById("bio").innerText=profile.bio;
+if(profile.verified===true){
+nameHTML+=` <span class="verified">✓</span>`;
 }
 
+document.getElementById("username").innerHTML=nameHTML;
+
+// bio
+document.getElementById("bio").innerText=profile.bio||"";
+
+// avatar
 if(profile.avatar){
-document.getElementById("avatar").style.background="url('"+profile.avatar+"')";
+document.getElementById("avatar").style.background=`url('${profile.avatar}')`;
 document.getElementById("avatar").innerText="";
 }else{
 document.getElementById("avatar").innerText=profile.username.charAt(0).toUpperCase();
@@ -121,31 +163,17 @@ document.getElementById("avatar").innerText=profile.username.charAt(0).toUpperCa
 const {data:links}=await supabaseClient
 .from("links")
 .select("*")
-.eq("user_id",profile.id);
+.eq("user_id",profile.id)
+.order("featured",{ascending:false})
+.order("position",{ascending:true});
 
 let html="";
 links.forEach(l=>{
-html+=`<a class="link" onclick="trackClick('${l.id}','${l.url}')" href="${l.url}" target="_blank">${l.title}</a>`;
+html+=`<a class="link" href="${l.url}" target="_blank">${l.title}</a>`;
 });
 
 document.getElementById("links").innerHTML=html;
-}
 
-// 🔥 CLICK TRACK
-async function trackClick(id,url){
-
-const {data}=await supabaseClient
-.from("links")
-.select("clicks")
-.eq("id",id)
-.single();
-
-await supabaseClient
-.from("links")
-.update({clicks:(data.clicks||0)+1})
-.eq("id",id);
-
-window.open(url,"_blank");
 }
 
 load();
