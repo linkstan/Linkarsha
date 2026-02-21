@@ -1,197 +1,210 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Linkarsha</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>Linkarsha — Creator Economy Platform</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body{
 margin:0;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
-background:linear-gradient(135deg,#eef2ff,#f5f3ff,#fafafa);
-min-height:100vh;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica;
+color:#111;
+overflow-x:hidden;
+background:black;
+}
+
+/* animated gradient background /
+.bg{
+position:fixed;
+width:100%;
+height:100%;
+z-index:-1;
+background:linear-gradient(270deg,#0f0c29,#302b63,#24243e,#1a1a2e);
+background-size:800% 800%;
+animation:gradientMove 18s ease infinite;
+}
+
+@keyframes gradientMove{
+0%{background-position:0% 50%}
+50%{background-position:100% 50%}
+100%{background-position:0% 50%}
+}
+
+/ nav /
+.nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:22px 60px;
+color:white;
+}
+
+.logo{
+font-weight:700;
+font-size:22px;
+letter-spacing:0.5px;
+}
+
+.navbtn{
+padding:10px 18px;
+border-radius:20px;
+background:white;
+color:black;
+text-decoration:none;
+font-weight:600;
+margin-left:10px;
+}
+
+/ hero /
+.hero{
+min-height:90vh;
 display:flex;
 align-items:center;
 justify-content:center;
-}
-
-.box{
-width:380px;
-max-width:92%;
-background:rgba(255,255,255,0.9);
-padding:40px 25px;
-border-radius:24px;
 text-align:center;
-box-shadow:0 30px 80px rgba(0,0,0,0.12);
+padding:40px;
 }
 
-input{
-width:100%;
-padding:14px;
-margin:10px 0;
-border-radius:12px;
-border:1px solid #eee;
-font-size:15px;
-}
-
-button{
-padding:14px;
-border:none;
-border-radius:12px;
-background:#6366f1;
+.heroBox{
+max-width:900px;
 color:white;
-font-weight:600;
-width:100%;
-cursor:pointer;
-margin-top:10px;
 }
 
-.result{
-text-align:left;
-padding:12px;
-border-radius:12px;
-background:#f5f5f5;
-margin:6px 0;
-cursor:pointer;
+.title{
+font-size:58px;
+font-weight:800;
+line-height:1.1;
+}
+
+.subtitle{
+margin-top:18px;
+font-size:18px;
+color:#ddd;
+}
+
+.cta{
+margin-top:30px;
+}
+
+.cta a{
+padding:16px 26px;
+border-radius:28px;
+background:white;
+color:black;
+text-decoration:none;
+font-weight:700;
+margin:10px;
+display:inline-block;
+}
+
+/ glass features */
+.section{
+padding:90px 40px;
+display:flex;
+justify-content:center;
+}
+
+.features{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:30px;
+max-width:1100px;
+width:100%;
+}
+
+.card{
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(16px);
+border-radius:26px;
+padding:30px;
+color:white;
+box-shadow:0 20px 60px rgba(0,0,0,0.3);
+transition:0.35s;
+}
+
+.card:hover{
+transform:translateY(-8px) scale(1.02);
+}
+
+.card h3{
+margin-top:0;
+}
+
+.footer{
+text-align:center;
+padding:40px;
+color:#aaa;
+font-size:13px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="box">
+<div class="bg"></div>
 
-<h1>Linkarsha</h1>
-<p>Create. Share. Discover creators.</p>
-
-<!-- SEARCH -->
-<input id="searchInput" placeholder="Search creators..." onkeyup="searchUser()">
-<div id="results"></div>
-
-<hr style="margin:25px 0">
-
-<h3>Create account</h3>
-<input id="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
-<input id="username" placeholder="Username">
-<button onclick="signup()">Create Account</button>
-
-<p id="msg"></p>
-
-<hr style="margin:20px 0">
-<button onclick="login()">Login</button>
-
+<!-- NAV -->
+<div class="nav">
+<div class="logo">Linkarsha</div>
+<div>
+<a class="navbtn" href="/dashboard">Dashboard</a>
+<a class="navbtn" href="/">Login</a>
+</div>
 </div>
 
-<script>
-const { createClient } = supabase;
+<!-- HERO -->
+<div class="hero">
+<div class="heroBox">
 
-const supabaseClient=createClient(
-"https://pibrvhziqkaitaacbegy.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpYnJ2aHppcWthaXRhYWNiZWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0Mzc3MDQsImV4cCI6MjA4NzAxMzcwNH0.gBi73cyS6exLNfm1iz6IwAzWFXXxFAjgjlnbuHx7HMw"
-);
+<div class="title">
+Your Entire Creator Business.<br>
+One Premium Link.
+</div>
 
-// SEARCH USERS
-async function searchUser(){
-const q=document.getElementById("searchInput").value.toLowerCase();
+<div class="subtitle">
+Build your creator empire.  
+Sell. Grow. Analyse. Monetize.  
+All from one powerful link.
+</div>
 
-if(q.length<1){
-document.getElementById("results").innerHTML="";
-return;
-}
+<div class="cta">
+<a href="/dashboard">Open Dashboard</a>
+<a href="/">Create Account</a>
+</div>
 
-const {data}=await supabaseClient
-.from("profiles")
-.select("username,verified")
-.ilike("username","%"+q+"%")
-.limit(8);
+</div>
+</div>
 
-let html="";
-data.forEach(u=>{
-html+=`
-<div class="result" onclick="openProfile('${u.username}')">
-@${u.username} ${u.verified?'✔':''}
-</div>`;
-});
+<!-- FEATURES -->
+<div class="section">
+<div class="features">
 
-document.getElementById("results").innerHTML=html;
-}
+<div class="card">
+<h3>💰 Monetize Links</h3>
+Earn from paid links, courses, content and exclusive drops.
+</div>
 
-function openProfile(username){
-window.location.href="/"+username;
-}
+<div class="card">
+<h3>📊 Deep Analytics</h3>
+Track profile views, clicks and growth like a pro creator.
+</div>
 
-// SIGNUP
-async function signup(){
+<div class="card">
+<h3>🎨 Premium Themes</h3>
+Luxury themes for influencers & brands.
+</div>
 
-const email=document.getElementById("email").value;
-const password=document.getElementById("password").value;
-const username=document.getElementById("username").value.toLowerCase();
-const msg=document.getElementById("msg");
+<div class="card">
+<h3>🚀 Built for Growth</h3>
+From 0 to viral — Linkarsha scales with you.
+</div>
 
-if(!email||!password||!username){
-msg.innerText="Fill all fields";
-return;
-}
+</div>
+</div>
 
-const {data,error}=await supabaseClient.auth.signUp({
-email:email,
-password:password
-});
-
-if(error){
-msg.innerText=error.message;
-return;
-}
-
-if(!data.user){
-msg.innerText="Signup success. Now login.";
-return;
-}
-
-// create profile row
-const {error:profileError}=await supabaseClient
-.from("profiles")
-.insert([{id:data.user.id,username:username}]);
-
-if(profileError){
-msg.innerText=profileError.message;
-return;
-}
-
-msg.innerText="Account created. Now login.";
-}
-
-// LOGIN
-async function login(){
-
-const email=document.getElementById("email").value;
-const password=document.getElementById("password").value;
-const msg=document.getElementById("msg");
-
-const {error}=await supabaseClient.auth.signInWithPassword({
-email:email,
-password:password
-});
-
-if(error){
-msg.innerText=error.message;
-return;
-}
-
-window.location.href="/dashboard";
-}
-
-// AUTO LOGIN
-async function check(){
-const {data:{user}}=await supabaseClient.auth.getUser();
-if(user){
-window.location.href="/dashboard";
-}
-}
-check();
-</script>
+<div class="footer">
+© Linkarsha — Creator economy platform
+</div>
 
 </body>
 </html>
