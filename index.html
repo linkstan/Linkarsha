@@ -9,12 +9,12 @@
 
 body{
 font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica;
-background:black;
+background:#0b0b12;
 color:white;
 overflow-x:hidden;
 }
 
-/* ===== Animated gradient background ===== */
+/* ===== animated gradient background ===== */
 .bg{
 position:fixed;
 width:100%;
@@ -30,6 +30,19 @@ animation:move 18s ease infinite;
 100%{background-position:0% 50%}
 }
 
+/* ===== glow blobs ===== */
+.blob{
+position:absolute;
+width:600px;
+height:600px;
+border-radius:50%;
+filter:blur(140px);
+opacity:0.25;
+z-index:-1;
+}
+.blob1{background:#7c3aed;top:-200px;left:-200px;}
+.blob2{background:#6366f1;bottom:-200px;right:-200px;}
+
 /* ===== NAV ===== */
 .nav{
 display:flex;
@@ -41,43 +54,49 @@ z-index:10;
 }
 
 .logo{
-font-weight:800;
+font-weight:900;
 font-size:22px;
 letter-spacing:.5px;
 }
 
 .navbtn{
 text-decoration:none;
-padding:12px 18px;
-border-radius:22px;
+padding:12px 20px;
+border-radius:24px;
 background:white;
 color:black;
 font-weight:700;
 margin-left:10px;
+transition:0.3s;
+}
+.navbtn:hover{
+transform:scale(1.05);
 }
 
 /* ===== HERO ===== */
 .hero{
-min-height:92vh;
+min-height:95vh;
 display:flex;
 align-items:center;
 justify-content:center;
 text-align:center;
 padding:40px;
+position:relative;
 }
 
 .heroBox{
-max-width:950px;
+max-width:1000px;
 }
 
 .title{
-font-size:64px;
+font-size:70px;
 font-weight:900;
 line-height:1.05;
+letter-spacing:-1px;
 }
 
 .subtitle{
-margin-top:20px;
+margin-top:24px;
 font-size:20px;
 color:#cfcfe7;
 }
@@ -89,36 +108,39 @@ margin-top:40px;
 .cta a{
 display:inline-block;
 margin:10px;
-padding:18px 32px;
+padding:18px 34px;
 border-radius:30px;
 font-weight:800;
 text-decoration:none;
+transition:0.3s;
 }
 
 .primary{
 background:white;
 color:black;
 }
-
 .secondary{
 border:1px solid rgba(255,255,255,.4);
 color:white;
 }
+.cta a:hover{
+transform:scale(1.08);
+}
 
-/* ===== floating glass preview ===== */
+/* ===== floating phone preview ===== */
 .previewWrap{
-margin-top:70px;
+margin-top:80px;
 display:flex;
 justify-content:center;
 }
 
 .phone{
-width:300px;
+width:320px;
 background:rgba(255,255,255,0.08);
-backdrop-filter:blur(25px);
+backdrop-filter:blur(30px);
 border-radius:36px;
 padding:22px;
-box-shadow:0 30px 90px rgba(0,0,0,.6);
+box-shadow:0 40px 120px rgba(0,0,0,.7);
 animation:float 4s ease-in-out infinite;
 }
 @keyframes float{
@@ -132,101 +154,120 @@ color:black;
 padding:14px;
 border-radius:14px;
 margin:10px 0;
-font-weight:600;
+font-weight:700;
 }
 
-/* ===== stats ===== */
-.stats{
-display:flex;
-justify-content:center;
-gap:70px;
-margin:80px 0;
-flex-wrap:wrap;
+/* ===== creator strip ===== */
+.creatorStrip{
+margin:120px 0;
+overflow:hidden;
+white-space:nowrap;
+}
+.creatorStrip img{
+height:220px;
+width:180px;
+object-fit:cover;
+border-radius:24px;
+margin:0 15px;
+box-shadow:0 30px 60px rgba(0,0,0,.6);
+animation:scroll 30s linear infinite;
+}
+@keyframes scroll{
+0%{transform:translateX(0)}
+100%{transform:translateX(-50%)}
 }
 
-.stat h2{
-font-size:42px;
-}
-
-.stat p{
-color:#bbb;
-}
-
-/* ===== section ===== */
+/* ===== features ===== */
 .section{
 padding:120px 40px;
-display:flex;
-justify-content:center;
-}
-
-.container{
-max-width:1100px;
-width:100%;
+text-align:center;
 }
 
 .heading{
 font-size:48px;
 font-weight:900;
-text-align:center;
 }
 
 .sub{
-text-align:center;
+margin-top:16px;
 color:#aaa;
-margin-top:14px;
 font-size:18px;
 }
 
-/* ===== features ===== */
 .grid{
-margin-top:60px;
+margin-top:70px;
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:28px;
+gap:30px;
+max-width:1100px;
+margin-left:auto;
+margin-right:auto;
 }
 
 .card{
 background:rgba(255,255,255,0.06);
-backdrop-filter:blur(18px);
+backdrop-filter:blur(20px);
 border-radius:26px;
 padding:30px;
-transition:.35s;
+transition:0.35s;
 }
-
 .card:hover{
-transform:translateY(-10px) scale(1.02);
+transform:translateY(-12px) scale(1.03);
 }
 
-.card h3{
-margin-bottom:10px;
+/* ===== image section ===== */
+.imageSection{
+display:flex;
+align-items:center;
+justify-content:center;
+flex-wrap:wrap;
+gap:60px;
+padding:120px 40px;
 }
 
-/* ===== CTA bar ===== */
+.imageSection img{
+width:400px;
+border-radius:30px;
+box-shadow:0 40px 90px rgba(0,0,0,.6);
+}
+
+.imageText{
+max-width:500px;
+}
+
+.imageText h2{
+font-size:42px;
+margin-bottom:20px;
+}
+
+.imageText p{
+color:#bbb;
+font-size:18px;
+}
+
+/* ===== CTA BAR ===== */
 .ctabar{
-margin:100px auto;
-max-width:900px;
+margin:120px auto;
+max-width:1000px;
 background:linear-gradient(135deg,#6366f1,#7c3aed);
-padding:40px;
-border-radius:26px;
+padding:60px;
+border-radius:30px;
 text-align:center;
 }
-
 .ctabar h2{
-font-size:34px;
+font-size:40px;
 }
-
 .ctabar a{
-margin-top:20px;
+margin-top:30px;
 display:inline-block;
 background:white;
 color:black;
-padding:16px 28px;
-border-radius:24px;
+padding:18px 34px;
+border-radius:26px;
 font-weight:800;
 text-decoration:none;
 }
 
-/* ===== footer ===== */
 .footer{
 text-align:center;
 color:#777;
@@ -239,6 +280,8 @@ font-size:14px;
 <body>
 
 <div class="bg"></div>
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
 
 <!-- NAV -->
 <div class="nav">
@@ -254,19 +297,18 @@ font-size:14px;
 <div class="heroBox">
 
 <div class="title">
-Your Entire Creator Business.<br>
-One Powerful Link.
+The Creator Economy OS.<br>
+Not Just A Link.
 </div>
 
 <div class="subtitle">
-Sell content. Earn money. Track growth.  
-Build your creator empire with Linkarsha —  
-the creator operating system.
+Sell. Monetize. Grow.  
+Linkarsha powers your entire creator business from one powerful link.
 </div>
 
 <div class="cta">
-<a class="primary" href="/">Create Your Linkarsha</a>
-<a class="secondary" href="/dashboard">Open Dashboard</a>
+<a class="primary" href="/">Claim Your Username</a>
+<a class="secondary" href="/dashboard">Open Studio</a>
 </div>
 
 <div class="previewWrap">
@@ -281,71 +323,46 @@ the creator operating system.
 </div>
 </div>
 
-<!-- STATS -->
-<div class="stats">
-<div class="stat">
-<h2>12K+</h2>
-<p>Creators</p>
-</div>
-
-<div class="stat">
-<h2>2.4M</h2>
-<p>Links Created</p>
-</div>
-
-<div class="stat">
-<h2>₹1.8Cr+</h2>
-<p>Creator Earnings</p>
-</div>
+<!-- CREATOR STRIP -->
+<div class="creatorStrip">
+<img src="creator1.jpg.PNG">
+<img src="creator2.jpg.PNG">
+<img src="creator3.jpg.PNG">
+<img src="creator4.jpg.PNG">
+<img src="creator5.jpg.PNG">
+<img src="creator1.jpg.PNG">
+<img src="creator2.jpg.PNG">
+<img src="creator3.jpg.PNG">
+<img src="creator4.jpg.PNG">
+<img src="creator5.jpg.PNG">
 </div>
 
 <!-- FEATURES -->
 <div class="section">
-<div class="container">
-
-<div class="heading">Everything to run your creator business</div>
-<div class="sub">Not just link in bio. A full creator economy system.</div>
+<div class="heading">Everything to run your creator empire</div>
+<div class="sub">Monetize, track, scale — all in one platform.</div>
 
 <div class="grid">
-
-<div class="card">
-<h3>💰 Monetize Everything</h3>
-Sell courses, private content, paid links and digital products.
-</div>
-
-<div class="card">
-<h3>📊 Advanced Analytics</h3>
-Track clicks, views, growth and earnings in real time.
-</div>
-
-<div class="card">
-<h3>🎨 Luxury Themes</h3>
-Premium creator pages that look rich & viral.
-</div>
-
-<div class="card">
-<h3>🚀 Built for Growth</h3>
-From 0 followers to creator business empire.
-</div>
-
-<div class="card">
-<h3>🔐 Paid Links</h3>
-Lock premium content and earn directly.
-</div>
-
-<div class="card">
-<h3>🌍 Global Creator OS</h3>
-Your entire creator business in one link.
-</div>
-
-</div>
+<div class="card">💰 Paid Links & Digital Products</div>
+<div class="card">📊 Advanced Analytics Dashboard</div>
+<div class="card">🎨 Luxury Viral Themes</div>
+<div class="card">🚀 Built For Growth</div>
 </div>
 </div>
 
-<!-- BIG CTA -->
+<!-- IMAGE SECTION -->
+<div class="imageSection">
+<img src="setup1.jpg.PNG">
+<div class="imageText">
+<h2>Turn followers into income</h2>
+<p>Lock premium content, sell courses, build communities and grow your brand with full control.</p>
+</div>
+</div>
+
+<!-- FINAL CTA -->
 <div class="ctabar">
-<h2>Claim your creator username before someone else.</h2>
-<a href="/">Create free account</a>
+<h2>Secure your creator name before it’s gone.</h2>
+<a href="/">Create Free Account</a>
 </div>
 
 <div class="footer">
