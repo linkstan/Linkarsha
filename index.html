@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<title>Linkarsha — Creator Operating System</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Linkarsha</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -15,7 +15,7 @@ color:white;
 overflow-x:hidden;
 }
 
-/* ===== BACKGROUND ===== */
+/* ===== Background ===== */
 .bg{
 position:fixed;
 inset:0;
@@ -32,8 +32,7 @@ animation:move 18s ease infinite;
 
 .blob{
 position:absolute;
-width:600px;
-height:600px;
+width:600px;height:600px;
 border-radius:50%;
 filter:blur(140px);
 opacity:.25;
@@ -42,7 +41,7 @@ z-index:-1;
 .blob1{background:#7c3aed;top:-200px;left:-200px;}
 .blob2{background:#6366f1;bottom:-200px;right:-200px;}
 
-/* ===== NAVBAR ===== */
+/* ===== Navbar ===== */
 .topbar{
 position:fixed;
 top:18px;
@@ -50,7 +49,7 @@ left:50%;
 transform:translateX(-50%);
 width:92%;
 max-width:1100px;
-z-index:999;
+z-index:9999;
 background:rgba(255,255,255,0.08);
 backdrop-filter:blur(18px);
 border-radius:28px;
@@ -62,16 +61,15 @@ border:1px solid rgba(255,255,255,0.12);
 }
 
 .logoText{font-size:20px;font-weight:700;}
-
-.topActions{display:flex;gap:12px;align-items:center}
+.topActions{display:flex;align-items:center;gap:12px;}
 
 .loginBtn{
 padding:10px 18px;
 border-radius:14px;
 background:rgba(255,255,255,0.15);
-color:white;
 text-decoration:none;
 font-weight:600;
+color:white;
 }
 
 .signupBtn{
@@ -100,11 +98,7 @@ align-items:center;
 
 .hero-left{width:50%;padding:60px;}
 
-.headline{
-font-size:64px;
-line-height:1.05;
-font-weight:900;
-}
+.headline{font-size:64px;line-height:1.05;font-weight:900;}
 
 .sub{
 margin-top:20px;
@@ -131,8 +125,7 @@ width:fit-content;
 font-size:18px;
 color:#aaa;
 }
-
-.claim-left span{color:white;}
+.claim-left span{color:white;font-weight:700;}
 
 .claim-btn{
 background:linear-gradient(90deg,#6a5cff,#8f7bff);
@@ -156,7 +149,7 @@ border-radius:20px;
 font-weight:700;
 }
 
-/* ===== HERO RIGHT FLIP ===== */
+/* ===== Flip Card ===== */
 .hero-right{
 width:50%;
 display:flex;
@@ -204,12 +197,7 @@ min-height:100vh;
 .premium-left{width:45%;}
 .premium-left h2{font-size:56px;font-weight:900;margin-bottom:20px;}
 .premium-left p{color:#aaa;font-size:20px;margin-bottom:30px;}
-
-.premium-features div{
-margin:14px 0;
-color:#ddd;
-font-size:18px;
-}
+.premium-features div{margin:14px 0;color:#ddd;font-size:18px;}
 
 .premium-btn{
 display:inline-block;
@@ -222,7 +210,7 @@ font-weight:700;
 text-decoration:none;
 }
 
-/* ===== FLOW SECTION ===== */
+/* ===== PAGE 3 FLOW ===== */
 .flow-section{
 display:flex;
 align-items:center;
@@ -245,26 +233,15 @@ font-weight:700;
 text-decoration:none;
 }
 
-.flow-right{
-width:50%;
-display:flex;
-justify-content:center;
-}
+.flow-right{width:50%;display:flex;justify-content:center;}
 
-.flow-stage{
-position:relative;
-width:700px;
-height:350px;
-}
+.flow-stage{position:relative;width:700px;height:350px;}
 
-/* FLOW CARDS */
 .flow-card{
 position:absolute;
-width:200px;
-height:200px;
+width:200px;height:200px;
 border-radius:28px;
-left:50%;
-top:50%;
+left:50%;top:50%;
 transform:translate(-50%,-50%);
 box-shadow:0 40px 90px rgba(0,0,0,0.4);
 opacity:0;
@@ -297,7 +274,6 @@ color:#fff;
 box-shadow:0 8px 18px rgba(0,0,0,.2);
 }
 
-/* colors */
 .c1{background:#E1306C;}
 .c2{background:#1877F2;}
 .c3{background:#25D366;}
@@ -327,9 +303,67 @@ box-shadow:0 8px 18px rgba(0,0,0,.2);
 .flow-card:nth-child(5){animation:flow 12s linear infinite 8s;}
 .flow-card:nth-child(6){animation:flow 12s linear infinite 10s;}
 
+/* ===== PAGE 4 ANALYTICS ===== */
+.analytics-section{
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:120px 8%;
+min-height:100vh;
+}
+
+.analytics-left{width:45%;}
+.analytics-left h2{font-size:54px;font-weight:900;margin-bottom:20px;}
+.analytics-left p{color:#aaa;font-size:18px;line-height:1.6;margin-bottom:30px;}
+
+.analytics-btn{
+padding:16px 34px;
+background:#d8b4e2;
+color:black;
+border-radius:30px;
+font-weight:700;
+text-decoration:none;
+}
+
+.analytics-right{width:50%;display:flex;justify-content:center;}
+
+.dash-grid{
+display:grid;
+grid-template-columns:220px 220px;
+gap:22px;
+}
+
+.dash-card{
+border-radius:26px;
+padding:26px;
+color:white;
+box-shadow:0 30px 60px rgba(0,0,0,.35);
+animation:float 6s ease-in-out infinite;
+}
+
+.dash-card:nth-child(2){animation-delay:.5s}
+.dash-card:nth-child(3){animation-delay:1s}
+.dash-card:nth-child(4){animation-delay:1.5s}
+
+@keyframes float{
+0%{transform:translateY(0)}
+50%{transform:translateY(-14px)}
+100%{transform:translateY(0)}
+}
+
+.green{background:#6b734a;}
+.purple{background:#c6a6cc;color:#111;}
+.pink{background:linear-gradient(180deg,#ff00cc,#a100ff);}
+.blue{background:#172a9c;}
+.wide{grid-column:span 2;}
+
+.num{font-size:34px;font-weight:800;margin-top:10px}
+.big{font-size:46px}
+.label{opacity:.8;margin-top:6px}
+
 @media(max-width:900px){
-.hero,.premium-section,.flow-section{flex-direction:column;text-align:center}
-.hero-left,.hero-right,.premium-left,.flow-left,.flow-right{width:100%}
+.hero,.premium-section,.flow-section,.analytics-section{flex-direction:column;text-align:center}
+.hero-left,.hero-right,.premium-left,.flow-left,.flow-right,.analytics-left,.analytics-right{width:100%}
 }
 </style>
 </head>
@@ -344,9 +378,9 @@ box-shadow:0 8px 18px rgba(0,0,0,.2);
 <div class="topbar">
 <div class="logoText">Linkarsha</div>
 <div class="topActions">
-<a href="/" class="loginBtn">Log in</a>
-<a href="/" class="signupBtn">Sign up free</a>
-<div class="menuBtn">≡</div>
+<a href="#" class="loginBtn">Log in</a>
+<a href="#" class="signupBtn">Sign up free</a>
+<div class="menuBtn">☰</div>
 </div>
 </div>
 
@@ -396,20 +430,36 @@ Sell. Monetize. Grow. Linkarsha powers your entire creator business from one pow
 <section class="flow-section">
 <div class="flow-left">
 <h2>Share your Linkarsha anywhere you like!</h2>
-<p>Add your unique Linkarsha URL to all platforms where your audience is. Use QR codes to bring offline traffic to your link in bio.</p>
+<p>Add your unique Linktree URL to all platforms and places you find your audience. Use QR codes to bring offline traffic to your link in bio.</p>
 <a href="#" class="flow-btn">Get started for free</a>
 </div>
 
 <div class="flow-right">
 <div class="flow-stage">
-
 <div class="flow-card c1"><div class="profile">👤</div><div class="logo">⌁</div><div class="tag t1">/username</div></div>
 <div class="flow-card c2"><div class="profile">👤</div><div class="logo">f</div><div class="tag t2">/username</div></div>
 <div class="flow-card c3"><div class="profile">👤</div><div class="logo">☎</div><div class="tag t3">/username</div></div>
 <div class="flow-card c4"><div class="profile">👤</div><div class="logo">▣</div><div class="tag t4">/username</div></div>
 <div class="flow-card c5"><div class="profile">👤</div><div class="logo">👻</div><div class="tag t5">/username</div></div>
 <div class="flow-card c6"><div class="profile">👤</div><div class="logo">VK</div><div class="tag t6">/username</div></div>
+</div>
+</div>
+</section>
 
+<!-- PAGE 4 -->
+<section class="analytics-section">
+<div class="analytics-left">
+<h2>Analyze your audience and keep them engaged</h2>
+<p>Track your engagement over time, monitor revenue and learn what’s converting your audience. Make informed updates on the fly to keep them coming back.</p>
+<a href="#" class="analytics-btn">Get started for free</a>
+</div>
+
+<div class="analytics-right">
+<div class="dash-grid">
+<div class="dash-card green"><div class="num">43,500</div><div class="label">Clicks</div></div>
+<div class="dash-card purple"><div class="num">643</div><div class="label">Track Plays</div></div>
+<div class="dash-card pink"><div class="num">$2,362</div><div class="label">Sales</div></div>
+<div class="dash-card blue wide"><div class="num big">960</div><div class="label">Visits</div></div>
 </div>
 </div>
 </section>
