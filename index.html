@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Linkarsha — Creator Operating System</title>
+<title>Linkarsha — Creator OS</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -15,7 +15,7 @@ color:white;
 overflow-x:hidden;
 }
 
-/* ===== Background ===== */
+/* ========= BACKGROUND ========= */
 .bg{
 position:fixed;
 inset:0;
@@ -32,24 +32,22 @@ animation:move 18s ease infinite;
 
 .blob{
 position:absolute;
-width:600px;
-height:600px;
+width:600px;height:600px;
 border-radius:50%;
 filter:blur(140px);
-opacity:0.25;
-z-index:-1;
+opacity:.25;z-index:-1;
 }
 .blob1{background:#7c3aed;top:-200px;left:-200px;}
 .blob2{background:#6366f1;bottom:-200px;right:-200px;}
 
-/* ===== Navbar ===== */
+/* ========= NAVBAR ========= */
 .topbar{
 position:fixed;
 top:18px;
 left:50%;
 transform:translateX(-50%);
 width:92%;
-max-width:1100px;
+max-width:1150px;
 z-index:9999;
 background:rgba(255,255,255,0.08);
 backdrop-filter:blur(18px);
@@ -58,49 +56,41 @@ padding:14px 18px;
 display:flex;
 align-items:center;
 justify-content:space-between;
-box-shadow:0 10px 40px rgba(0,0,0,0.25);
 border:1px solid rgba(255,255,255,0.12);
 }
 
 .logoText{font-size:20px;font-weight:700;}
-.topActions{display:flex;align-items:center;gap:12px;}
+.topActions{display:flex;gap:12px;}
 
 .loginBtn{
 padding:10px 18px;
 border-radius:14px;
 background:rgba(255,255,255,0.15);
-text-decoration:none;
-font-weight:600;
-color:white;
+text-decoration:none;color:white;font-weight:600;
 }
 
 .signupBtn{
 padding:11px 22px;
 border-radius:18px;
 background:linear-gradient(90deg,#6a5cff,#8f7bff);
-color:white;
-text-decoration:none;
-font-weight:700;
+color:white;text-decoration:none;font-weight:700;
 }
 
-.menuBtn{
-font-size:22px;
-padding:8px 12px;
-border-radius:10px;
-background:rgba(255,255,255,0.12);
-}
-
-/* ===== HERO ===== */
+/* ========= HERO ========= */
 .hero{
 display:flex;
 min-height:100vh;
-padding-top:90px;
+padding-top:110px;
 align-items:center;
 }
 
-.hero-left{width:50%;padding:60px;}
+.hero-left{width:50%;padding:70px;}
 
-.headline{font-size:64px;line-height:1.05;font-weight:900;}
+.headline{
+font-size:64px;
+line-height:1.05;
+font-weight:900;
+}
 
 .sub{
 margin-top:20px;
@@ -122,9 +112,6 @@ position:relative;
 width:fit-content;
 }
 
-.claim-left{font-size:18px;color:#aaa;}
-.claim-left span{color:white;}
-
 .claim-btn{
 background:linear-gradient(90deg,#6a5cff,#8f7bff);
 border:none;
@@ -135,39 +122,20 @@ font-weight:600;
 cursor:pointer;
 }
 
-.free-badge{
-position:absolute;
-top:-12px;
-right:18px;
-background:linear-gradient(90deg,#00ffa3,#00c3ff);
-color:black;
-font-size:12px;
-padding:4px 10px;
-border-radius:20px;
-font-weight:700;
-}
-
-/* ===== Flip Card ===== */
-.hero-right{
-width:50%;
-display:flex;
-justify-content:center;
-align-items:center;
-}
+/* ========= PHONE FLIP ========= */
+.hero-right{width:50%;display:flex;justify-content:center;}
 
 .scene{width:280px;height:520px;perspective:1200px;}
 
 .card{
-width:100%;
-height:100%;
+width:100%;height:100%;
 position:relative;
 transform-style:preserve-3d;
 }
 
 .face{
 position:absolute;
-width:100%;
-height:100%;
+width:100%;height:100%;
 backface-visibility:hidden;
 border-radius:35px;
 overflow:hidden;
@@ -183,8 +151,8 @@ box-shadow:0 40px 80px rgba(0,0,0,0.45);
 100%{transform:rotateY(180deg);}
 }
 
-/* ===== PREMIUM SECTION ===== */
-.premium-section{
+/* ========= ANALYTICS SECTION ========= */
+.analytics{
 display:flex;
 align-items:center;
 justify-content:space-between;
@@ -192,51 +160,69 @@ padding:120px 8%;
 min-height:100vh;
 }
 
-.premium-left{width:45%;}
-.premium-left h2{font-size:56px;font-weight:900;margin-bottom:20px;}
-.premium-left p{color:#aaa;font-size:20px;margin-bottom:30px;}
-.premium-features div{margin:14px 0;color:#ddd;font-size:18px;}
+.analytics-left{
+width:50%;
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:25px;
+}
 
-.premium-btn{
-display:inline-block;
-margin-top:30px;
-padding:16px 34px;
-background:white;
-color:black;
-border-radius:14px;
+.stat{
+border-radius:24px;
+padding:25px;
+color:white;
+font-weight:700;
+min-height:140px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+}
+
+.s1{background:#6b705c;}
+.s2{background:#cdb4db;color:#111;}
+.s3{background:linear-gradient(180deg,#ff00cc,#c77dff);}
+.s4{background:#1b2a8f;}
+
+.stat h3{font-size:32px;margin-bottom:6px}
+.stat small{opacity:.8}
+
+.analytics-right{width:45%;}
+.analytics-right h2{
+font-size:54px;
+font-weight:900;
+margin-bottom:20px;
+}
+
+.analytics-right p{
+color:#bbb;
+font-size:18px;
+margin-bottom:30px;
+max-width:520px;
+}
+
+.start-btn{
+padding:16px 32px;
+background:#d8b4e2;
+color:#111;
+border-radius:30px;
 font-weight:700;
 text-decoration:none;
 }
 
-/* ===== NEW FLOW SECTION ===== */
+/* ========= FLOW CARDS ========= */
 .flow-section{
 display:flex;
 align-items:center;
 justify-content:space-between;
-padding:80px 8%;   /* reduced top-bottom space */
+padding:100px 8%;
 min-height:100vh;
-margin-top:-60px;  /* pulls page 3 closer to page 2 */
 }
 
 .flow-left{width:45%;}
-.flow-left h2{font-size:48px;font-weight:900;margin-bottom:20px;}
-.flow-left p{color:#aaa;font-size:18px;margin-bottom:25px;line-height:1.6;}
+.flow-left h2{font-size:46px;font-weight:900;margin-bottom:18px;}
+.flow-left p{color:#aaa;font-size:18px;margin-bottom:20px;}
 
-.flow-btn{
-display:inline-block;
-padding:14px 28px;
-background:white;
-color:black;
-border-radius:14px;
-font-weight:700;
-text-decoration:none;
-}
-
-.flow-right{
-width:50%;
-display:flex;
-justify-content:center;
-}
+.flow-right{width:50%;display:flex;justify-content:center;}
 
 .flow-stage{
 position:relative;
@@ -244,34 +230,28 @@ width:700px;
 height:350px;
 }
 
-/* flowing cards */
 .flow-card{
 position:absolute;
-width:200px;
-height:200px;
+width:200px;height:200px;
 border-radius:28px;
-left:50%;
-top:50%;
+left:50%;top:50%;
 transform:translate(-50%,-50%);
 box-shadow:0 40px 90px rgba(0,0,0,0.4);
 opacity:0;
 display:flex;
 flex-direction:column;
 align-items:center;
-justify-content:flex-start;
 padding-top:18px;
 }
 
 .profile{
 width:50px;height:50px;border-radius:50%;
-background:rgba(255,255,255,0.95);
-margin-bottom:14px;
+background:white;margin-bottom:12px;
 display:flex;align-items:center;justify-content:center;
-font-size:22px;color:black;
+color:black;font-size:22px;
 }
 
 .logo{font-size:28px;color:white;margin-top:6px;}
-
 .tag{
 position:absolute;
 right:-70px;
@@ -281,7 +261,6 @@ border-radius:20px;
 font-size:12px;
 font-weight:bold;
 color:#fff;
-box-shadow:0 8px 18px rgba(0,0,0,.2);
 }
 
 /* colors */
@@ -315,10 +294,10 @@ box-shadow:0 8px 18px rgba(0,0,0,.2);
 .flow-card:nth-child(6){animation:flow 12s linear infinite 10s;}
 
 @media(max-width:900px){
-.hero,.premium-section,.flow-section{flex-direction:column;text-align:center}
+.hero,.analytics,.flow-section{flex-direction:column;text-align:center}
 .hero-left,.hero-right,
-.premium-left,.flow-left,
-.flow-right{width:100%}
+.analytics-left,.analytics-right,
+.flow-left,.flow-right{width:100%}
 }
 </style>
 </head>
@@ -329,23 +308,23 @@ box-shadow:0 8px 18px rgba(0,0,0,.2);
 <div class="blob blob1"></div>
 <div class="blob blob2"></div>
 
+<!-- NAVBAR -->
 <div class="topbar">
 <div class="logoText">Linkarsha</div>
 <div class="topActions">
-<a href="/" class="loginBtn">Log in</a>
-<a href="/" class="signupBtn">Sign up free</a>
-<div class="menuBtn">☰</div>
+<a href="#" class="loginBtn">Log in</a>
+<a href="#" class="signupBtn">Sign up free</a>
 </div>
 </div>
 
+<!-- HERO -->
 <section class="hero">
 <div class="hero-left">
 <h1 class="headline">The Creator Economy OS.<br>Not just a link.</h1>
 <p class="sub">Sell. Monetize. Grow. Linkarsha powers your entire creator business from one powerful link.</p>
+
 <div class="claim-box">
-<div class="claim-left">linkarsha.com/<span>username</span></div>
 <button class="claim-btn">Claim your username</button>
-<div class="free-badge">It's Free</div>
 </div>
 </div>
 
@@ -359,24 +338,29 @@ box-shadow:0 8px 18px rgba(0,0,0,.2);
 </div>
 </section>
 
-<section class="premium-section">
-<div class="premium-left">
-<h2>Easier than you think</h2>
-<p>Create your Linkarsha in a couple of minutes.</p>
-<div class="premium-features">
-<div>✔ Without designers and programmers</div>
-<div>✔ No skills required</div>
-<div>✔ From smartphone or computer</div>
+<!-- ANALYTICS SECTION -->
+<section class="analytics">
+<div class="analytics-left">
+
+<div class="stat s1"><h3>43,500</h3><small>Clicks</small></div>
+<div class="stat s2"><h3>643</h3><small>Track Plays</small></div>
+<div class="stat s3"><h3>$2,362</h3><small>Sales</small></div>
+<div class="stat s4"><h3>960</h3><small>Visits</small></div>
+
 </div>
-<a href="#" class="premium-btn">Get started for free</a>
+
+<div class="analytics-right">
+<h2>Analyze your audience and keep them engaged</h2>
+<p>Track your engagement over time, monitor revenue and learn what's converting your audience. Make informed updates on the fly to keep them coming back.</p>
+<a href="#" class="start-btn">Get started for free</a>
 </div>
 </section>
 
+<!-- FLOW SECTION -->
 <section class="flow-section">
 <div class="flow-left">
-<h2>Share your Linktree anywhere you like!</h2>
-<p>Add your unique Linktree URL to all the platforms and places you find your audience. Then use your QR code to drive your offline traffic back to your link in bio.</p>
-<a href="#" class="flow-btn">Get started for free</a>
+<h2>Share your Linkarsha anywhere</h2>
+<p>Add your link everywhere and grow faster.</p>
 </div>
 
 <div class="flow-right">
