@@ -188,8 +188,9 @@ box-shadow:0 40px 80px rgba(0,0,0,0.45);
 display:flex;
 align-items:center;
 justify-content:space-between;
-padding:120px 8%;
+padding:70px 8%;      /* reduced spacing */
 min-height:100vh;
+margin-top:-40px;     /* reduced gap from hero */
 }
 
 .premium-left{width:45%;}
@@ -208,13 +209,14 @@ font-weight:700;
 text-decoration:none;
 }
 
-/* ===== NEW FLOW SECTION ===== */
+/* ===== FLOW SECTION ===== */
 .flow-section{
 display:flex;
 align-items:center;
 justify-content:space-between;
-padding:140px 8%;
+padding:70px 8%;     /* same spacing as premium */
 min-height:100vh;
+margin-top:-20px;    /* smoother transition */
 }
 
 .flow-left{width:45%;}
@@ -235,19 +237,22 @@ text-decoration:none;
 width:50%;
 display:flex;
 justify-content:center;
+align-items:center;
+overflow:hidden;   /* prevents mixing into left */
+position:relative;
 }
 
 .flow-stage{
 position:relative;
-width:700px;
-height:350px;
+width:420px;      /* reduced width */
+height:300px;
 }
 
 /* flowing cards */
 .flow-card{
 position:absolute;
-width:200px;
-height:200px;
+width:180px;
+height:180px;
 border-radius:28px;
 left:50%;
 top:50%;
@@ -273,17 +278,15 @@ font-size:22px;color:black;
 
 .tag{
 position:absolute;
-right:-70px;
+right:-50px;
 bottom:35px;
 padding:6px 12px;
 border-radius:20px;
 font-size:12px;
 font-weight:bold;
 color:#fff;
-box-shadow:0 8px 18px rgba(0,0,0,.2);
 }
 
-/* colors */
 .c1{background:#E1306C;}
 .c2{background:#1877F2;}
 .c3{background:#25D366;}
@@ -299,10 +302,10 @@ box-shadow:0 8px 18px rgba(0,0,0,.2);
 .t6{background:#4C75A3;}
 
 @keyframes flow{
-0%{transform:translate(-50%,-50%) translateX(-350px) scale(.8);opacity:0;}
+0%{transform:translate(-50%,-50%) translateX(-220px) scale(.8);opacity:0;}
 15%{opacity:1;}
 50%{transform:translate(-50%,-50%) translateX(0px) scale(1);}
-85%{transform:translate(-50%,-50%) translateX(350px) scale(.8);opacity:0;}
+85%{transform:translate(-50%,-50%) translateX(220px) scale(.8);opacity:0;}
 100%{opacity:0;}
 }
 
@@ -380,14 +383,12 @@ box-shadow:0 8px 18px rgba(0,0,0,.2);
 
 <div class="flow-right">
 <div class="flow-stage">
-
 <div class="flow-card c1"><div class="profile">👤</div><div class="logo">⌁</div><div class="tag t1">/username</div></div>
 <div class="flow-card c2"><div class="profile">👤</div><div class="logo">f</div><div class="tag t2">/username</div></div>
 <div class="flow-card c3"><div class="profile">👤</div><div class="logo">☎</div><div class="tag t3">/username</div></div>
 <div class="flow-card c4"><div class="profile">👤</div><div class="logo">▣</div><div class="tag t4">/username</div></div>
 <div class="flow-card c5"><div class="profile">👤</div><div class="logo">👻</div><div class="tag t5">/username</div></div>
 <div class="flow-card c6"><div class="profile">👤</div><div class="logo">VK</div><div class="tag t6">/username</div></div>
-
 </div>
 </div>
 </section>
