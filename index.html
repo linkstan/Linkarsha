@@ -1,12 +1,9 @@
 <!DOCTYPE html>
-
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Linkarsha — Creator Operating System</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -208,7 +205,7 @@ font-weight:700;
 text-decoration:none;
 }
 
-/* ===== PAGE 3 FLOW ===== */
+/* ===== PAGE 3 ===== */
 .flow-section{
 display:flex;
 align-items:center;
@@ -300,7 +297,7 @@ box-shadow:0 8px 18px rgba(0,0,0,.2);
 .flow-card:nth-child(5){animation:flow 12s linear infinite 8s;}
 .flow-card:nth-child(6){animation:flow 12s linear infinite 10s;}
 
-/* ===== PAGE 4 ANALYTICS ===== */
+/* ===== PAGE 4 ===== */
 .analytics-section{
 display:flex;
 align-items:center;
@@ -358,7 +355,7 @@ animation:float 6s ease-in-out infinite;
 .big{font-size:46px}
 .label{opacity:.8;margin-top:6px}
 
-/* ===== PAGE 5 NEW ===== */
+/* ===== PAGE 5 ===== */
 .page5{
 display:flex;
 align-items:center;
@@ -367,19 +364,9 @@ padding:120px 8%;
 min-height:100vh;
 }
 
-.page5-left{
-width:50%;
-display:flex;
-justify-content:center;
-align-items:center;
-}
+.page5-left{width:50%;display:flex;justify-content:center;align-items:center;}
 
-.scene5{
-width:320px;
-height:600px;
-perspective:1600px;
-position:relative;
-}
+.scene5{width:320px;height:600px;perspective:1600px;position:relative;}
 
 .card-wrapper{
 width:100%;
@@ -419,18 +406,13 @@ background:#000;
 .hero-left,.hero-right,.premium-left,.flow-left,.flow-right,.analytics-left,.analytics-right,.page5-left,.page5-right{width:100%}
 }
 </style>
-
-
 </head>
 
-
 <body>
-
 
 <div class="bg"></div>
 <div class="blob blob1"></div>
 <div class="blob blob2"></div>
-
 
 <div class="topbar">
 <div class="logoText">Linkarsha</div>
@@ -441,10 +423,7 @@ background:#000;
 </div>
 </div>
 
-
 <!-- HERO -->
-
-
 <section class="hero">
 <div class="hero-left">
 <h1 class="headline">The Creator Economy OS.<br>Not just a link.</h1>
@@ -456,7 +435,6 @@ background:#000;
 </div>
 </div>
 
-
 <div class="hero-right">
 <div class="scene">
 <div class="card" id="card">
@@ -467,10 +445,7 @@ background:#000;
 </div>
 </section>
 
-
 <!-- PAGE 2 -->
-
-
 <section class="premium-section">
 <div class="premium-left">
 <h2>Easier than you think</h2>
@@ -484,17 +459,13 @@ background:#000;
 </div>
 </section>
 
-
 <!-- PAGE 3 -->
-
-
 <section class="flow-section">
 <div class="flow-left">
 <h2>Share your Linkarsha anywhere you like!</h2>
 <p>Add your unique Linktree URL to all platforms and places you find your audience. Use QR codes to bring offline traffic to your link in bio.</p>
 <a href="#" class="flow-btn">Get started for free</a>
 </div>
-
 
 <div class="flow-right">
 <div class="flow-stage">
@@ -508,17 +479,13 @@ background:#000;
 </div>
 </section>
 
-
 <!-- PAGE 4 -->
-
-
 <section class="analytics-section">
 <div class="analytics-left">
 <h2>Analyze your audience and keep them engaged</h2>
 <p>Track your engagement over time, monitor revenue and learn what’s converting your audience.</p>
 <a href="#" class="analytics-btn">Get started for free</a>
 </div>
-
 
 <div class="analytics-right">
 <div class="dash-grid">
@@ -530,68 +497,53 @@ background:#000;
 </div>
 </section>
 
-
 <!-- PAGE 5 -->
-
-
 <section class="page5">
-
 
 <div class="page5-left">
 <div class="scene5">
 <div class="card-wrapper" id="wrap">
 
-
 <div class="card5 card1 center-card">
-<img id="img1" src="card1.png">
+<img id="img1" src="c1.png">
 </div>
-
 
 <div class="card5 card2 side-card">
-<img id="img2" src="card2.png">
+<img id="img2" src="l1.png">
 </div>
-
 
 <div class="card5 card3 side-card">
-<img id="img3" src="card3.png">
+<img id="img3" src="r1.png">
 </div>
 
-
 </div>
 </div>
 </div>
-
 
 <div class="page5-right">
-
 
 <div class="feature">
 <h3>Share anything. Limitless.</h3>
 <p>Products, socials, links, videos — all in one place.</p>
 </div>
 
-
 <div class="feature">
 <h3>Turn audience into income.</h3>
 <p>Sell products. Collect payments. Monetize instantly.</p>
 </div>
-
 
 <div class="feature">
 <h3>One link. Unlimited possibilities.</h3>
 <p>Your entire digital world — organized beautifully.</p>
 </div>
 
-
 <div class="feature">
 <h3>Grow across every platform.</h3>
 <p>Instagram, YouTube, TikTok, Facebook, offline — all connected.</p>
 </div>
 
-
 </div>
 </section>
-
 
 <script>
 /* HERO FLIP */
@@ -608,26 +560,26 @@ setTimeout(()=>{index=(index+1)%images.length;back.src=images[index];card.classL
 }
 setInterval(flipCard,2200);
 
-/* PAGE5 3D ROTATE */
-const wrap = document.getElementById("wrap");
+/* PAGE5 ROTATION */
+const wrap=document.getElementById("wrap");
 
-const imgs=[
-"card1.png","card2.png","card3.png",
-"card4.png","card5.png","card6.png"
-];
+const centerImages=["c1.png","c2.png","c3.png","c4.png","c5.png","c6.png"];
+const leftImages=["l1.png","l2.png","l3.png","l4.png","l5.png","l6.png"];
+const rightImages=["r1.png","r2.png","r3.png","r4.png","r5.png","r6.png"];
 
-let i=0;
+let rot=0;
 
 function rotateLoop(){
 setTimeout(()=>{
-i++;
+rot++;
+
 wrap.style.transition="transform 1.2s cubic-bezier(.65,.05,.36,1)";
-wrap.style.transform=`rotateY(${i*-120}deg)`;
+wrap.style.transform=`rotateY(${rot*-120}deg)`;
 
 setTimeout(()=>{
-document.getElementById("img1").src = imgs[i % imgs.length];
-document.getElementById("img2").src = imgs[(i+1) % imgs.length];
-document.getElementById("img3").src = imgs[(i+2) % imgs.length];
+document.getElementById("img1").src = centerImages[rot % centerImages.length];
+document.getElementById("img2").src = leftImages[rot % leftImages.length];
+document.getElementById("img3").src = rightImages[rot % rightImages.length];
 },1200);
 
 rotateLoop();
@@ -635,7 +587,6 @@ rotateLoop();
 }
 rotateLoop();
 </script>
-
 
 </body>
 </html>
