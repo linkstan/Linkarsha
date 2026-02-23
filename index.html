@@ -97,6 +97,7 @@ align-items:center;
 }
 
 .hero-left{width:50%;padding:60px;}
+
 .headline{font-size:64px;line-height:1.05;font-weight:900;}
 
 .sub{
@@ -106,6 +107,7 @@ color:#bbb;
 max-width:520px;
 }
 
+/* ===== CLAIM BOX ===== */
 .claim-box{
 margin-top:35px;
 background:rgba(255,255,255,0.06);
@@ -119,7 +121,10 @@ position:relative;
 width:fit-content;
 }
 
-.claim-left{font-size:18px;color:#aaa;}
+.claim-left{
+font-size:18px;
+color:#aaa;
+}
 .claim-left span{color:white;font-weight:700;}
 
 .claim-btn{
@@ -205,7 +210,7 @@ font-weight:700;
 text-decoration:none;
 }
 
-/* ===== PAGE 3 ===== */
+/* ===== PAGE 3 FLOW ===== */
 .flow-section{
 display:flex;
 align-items:center;
@@ -229,6 +234,7 @@ text-decoration:none;
 }
 
 .flow-right{width:50%;display:flex;justify-content:center;}
+
 .flow-stage{position:relative;width:700px;height:350px;}
 
 .flow-card{
@@ -297,7 +303,7 @@ box-shadow:0 8px 18px rgba(0,0,0,.2);
 .flow-card:nth-child(5){animation:flow 12s linear infinite 8s;}
 .flow-card:nth-child(6){animation:flow 12s linear infinite 10s;}
 
-/* ===== PAGE 4 ===== */
+/* ===== PAGE 4 ANALYTICS ===== */
 .analytics-section{
 display:flex;
 align-items:center;
@@ -355,55 +361,9 @@ animation:float 6s ease-in-out infinite;
 .big{font-size:46px}
 .label{opacity:.8;margin-top:6px}
 
-/* ===== PAGE 5 ===== */
-.page5{
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:120px 8%;
-min-height:100vh;
-}
-
-.page5-left{width:50%;display:flex;justify-content:center;align-items:center;}
-
-.scene5{width:320px;height:600px;perspective:1600px;position:relative;}
-
-.card-wrapper{
-width:100%;
-height:100%;
-position:absolute;
-transform-style:preserve-3d;
-}
-
-.card5{
-position:absolute;
-width:260px;
-height:520px;
-left:30px;
-top:40px;
-overflow:hidden;
-backface-visibility:hidden;
-box-shadow:0 40px 80px rgba(0,0,0,0.45);
-background:#000;
-}
-
-.card5 img{width:100%;height:100%;object-fit:cover;}
-
-.center-card{border-radius:0;}
-.side-card{border-radius:60px;}
-
-.card1{ transform: rotateY(0deg) translateZ(170px);}
-.card2{ transform: rotateY(120deg) translateZ(170px);}
-.card3{ transform: rotateY(240deg) translateZ(170px);}
-
-.page5-right{width:45%;}
-.feature{margin-bottom:32px;}
-.feature h3{font-size:26px;margin-bottom:8px;}
-.feature p{color:#aaa;line-height:1.6;}
-
 @media(max-width:900px){
-.hero,.premium-section,.flow-section,.analytics-section,.page5{flex-direction:column;text-align:center}
-.hero-left,.hero-right,.premium-left,.flow-left,.flow-right,.analytics-left,.analytics-right,.page5-left,.page5-right{width:100%}
+.hero,.premium-section,.flow-section,.analytics-section{flex-direction:column;text-align:center}
+.hero-left,.hero-right,.premium-left,.flow-left,.flow-right,.analytics-left,.analytics-right{width:100%}
 }
 </style>
 </head>
@@ -414,6 +374,7 @@ background:#000;
 <div class="blob blob1"></div>
 <div class="blob blob2"></div>
 
+<!-- NAVBAR -->
 <div class="topbar">
 <div class="logoText">Linkarsha</div>
 <div class="topActions">
@@ -427,7 +388,11 @@ background:#000;
 <section class="hero">
 <div class="hero-left">
 <h1 class="headline">The Creator Economy OS.<br>Not just a link.</h1>
-<p class="sub">Sell. Monetize. Grow. Linkarsha powers your entire creator business from one powerful link.</p>
+
+<p class="sub">
+Sell. Monetize. Grow. Linkarsha powers your entire creator business from one powerful link.
+</p>
+
 <div class="claim-box">
 <div class="claim-left">linkarsha.com/<span>username</span></div>
 <button class="claim-btn">Claim your username</button>
@@ -450,11 +415,13 @@ background:#000;
 <div class="premium-left">
 <h2>Easier than you think</h2>
 <p>Create your Linkarsha in a couple of minutes.</p>
+
 <div class="premium-features">
 <div>✔ Without designers and programmers</div>
 <div>✔ No skills required</div>
 <div>✔ From smartphone or computer</div>
 </div>
+
 <a href="#" class="premium-btn">Get started for free</a>
 </div>
 </section>
@@ -483,7 +450,7 @@ background:#000;
 <section class="analytics-section">
 <div class="analytics-left">
 <h2>Analyze your audience and keep them engaged</h2>
-<p>Track your engagement over time, monitor revenue and learn what’s converting your audience.</p>
+<p>Track your engagement over time, monitor revenue and learn what’s converting your audience. Make informed updates on the fly to keep them coming back.</p>
 <a href="#" class="analytics-btn">Get started for free</a>
 </div>
 
@@ -496,57 +463,36 @@ background:#000;
 </div>
 </div>
 </section>
-
 <!-- PAGE 5 -->
-<section class="page5">
-
-<div class="page5-left">
-<div class="scene5">
-<div class="card-wrapper" id="wrap">
-
-<div class="card5 card1 center-card">
-<img id="img1" src="c1.PNG">
-</div>
-
-<div class="card5 card2 side-card">
-<img id="img2" src="l1.png">
-</div>
-
-<div class="card5 card3 side-card">
-<img id="img3" src="r1.png">
-</div>
-
-</div>
-</div>
-</div>
-
-<div class="page5-right">
-
-<div class="feature">
-<h3>Share anything. Limitless.</h3>
-<p>Products, socials, links, videos — all in one place.</p>
-</div>
-
-<div class="feature">
-<h3>Turn audience into income.</h3>
-<p>Sell products. Collect payments. Monetize instantly.</p>
-</div>
-
-<div class="feature">
-<h3>One link. Unlimited possibilities.</h3>
-<p>Your entire digital world — organized beautifully.</p>
-</div>
-
-<div class="feature">
-<h3>Grow across every platform.</h3>
-<p>Instagram, YouTube, TikTok, Facebook, offline — all connected.</p>
-</div>
-
-</div>
+<section style="
+min-height:100vh;
+padding:120px 8%;
+display:flex;
+align-items:center;
+justify-content:center;
+">
 </section>
 
+<!-- PAGE 6 -->
+<section style="
+min-height:100vh;
+padding:120px 8%;
+display:flex;
+align-items:center;
+justify-content:center;
+">
+</section>
+
+<!-- PAGE 7 -->
+<section style="
+min-height:100vh;
+padding:120px 8%;
+display:flex;
+align-items:center;
+justify-content:center;
+">
+</section>
 <script>
-/* HERO FLIP */
 const images=["1.PNG","2.PNG","3.PNG","4.PNG","5.PNG","6.PNG","7.PNG","8.PNG","9.PNG","10.PNG"];
 let index=0;
 const card=document.getElementById("card");
@@ -559,33 +505,6 @@ setTimeout(()=>{index=(index+1)%images.length;front.src=images[index];},600);
 setTimeout(()=>{index=(index+1)%images.length;back.src=images[index];card.classList.remove("flip");},1200);
 }
 setInterval(flipCard,2200);
-
-/* PAGE5 ROTATION */
-const wrap=document.getElementById("wrap");
-
-const centerImages=["c1.PNG","c2.PNG","c3.PNG","c4.PNG","c5.PNG","c6.PNG"];
-const leftImages=["l1.png","l2.png","l3.png","l4.png","l5.png","l6.png"];
-const rightImages=["r1.png","r2.png","r3.png","r4.png","r5.png","r6.png"];
-
-let rot=0;
-
-function rotateLoop(){
-setTimeout(()=>{
-rot++;
-
-wrap.style.transition="transform 1.2s cubic-bezier(.65,.05,.36,1)";
-wrap.style.transform=`rotateY(${rot*-120}deg)`;
-
-setTimeout(()=>{
-document.getElementById("img1").src = centerImages[rot % centerImages.length];
-document.getElementById("img2").src = leftImages[rot % leftImages.length];
-document.getElementById("img3").src = rightImages[rot % rightImages.length];
-},1200);
-
-rotateLoop();
-},3000);
-}
-rotateLoop();
 </script>
 
 </body>
