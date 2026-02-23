@@ -469,8 +469,16 @@ min-height:100vh;
 padding:120px 8%;
 display:flex;
 align-items:center;
-justify-content:center;
 ">
+
+<!-- LEFT SIDE (blank) -->
+<div style="width:50%;"></div>
+
+<!-- RIGHT SIDE (animation) -->
+<div style="width:50%;height:600px;position:relative;">
+<div id="webgl-container" style="width:100%;height:100%;"></div>
+</div>
+
 </section>
 
 <!-- PAGE 6 -->
@@ -506,6 +514,101 @@ setTimeout(()=>{index=(index+1)%images.length;back.src=images[index];card.classL
 }
 setInterval(flipCard,2200);
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
 
+<script>
+let container = document.getElementById("webgl-container");
+
+let scene = new THREE.Scene();
+let camera = new THREE.PerspectiveCamera(45, container.clientWidth/container.clientHeight, 0.1, 1000);
+let renderer = new THREE.WebGLRenderer({antialias:true,alpha:true});
+renderer.setSize(container.clientWidth, container.clientHeight);
+container.appendChild(renderer.domElement);
+
+camera.position.z = 8;
+
+/* light */
+let light = new THREE.DirectionalLight(0xffffff,1);
+light.position.set(5,5,5);
+scene.add(light);
+
+/* geometry */
+let geometry = new THREE.PlaneGeometry(3,6);
+let loader = new THREE.TextureLoader();
+
+/* card textures */
+let cardTextures=[
+loader.load("card1.png"),
+loader.load("card2.png"),
+loader.load("card3.png"),
+loader.load("card4.png"),
+loader.load("card5.png")
+];
+
+/* object textures per scene */
+let objectSets=[
+["s1_obj1.png","s1_obj2.png"],
+["s2_obj1.png","s2_obj2.png"],
+["s3_obj1.png","s3_obj2.png"],
+["s4_obj1.png","s4_obj2.png"],
+["s5_obj1.png","s5_obj2.png"]
+];
+
+let material=new THREE.MeshBasicMaterial({map:cardTextures[0],transparent:true});
+let card=new THREE.Mesh(geometry,material);
+scene.add(card);
+
+let objects=[];
+
+function loadObjects(i){
+objects.forEach(o=>scene.remove(o));
+objects=[];
+
+objectSets[i].forEach((file,idx)=>{
+let tex=loader.load(file);
+let mat=new THREE.MeshBasicMaterial({map:tex,transparent:true});
+let geo=new THREE.PlaneGeometry(1.4,1.4);
+let mesh=new THREE.Mesh(geo,mat);
+
+mesh.position.x=(idx===0)?-2:2;
+mesh.position.y=(idx===0)?1.5:-1.5;
+mesh.position.z=0.2;
+
+scene.add(mesh);
+objects.push(mesh);
+});
+}
+
+loadObjects(0);
+
+let index=0;
+let angle=0;
+
+function animate(){
+requestAnimationFrame(animate);
+
+angle+=0.01;
+card.rotation.y=angle;
+objects.forEach(o=>o.rotation.y=angle);
+
+/* change screen */
+if(angle>= (Math.PI*2)/5){
+angle=0;
+index=(index+1)%5;
+material.map=cardTextures[index];
+material.needsUpdate=true;
+loadObjects(index);
+}
+
+renderer.render(scene,camera);
+}
+animate();
+
+window.addEventListener("resize",()=>{
+camera.aspect=container.clientWidth/container.clientHeight;
+camera.updateProjectionMatrix();
+renderer.setSize(container.clientWidth, container.clientHeight);
+});
+</script>
 </body>
 </html>
