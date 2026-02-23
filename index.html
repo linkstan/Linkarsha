@@ -365,6 +365,97 @@ animation:float 6s ease-in-out infinite;
 .hero,.premium-section,.flow-section,.analytics-section{flex-direction:column;text-align:center}
 .hero-left,.hero-right,.premium-left,.flow-left,.flow-right,.analytics-left,.analytics-right{width:100%}
 }
+  /* ===== PAGE 5 RIGHT HALF INSERT ===== */
+.page5-wrap{
+width:100%;
+display:flex;
+}
+
+.page5-left{
+width:50%;
+}
+
+.page5-right{
+width:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+/* 3D CARD SYSTEM */
+.linkarsha-scene{
+width:340px;
+height:620px;
+position:relative;
+transform-style:preserve-3d;
+animation: godSpeed2 3.8s infinite linear;
+}
+
+@keyframes godSpeed2{
+0%{transform:rotateY(-40deg) rotateX(12deg);}
+55%{transform:rotateY(-15deg) rotateX(12deg);}
+100%{transform:rotateY(320deg) rotateX(12deg);}
+}
+
+.lcard{
+position:absolute;
+left:50%;
+transform-style:preserve-3d;
+overflow:hidden;
+}
+
+/* card1 */
+.lcard1{
+width:300px;
+height:600px;
+margin-left:-150px;
+top:10px;
+border-radius:32px;
+transform:translateZ(120px);
+box-shadow:0 60px 120px rgba(0,0,0,.45);
+}
+
+/* card2 */
+.lcard2{
+width:255px;
+height:250px;
+margin-left:-127.5px;
+top:340px;
+border-radius:22px;
+transform:translateZ(200px) rotateX(10deg);
+box-shadow:0 40px 80px rgba(0,0,0,.4);
+}
+
+/* card3 */
+.lcard3{
+width:70px;
+height:70px;
+border-radius:18px;
+right:40px;
+top:380px;
+transform:translateZ(260px) rotateY(-20deg);
+box-shadow:0 20px 40px rgba(0,0,0,.4);
+}
+
+/* image slides */
+.lslide{
+position:absolute;
+width:100%;
+height:100%;
+background-size:cover;
+background-position:center;
+opacity:0;
+animation: imgCycle2 19s infinite;
+}
+
+@keyframes imgCycle2{
+0%,18%{opacity:1}
+20%,38%{opacity:0}
+40%,58%{opacity:1}
+60%,78%{opacity:0}
+80%,98%{opacity:1}
+100%{opacity:0}
+}
 </style>
 </head>
 
@@ -471,6 +562,46 @@ display:flex;
 align-items:center;
 justify-content:center;
 ">
+
+<div class="page5-wrap">
+
+<div class="page5-left"></div>
+
+<div class="page5-right">
+
+<div class="linkarsha-scene">
+
+<!-- CARD 1 -->
+<div class="lcard lcard1">
+<div class="lslide" style="background-image:url('https://images.unsplash.com/photo-1520975916090-3105956dac38');animation-delay:0s"></div>
+<div class="lslide" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee');animation-delay:3.8s"></div>
+<div class="lslide" style="background-image:url('https://images.unsplash.com/photo-1492724441997-5dc865305da7');animation-delay:7.6s"></div>
+<div class="lslide" style="background-image:url('https://images.unsplash.com/photo-1519999482648-25049ddd37b1');animation-delay:11.4s"></div>
+<div class="lslide" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e');animation-delay:15.2s"></div>
+</div>
+
+<!-- CARD 2 -->
+<div class="lcard lcard2">
+<div class="lslide" style="background-image:url('https://images.unsplash.com/photo-1517841905240-472988babdf9');animation-delay:0s"></div>
+<div class="lslide" style="background-image:url('https://images.unsplash.com/photo-1494790108377-be9c29b29330');animation-delay:3.8s"></div>
+<div class="lslide" style="background-image:url('https://images.unsplash.com/photo-1502685104226-ee32379fefbe');animation-delay:7.6s"></div>
+<div class="lslide" style="background-image:url('https://images.unsplash.com/photo-1487412720507-e7ab37603c6f');animation-delay:11.4s"></div>
+<div class="lslide" style="background-image:url('https://images.unsplash.com/photo-1544005313-94ddf0286df2');animation-delay:15.2s"></div>
+</div>
+
+<!-- CARD 3 -->
+<div class="lcard lcard3">
+<div class="lslide" style="background-image:url('https://images.unsplash.com/photo-1511367461989-f85a21fda167');animation-delay:0s"></div>
+<div class="lslide" style="background-image:url('https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e');animation-delay:3.8s"></div>
+<div class="lslide" style="background-image:url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e');animation-delay:7.6s"></div>
+<div class="lslide" style="background-image:url('https://images.unsplash.com/photo-1492562080023-ab3db95bfbce');animation-delay:11.4s"></div>
+<div class="lslide" style="background-image:url('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde');animation-delay:15.2s"></div>
+</div>
+
+</div>
+</div>
+</div>
+
 </section>
 
 <!-- PAGE 6 -->
