@@ -611,6 +611,48 @@ padding:3px 8px;
 }
 
 }
+  /* FAQ */
+.faqItem{
+background:rgba(255,255,255,0.05);
+border:1px solid rgba(255,255,255,0.1);
+margin-bottom:16px;
+border-radius:18px;
+backdrop-filter:blur(12px);
+overflow:hidden;
+}
+
+.faqQ{
+padding:20px;
+font-size:clamp(15px,2vw,18px);
+font-weight:600;
+cursor:pointer;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.faqQ span{
+transition:.3s;
+}
+
+.faqA{
+max-height:0;
+overflow:hidden;
+padding:0 20px;
+color:#bbb;
+line-height:1.7;
+transition:.4s;
+font-size:clamp(14px,1.8vw,16px);
+}
+
+.faqItem.active .faqA{
+max-height:300px;
+padding:0 20px 20px 20px;
+}
+
+.faqItem.active .faqQ span{
+transform:rotate(180deg);
+}
 </style>
 </head>
 
@@ -823,6 +865,109 @@ Start free. Upgrade only when you grow.
 min-height:100vh;
 padding:120px 8%;
 display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+">
+
+<div style="font-size:clamp(34px,5vw,56px);font-weight:900;text-align:center;margin-bottom:10px;">
+Everything you need to know
+</div>
+
+<div style="text-align:center;color:#aaa;margin-bottom:60px;font-size:clamp(14px,2vw,18px);">
+Simple answers before you create your Linkarsha.
+</div>
+
+<div style="width:100%;max-width:900px;">
+
+<!-- FAQ ITEM -->
+<div class="faqItem">
+<div class="faqQ">What is Linkarsha and why do I need it?<span>⌄</span></div>
+<div class="faqA">
+Linkarsha is your all-in-one link for everything online. Instead of sharing many links, you share one Linkarsha where people can explore your content, products, socials or services. Think of it as a mini-website you can create in minutes.
+</div>
+</div>
+
+<div class="faqItem">
+<div class="faqQ">Who is Linkarsha for?<span>⌄</span></div>
+<div class="faqA">
+Creators, influencers, artists, small businesses, freelancers, athletes and even normal users. If you share anything online, Linkarsha makes it simple and professional.
+</div>
+</div>
+
+<div class="faqItem">
+<div class="faqQ">Do I need a website to use Linkarsha?<span>⌄</span></div>
+<div class="faqA">
+No. Linkarsha works like your mini website. You can use it instead of a website or alongside your existing one.
+</div>
+</div>
+
+<div class="faqItem">
+<div class="faqQ">Can I sell products or earn money?<span>⌄</span></div>
+<div class="faqA">
+Yes. You can showcase products, services, digital downloads or payment links and turn visitors into customers easily.
+</div>
+</div>
+
+<div class="faqItem">
+<div class="faqQ">Is Linkarsha free to use?<span>⌄</span></div>
+<div class="faqA">
+Yes. You can start free forever and upgrade anytime. Pro plan is just ₹2/day when you want advanced features.
+</div>
+</div>
+
+<div class="faqItem">
+<div class="faqQ">Is it safe for Instagram and other platforms?<span>⌄</span></div>
+<div class="faqA">
+Yes. Linkarsha works across Instagram, TikTok, YouTube, WhatsApp and all major platforms with one clean trusted link.
+</div>
+</div>
+
+<div class="faqItem">
+<div class="faqQ">Why choose Linkarsha if it is new?<span>⌄</span></div>
+<div class="faqA">
+Linkarsha is built modern from day one — fast, simple and creator-focused. Early users help shape new features and grow with the platform.
+</div>
+</div>
+
+<div class="faqItem">
+<div class="faqQ">How many links should I add?<span>⌄</span></div>
+<div class="faqA">
+For best results keep 5-7 important links. But you can add many more if you want to showcase everything.
+</div>
+</div>
+
+<div class="faqItem">
+<div class="faqQ">Can businesses use Linkarsha?<span>⌄</span></div>
+<div class="faqA">
+Yes. Local shops, gyms, salons, agencies, brands and online businesses all use Linkarsha to manage customers and links from one place.
+</div>
+</div>
+
+<div class="faqItem">
+<div class="faqQ">How do I get started?<span>⌄</span></div>
+<div class="faqA">
+Create your username, add your links and share it everywhere. Your online presence can be ready in under a minute.
+</div>
+</div>
+
+</div>
+</section>
+  <!-- PAGE 8 -->
+<section style="
+min-height:100vh;
+padding:120px 8%;
+display:flex;
+align-items:center;
+justify-content:center;
+">
+</section>
+
+<!-- PAGE 9 -->
+<section style="
+min-height:100vh;
+padding:120px 8%;
+display:flex;
 align-items:center;
 justify-content:center;
 ">
@@ -841,6 +986,12 @@ setTimeout(()=>{index=(index+1)%images.length;back.src=images[index];card.classL
 }
 setInterval(flipCard,2200);
 </script>
-
+<script>
+document.querySelectorAll(".faqQ").forEach(q=>{
+q.addEventListener("click",()=>{
+q.parentElement.classList.toggle("active");
+});
+});
+</script>
 </body>
 </html>
