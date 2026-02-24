@@ -456,6 +456,161 @@ animation: imgCycle2 19s infinite;
 80%,98%{opacity:1}
 100%{opacity:0}
 }
+  /* ===== PAGE 6 PRICING ===== */
+
+.pricing-section{
+min-height:100vh;
+padding:120px 8%;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+}
+
+.pricing-title{
+font-size:56px;
+font-weight:900;
+margin-bottom:10px;
+text-align:center;
+}
+
+.pricing-subtitle{
+color:#aaa;
+font-size:18px;
+margin-bottom:60px;
+text-align:center;
+max-width:700px;
+}
+
+.pricing-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:30px;
+width:100%;
+max-width:900px;
+}
+
+.pricing-card{
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(18px);
+border-radius:28px;
+padding:40px;
+border:1px solid rgba(255,255,255,0.12);
+box-shadow:0 30px 70px rgba(0,0,0,.35);
+display:flex;
+flex-direction:column;
+position:relative;
+}
+
+.plan-name{
+font-size:24px;
+font-weight:800;
+}
+
+.plan-price{
+font-size:42px;
+font-weight:900;
+margin:10px 0;
+}
+
+.plan-desc{
+color:#aaa;
+margin-bottom:20px;
+}
+
+.plan-features{
+line-height:2;
+font-size:16px;
+flex:1;
+}
+
+.plan-btn{
+margin-top:20px;
+padding:16px;
+border-radius:14px;
+border:none;
+background:rgba(255,255,255,0.15);
+color:white;
+font-weight:700;
+cursor:pointer;
+}
+
+.pro-plan{
+background:linear-gradient(180deg,#6a5cff,#8f7bff);
+box-shadow:0 40px 90px rgba(106,92,255,.35);
+}
+
+.pro-btn{
+background:black;
+font-weight:900;
+}
+
+.badge{
+position:absolute;
+top:-12px;
+right:20px;
+background:#00ffa3;
+color:black;
+font-weight:800;
+padding:5px 12px;
+border-radius:20px;
+font-size:12px;
+}
+
+.muted{
+opacity:.5;
+}
+
+/* ===== MOBILE VERSION ===== */
+
+@media(max-width:768px){
+
+.pricing-section{
+padding:80px 5%;
+}
+
+.pricing-title{
+font-size:32px;
+}
+
+.pricing-subtitle{
+font-size:14px;
+margin-bottom:30px;
+}
+
+.pricing-grid{
+gap:15px;
+}
+
+.pricing-card{
+padding:20px;
+border-radius:20px;
+}
+
+.plan-name{
+font-size:18px;
+}
+
+.plan-price{
+font-size:28px;
+}
+
+.plan-features{
+font-size:13px;
+line-height:1.7;
+}
+
+.plan-btn{
+padding:12px;
+font-size:14px;
+}
+
+.badge{
+font-size:9px;
+padding:3px 8px;
+}
+
+}
 </style>
 </head>
 
@@ -605,151 +760,59 @@ justify-content:center;
 </section>
 
 <!-- PAGE 6 -->
-<section style="
-min-height:100vh;
-padding:80px 5%;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-">
+<section class="pricing-section">
 
-<div style="
-font-size:clamp(28px,5vw,56px);
-font-weight:900;
-text-align:center;
-margin-bottom:10px;
-">
-Simple pricing.
-</div>
-
-<div style="
-color:#aaa;
-font-size:clamp(14px,2.5vw,18px);
-text-align:center;
-margin-bottom:40px;
-max-width:700px;
-">
+<div class="pricing-title">Simple pricing.</div>
+<div class="pricing-subtitle">
 Start free. Upgrade only when you grow.
 </div>
 
-<div style="
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:14px;
-width:100%;
-max-width:900px;
-">
+<div class="pricing-grid">
 
 <!-- FREE -->
-<div style="
-background:rgba(255,255,255,0.05);
-backdrop-filter:blur(18px);
-border-radius:22px;
-padding:18px;
-border:1px solid rgba(255,255,255,0.12);
-box-shadow:0 20px 50px rgba(0,0,0,.35);
-display:flex;
-flex-direction:column;
-">
+<div class="pricing-card free-plan">
+<div class="plan-name">Free</div>
+<div class="plan-price">₹0</div>
+<div class="plan-desc">Perfect to start</div>
 
-<div style="font-size:18px;font-weight:800;">Free</div>
-<div style="font-size:28px;font-weight:900;margin:6px 0;">₹0</div>
-<div style="color:#aaa;font-size:12px;margin-bottom:10px;">Start free</div>
-
-<div style="
-line-height:1.7;
-color:#ddd;
-font-size:12.5px;
-flex:1;
-">
+<div class="plan-features">
 ✔ Unlimited links<br>
-✔ Bio page<br>
+✔ Bio page & social links<br>
 ✔ Basic themes<br>
-✔ Images & videos<br>
+✔ Images & video embeds<br>
 ✔ Contact buttons<br>
 ✔ QR code<br>
 ✔ Basic analytics<br>
 ✔ 1 product showcase<br>
-<span style="opacity:.5">✖ Remove branding</span><br>
-<span style="opacity:.5">✖ Custom domain</span>
+<span class="muted">✖ Remove branding</span><br>
+<span class="muted">✖ Custom domain</span>
 </div>
 
-<button style="
-margin-top:12px;
-padding:10px;
-border-radius:10px;
-border:none;
-background:rgba(255,255,255,0.15);
-color:white;
-font-weight:700;
-font-size:13px;
-cursor:pointer;
-">
-Start
-</button>
-
+<button class="plan-btn">Start Free</button>
 </div>
 
 <!-- PRO -->
-<div style="
-background:linear-gradient(180deg,#6a5cff,#8f7bff);
-border-radius:22px;
-padding:18px;
-color:white;
-position:relative;
-box-shadow:0 25px 60px rgba(106,92,255,.35);
-display:flex;
-flex-direction:column;
-">
+<div class="pricing-card pro-plan">
+<div class="badge">POPULAR</div>
 
-<div style="
-position:absolute;
-top:-10px;
-right:10px;
-background:#00ffa3;
-color:black;
-font-weight:800;
-padding:3px 8px;
-border-radius:20px;
-font-size:9px;
-">POPULAR</div>
+<div class="plan-name">Pro</div>
+<div class="plan-price">₹2/day</div>
+<div class="plan-desc">₹180 / 3 months • ₹350 / 6 months</div>
 
-<div style="font-size:18px;font-weight:800;">Pro</div>
-<div style="font-size:28px;font-weight:900;margin:6px 0;">₹2/day</div>
-<div style="font-size:11px;margin-bottom:10px;">₹180/3mo • ₹350/6mo</div>
-
-<div style="
-line-height:1.7;
-font-size:12.5px;
-flex:1;
-">
-✔ Remove branding<br>
-✔ Custom domain<br>
+<div class="plan-features">
+✔ Remove Linkarsha branding<br>
+✔ Custom domain support<br>
 ✔ Premium themes<br>
-✔ Full analytics<br>
-✔ Unlimited products<br>
+✔ Full analytics dashboard<br>
+✔ Unlimited products/services<br>
 ✔ Sell digital products<br>
-✔ Lead collection<br>
+✔ Collect leads & emails<br>
 ✔ Smart scheduling<br>
-✔ Pixel integration<br>
+✔ Pixel integrations<br>
 ✔ Priority support
 </div>
 
-<button style="
-margin-top:12px;
-padding:11px;
-border-radius:10px;
-border:none;
-background:black;
-color:white;
-font-weight:900;
-font-size:13px;
-cursor:pointer;
-">
-Upgrade
-</button>
-
+<button class="plan-btn pro-btn">Upgrade</button>
 </div>
 
 </div>
