@@ -1516,5 +1516,37 @@ q.parentElement.classList.toggle("active");
 });
 });
 </script>
+  <script>
+const screen=document.getElementById("screen");
+const live=document.getElementById("live");
+
+function cycle(){
+setTimeout(()=>{screen.classList.add("hideAll");},9000);
+setTimeout(()=>{live.classList.add("show");},9400);
+setTimeout(()=>{live.classList.remove("show");live.classList.add("hide");},13000);
+
+setTimeout(()=>{
+live.classList.remove("hide");
+screen.classList.remove("hideAll");
+
+let steps=document.querySelectorAll(".step");
+let arrows=document.querySelectorAll(".arrow");
+
+steps.forEach(s=>{
+s.style.animation="none";
+s.offsetHeight;
+s.style.animation="";
+});
+arrows.forEach(a=>{
+a.style.animation="none";
+a.offsetHeight;
+a.style.animation="";
+});
+
+},13350);
+}
+setInterval(cycle,14000);
+cycle();
+</script>
 </body>
 </html>
