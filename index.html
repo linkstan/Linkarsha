@@ -807,7 +807,40 @@ Sell. Monetize. Grow. Linkarsha powers your entire creator business from one pow
 <div>✔ No skills required</div>
 <div>✔ From smartphone or computer</div>
 </div>
+<div style="width:50%;display:flex;align-items:center;justify-content:center;">
 
+<div class="scene-iphone">
+<div class="phone-iphone">
+
+<div class="island"></div>
+
+<div class="screen-iphone" id="screen2">
+
+<!-- SCREENSHOT PLACEHOLDER -->
+<div class="screen-bg-iphone"></div>
+
+<div class="step2 s1">Choose username & claim</div>
+<div class="arrow2 a1"></div>
+
+<div class="step2 s2">Sign up with email</div>
+<div class="arrow2 a2"></div>
+
+<div class="step2 s3">Pick a theme you love</div>
+<div class="arrow2 a3"></div>
+
+<div class="step2 s4">Add links & products</div>
+<div class="arrow2 a4"></div>
+
+<div class="step2 s5">Share your Linkarsha</div>
+
+</div>
+
+<div class="live2" id="live2">
+<div class="circle2">YOU'RE LIVE<br>START GROWING</div>
+</div>
+
+</div>
+</div>
 <a href="#" class="premium-btn">Get started for free</a>
 </div>
 </section>
@@ -1173,7 +1206,6 @@ Build your presence. Grow your world.
 
 <div style="color:#888;font-size:14px;margin-top:8px;">
 Made with love in India 🇮🇳<br>
-from Jaipur (Pink City)
 </div>
 
 </div>
@@ -1316,6 +1348,46 @@ q.addEventListener("click",()=>{
 q.parentElement.classList.toggle("active");
 });
 });
+</script>
+  <script>
+const screen2=document.getElementById("screen2");
+const live2=document.getElementById("live2");
+
+function cycle2(){
+
+setTimeout(()=>{screen2.classList.add("hideAll2");},9000);
+setTimeout(()=>{live2.classList.add("show");},9400);
+
+setTimeout(()=>{
+live2.classList.remove("show");
+live2.classList.add("hide");
+},13000);
+
+setTimeout(()=>{
+live2.classList.remove("hide");
+screen2.classList.remove("hideAll2");
+
+let steps=document.querySelectorAll(".step2");
+let arrows=document.querySelectorAll(".arrow2");
+
+steps.forEach(s=>{
+s.style.animation="none";
+s.offsetHeight;
+s.style.animation="";
+});
+
+arrows.forEach(a=>{
+a.style.animation="none";
+a.offsetHeight;
+a.style.animation="";
+});
+
+},13350);
+
+}
+
+setInterval(cycle2,14000);
+cycle2();
 </script>
 </body>
 </html>
