@@ -751,6 +751,162 @@ box-shadow:0 0 0 2px rgba(0,0,0,.7);
 .flow-right .card:nth-child(4){animation:assemble 14s infinite 6.6s;}
 .flow-right .card:nth-child(5){animation:assemble 14s infinite 8.8s;}
 .flow-right .card:nth-child(6){animation:assemble 14s infinite 11s;}
+  /* ===== PAGE 2 iPHONE INSERT ===== */
+
+.scene-iphone{
+width:420px;
+height:520px;
+perspective:1200px;
+position:relative;
+}
+
+.phone-iphone{
+width:250px;
+height:500px;
+background:linear-gradient(180deg,#1a1a2e,#111);
+border-radius:55px;
+position:absolute;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%) rotateY(-18deg) rotateX(6deg);
+box-shadow:
+0 60px 120px rgba(0,0,0,.7),
+inset 0 0 0 2px rgba(255,255,255,.08);
+animation:phoneFloat2 12s infinite ease-in-out;
+}
+
+@keyframes phoneFloat2{
+0%{transform:translate(-50%,-50%) rotateY(-18deg) rotateX(6deg);}
+50%{transform:translate(-50%,-52%) rotateY(10deg) rotateX(6deg);}
+100%{transform:translate(-50%,-50%) rotateY(-18deg) rotateX(6deg);}
+}
+
+.island{
+position:absolute;
+top:10px;
+left:50%;
+transform:translateX(-50%);
+width:110px;
+height:26px;
+background:black;
+border-radius:20px;
+z-index:5;
+}
+
+.screen-iphone{
+position:absolute;
+top:22px;
+bottom:22px;
+left:14px;
+right:14px;
+border-radius:40px;
+background:#0b0b12;
+overflow:hidden;
+padding-top:35px;
+}
+
+.screen-bg-iphone{
+position:absolute;
+inset:0;
+border-radius:40px;
+z-index:0;
+background-size:cover;
+background-position:center;
+opacity:.9;
+}
+
+.step2{
+width:80%;
+margin:10px auto;
+padding:10px 12px;
+border-radius:12px;
+background:linear-gradient(90deg,#6a5cff,#8f7bff);
+font-size:13px;
+opacity:0;
+transform:translateY(15px);
+position:relative;
+z-index:2;
+}
+
+.arrow2{
+width:6px;
+height:28px;
+background:#8f7bff;
+margin:-6px auto -2px auto;
+border-radius:6px;
+opacity:0;
+position:relative;
+z-index:2;
+}
+
+.arrow2:after{
+content:"";
+position:absolute;
+bottom:-6px;
+left:50%;
+transform:translateX(-50%);
+border-left:9px solid transparent;
+border-right:9px solid transparent;
+border-top:12px solid #8f7bff;
+}
+
+.s1{animation:show2 .6s forwards 1s;}
+.a1{animation:show2 .4s forwards 2s;}
+
+.s2{animation:show2 .6s forwards 2.6s;}
+.a2{animation:show2 .4s forwards 3.6s;}
+
+.s3{animation:show2 .6s forwards 4.2s;}
+.a3{animation:show2 .4s forwards 5.2s;}
+
+.s4{animation:show2 .6s forwards 5.8s;}
+.a4{animation:show2 .4s forwards 6.8s;}
+
+.s5{animation:show2 .6s forwards 7.4s;}
+
+@keyframes show2{
+to{opacity:1;transform:translateY(0);}
+}
+
+.hideAll2{animation:hideAll2 .4s forwards;}
+@keyframes hideAll2{to{opacity:0;}}
+
+.live2{
+position:absolute;
+inset:0;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+opacity:0;
+z-index:3;
+}
+
+.circle2{
+width:150px;
+height:150px;
+border-radius:50%;
+background:radial-gradient(circle,#00ffa3,#00c37a);
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:900;
+font-size:16px;
+text-align:center;
+padding:15px;
+color:black;
+box-shadow:0 0 60px #00ffa3,0 0 120px #00ffa3;
+transform:scale(.5);
+}
+
+.live2.show{animation:liveIn2 .7s forwards;}
+@keyframes liveIn2{to{opacity:1;}}
+
+.live2.show .circle2{animation:pop2 .5s forwards;}
+@keyframes pop2{to{transform:scale(1);}}
+
+.live2.hide{animation:fadeOut2 .35s forwards;}
+@keyframes fadeOut2{to{opacity:0;}}
 </style>
 </head>
 
